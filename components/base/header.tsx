@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
-import { PlusCircleOutlined, SnippetsOutlined } from '@ant-design/icons';
-import {
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-} from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { PlusCircleOutlined, SnippetsOutlined, FileOutlined, PieChartOutlined, TeamOutlined } from '@ant-design/icons';
+import { Breadcrumb, Layout, Menu, MenuProps, theme } from 'antd';
 import { AggregationPage } from '@/pages/aggregation';
 
 const { Header, Content, Sider } = Layout;
@@ -70,23 +64,24 @@ export const HeaderPage: React.FC = () => {
             theme="dark" 
             defaultSelectedKeys={['1']} 
             mode="inline" 
-            items={items.map(item => ({
-              ...item,
-              onClick: () => setCurrentPage(item.key)
-            }))} 
+            items={items} 
+            onClick={({ key }) => setCurrentPage(key.toString())}
           />
         </Sider>
         <Layout>
           <Header style={{ padding: 0, background: colorBgContainer }} />
           <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-              {renderContent()}
+            <Breadcrumb items={[
+              { content: 'User' },
+              { content: 'Bill' }
+            ]} />
+            {renderContent()}
           </Content>
         </Layout>
       </Layout>
     </>
   );
 };
+
+
+

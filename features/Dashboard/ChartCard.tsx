@@ -1,8 +1,8 @@
 import React from "react";
 import { Card } from "antd";
 import styles from "./styles/Dashboard.module.css";
-import { AchievementCard } from "./AchievementCard";
 import { AreaChartPage } from "./AreaChart";
+import { PieCard } from './PieCard';
 
 export const ChartCard: React.FC = () => {
   return (
@@ -17,8 +17,8 @@ export const ChartCard: React.FC = () => {
         
         <div className={styles.largecard}>
           <Card style={{ height: 360, width: "100%"}}>
-            <p>目標達成率</p>
-            <AchievementCard />
+            <p>消化率</p>
+            <PieCard />
           </Card>
         </div>
       </div>
