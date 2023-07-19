@@ -1,0 +1,63 @@
+.dashboard {
+	height: 100vh;
+	width: 100vw;
+	background-color: #F5F5F5;
+	padding: 40px 20px 20px 20px;
+}
+
+/* StateCardとFilterCardで使用 */
+.cardscontainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+/* StateCardとFilterCardで使用 */
+.statecardwrapper {
+	width: calc(33.33% - 1.6rem); /* こちらを変更 */
+	box-sizing: border-box;
+	margin-bottom: 1.2rem;
+}
+
+/* StateCardで使用 */
+.lowercards {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	gap: 1.2rem;
+}
+
+/* FilterCardで使用  */
+.selectcontent {
+	display: flex;
+	align-items: center;
+	height: 100%;
+}
+
+.lowercards2 {
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
+	gap: 1.2rem;
+}
+
+.statecardwrapper2 {
+	width: calc(100% - 2 * 1.6rem); /* 3カードの合計幅を取得 (100% - 2 gaps) */
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+.largecard {
+	width: calc(25% - 1.6rem); /* こちらを変更 */
+	box-sizing: border-box;
+}
+
+.fullwidthcard {
+    width: 100%;
+    box-sizing: border-box;
+}
