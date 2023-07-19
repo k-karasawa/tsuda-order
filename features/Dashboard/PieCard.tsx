@@ -10,13 +10,8 @@ const SalesData = [
 ];
 
 export const PieCard: React.FC = () => {
-
   const RADIAN = Math.PI / 180;
-
-  // 1. 全体の合計を計算します。
   const total = SalesData.reduce((acc, curr) => acc + curr.value, 0);
-  
-  // 1. 色の配列を定義します。
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
   
   const renderCustomizedLabel = ({
@@ -69,7 +64,7 @@ export const PieCard: React.FC = () => {
             fill="#8884d8"
             labelLine={false}
             label={renderCustomizedLabel}
-            fillOpacity={0.8}
+            fillOpacity={0.7}
           >
             {
               SalesData.map((entry, index) => 

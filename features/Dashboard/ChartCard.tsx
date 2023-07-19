@@ -16,8 +16,8 @@ export const ChartCard: React.FC = () => {
         </div>
         
         <div className={styles.largecard}>
-          <Card style={{ height: 360, width: "100%"}}>
-            <p>消化率</p>
+          <Card style={{ height: 360, width: "100%" }}>
+            <p>案件消化率</p>
             <PieCard />
           </Card>
         </div>

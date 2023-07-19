@@ -52,6 +52,14 @@ export const HeaderPage: React.FC = () => {
     }
   };
 
+  const getPageTitle = (key: string): string => {
+    const menuItem = items.find(item => item.key === key);
+    if (menuItem) {
+      return menuItem.label as string;
+    }
+    return "Unknown Page";
+  };
+
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
@@ -69,7 +77,9 @@ export const HeaderPage: React.FC = () => {
           />
         </Sider>
         <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }} />
+        <Header style={{ padding: 0, background: colorBgContainer, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {getPageTitle(currentPage)}
+        </Header>
           <Content style={{ margin: '0 16px' }}>
             <Breadcrumb items={[
               { content: 'User' },
