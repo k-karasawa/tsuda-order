@@ -6,7 +6,12 @@ import { OrderRegistrationPage } from '@/pages/orderregistration';
 
 const { Header, Content, Sider } = Layout;
 
-type MenuItem = Required<MenuProps>['items'][number];
+type MenuItem = {
+  key: string;
+  icon?: React.ReactNode;
+  children?: MenuItem[];
+  label: React.ReactNode;
+};
 
 function getItem(
   label: React.ReactNode,
@@ -83,18 +88,15 @@ export const HeaderPage: React.FC = () => {
         <Header style={{ padding: 0, background: colorBgContainer, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {getPageTitle(currentPage)}
         </Header>
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb items={[
-              { content: 'User' },
-              { content: 'Bill' }
-            ]} />
-            {renderContent()}
-          </Content>
+        <Content style={{ margin: '0 16px' }}>
+          <Breadcrumb>
+            <Breadcrumb.Item>User</Breadcrumb.Item>
+            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+          </Breadcrumb>
+          {renderContent()}
+        </Content>
         </Layout>
       </Layout>
     </>
   );
 };
-
-
-
