@@ -8,5 +8,15 @@
   display: flex;
   gap: 1.2rem;
   margin-bottom: 1.2rem;
-  width: 100%; /* 追加 */
+  width: 100%;
+}
+
+.submitButton {
+  background-color: #1890ff !important;  /* !important を追加 */
+  border-color: #1890ff !important;
+}
+
+.submitButton:hover {
+  background-color: #40a9ff !important;  /* ホバー時の色 */
+  border-color: #40a9ff !important;
 }
