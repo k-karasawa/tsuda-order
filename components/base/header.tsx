@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PlusCircleOutlined, SnippetsOutlined, FileOutlined, PieChartOutlined, TeamOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, MenuProps, theme } from 'antd';
 import { AggregationPage } from '@/pages/aggregation';
+import { OrderRegistrationPage } from '@/pages/orderregistration';
 
 const { Header, Content, Sider } = Layout;
 
@@ -23,13 +24,13 @@ function getItem(
 
 const items: MenuItem[] = [
   getItem('受注情報集計', '1', <PieChartOutlined />),
-  getItem('受注登録', '2', <PlusCircleOutlined />),
-  getItem('受注状況', 'sub1', <SnippetsOutlined />, [
+  getItem('案件登録', '2', <PlusCircleOutlined />),
+  getItem('案件状況', 'sub1', <SnippetsOutlined />, [
     getItem('Tリバース Eng', '3'),
     getItem('Sリバース Eng', '4'),
     getItem('Mリバース Eng', '5'),
     getItem('特機事業部案件', '6'),
-    getItem('全受注案件', '7'),
+    getItem('全案件', '7'),
   ]),
   getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '8'), getItem('Team 2', '9')]),
   getItem('関連ファイル', '10', <FileOutlined />),
@@ -46,6 +47,8 @@ export const HeaderPage: React.FC = () => {
     switch (currentPage) {
       case '1':
         return <AggregationPage />;
+      case '2':
+        return <OrderRegistrationPage />;
       // 他のページの場合の条件もここに追加...
       default:
         return <div>Bill is a cat.</div>;
