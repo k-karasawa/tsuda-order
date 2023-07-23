@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { PlusCircleOutlined, SnippetsOutlined, FileOutlined, PieChartOutlined, TeamOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, Menu, MenuProps, theme } from 'antd';
+import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { AggregationPage } from '@/pages/aggregation';
 import { OrderRegistrationPage } from '@/pages/orderregistration';
+import { ReceiveOrders } from '@/pages/receiveorders';
 
 const { Header, Content, Sider } = Layout;
 
@@ -54,6 +55,8 @@ export const HeaderPage: React.FC = () => {
         return <AggregationPage />;
       case '2':
         return <OrderRegistrationPage />;
+      case '3':
+        return <ReceiveOrders />;
       // 他のページの場合の条件もここに追加...
       default:
         return <div>Bill is a cat.</div>;

@@ -1,0 +1,11 @@
+.editable-row {
+  height: 100px;
+}
+
+.editable-row > td {
+  height: 50px;
+  max-height: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
