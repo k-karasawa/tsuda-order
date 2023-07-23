@@ -57,6 +57,8 @@ export const HeaderPage: React.FC = () => {
         return <OrderRegistrationPage />;
       case '3':
         return <ReceiveOrders />;
+      case '7':
+        return <ReceiveOrders />;
       // 他のページの場合の条件もここに追加...
       default:
         return <div>Bill is a cat.</div>;
@@ -64,12 +66,26 @@ export const HeaderPage: React.FC = () => {
   };
 
   const getPageTitle = (key: string): string => {
+    // メインメニューアイテムを探す
     const menuItem = items.find(item => item.key === key);
+    
     if (menuItem) {
       return menuItem.label as string;
     }
+    
+    // サブメニューアイテムを探す
+    for (let mainItem of items) {
+      if (mainItem.children) {
+        const subMenuItem = mainItem.children.find(item => item.key === key);
+        if (subMenuItem) {
+          return subMenuItem.label as string;
+        }
+      }
+    }
+  
     return "Unknown Page";
   };
+  
 
   return (
     <>
