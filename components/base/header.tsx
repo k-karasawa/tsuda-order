@@ -38,7 +38,10 @@ const items: MenuItem[] = [
     getItem('特機事業部案件', '6'),
     getItem('全案件', '7'),
   ]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '8'), getItem('Team 2', '9')]),
+  getItem('帳票発行', 'sub2', <TeamOutlined />,[
+    getItem('Team 1', '8'),
+    getItem('Team 2', '9')
+  ]),
   getItem('関連ファイル', '10', <FileOutlined />),
 ];
 

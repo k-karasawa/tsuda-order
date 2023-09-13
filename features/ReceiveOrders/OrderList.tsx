@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { InputRef } from 'antd';
-import { Button, Form, Input, Popconfirm, Table, Tag } from 'antd';
+import { Form, Input, Popconfirm, Table, Tag } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import { Item, DataType, initialData } from './TableData';
 import styles from './tableStyles.module.css';
 
+const { Search } = Input;
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null);
 
@@ -99,13 +100,24 @@ type EditableTableProps = Parameters<typeof Table>[0];
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 export const OrderList: React.FC = () => {
-	const [dataSource, setDataSource] = useState<DataType[]>(initialData);
+  const [dataSource, setDataSource] = useState<DataType[]>(initialData);
+  const [filteredData, setFilteredData] = useState<DataType[]>(initialData); // ← フィルタリングされたデータのためのstate
   const [count, setCount] = useState(2);
+  const [searchText, setSearchText] = useState<string>(""); // ← 検索テキストのstate
 
-  const handleDelete = (key: React.Key) => {
-    const newData = dataSource.filter((item) => item.key !== key);
-    setDataSource(newData);
-  };
+  useEffect(() => {
+    if (searchText) {
+      const loweredSearchText = searchText.toLowerCase();
+      const filtered = dataSource.filter(item => 
+        Object.values(item).some(value => 
+          String(value).toLowerCase().includes(loweredSearchText)
+        )
+      );
+      setFilteredData(filtered);
+    } else {
+      setFilteredData(dataSource);
+    }
+  }, [searchText, dataSource]);
 
   const defaultColumns: (ColumnTypes[number] & { editable?: boolean; dataIndex: string })[] = [
     {
@@ -235,30 +247,6 @@ export const OrderList: React.FC = () => {
     },
   ];
 
-  const handleAdd = () => {
-    const newData: DataType = {
-      受注No: count,
-      依頼内容: '',
-      ユーザー: '',
-      拠点: '',
-      顧客担当者: '',
-      部署: '',
-      品番: '',
-      品名: '',
-      台数: '',
-      見積日: '',
-      受注日: '',
-      希望納期: '',
-      予定納期: '',
-      出荷日: '',
-      備考: '',
-      key: undefined,
-      進捗: ''
-    };
-    setDataSource([...dataSource, newData]);
-    setCount(count + 1);
-  };
-
   const handleSave = (row: DataType) => {
     const newData = [...dataSource];
     const index = newData.findIndex((item) => row.key === item.key);
@@ -295,9 +283,15 @@ export const OrderList: React.FC = () => {
 
   return (
     <>
-      <Button onClick={handleAdd} style={{ marginTop: 40 }}>
-          Add a row
-      </Button>
+      <div style={{ marginTop: 40 }}>
+        <Search
+          placeholder="Search in table"
+          onSearch={value => setSearchText(value)}
+          style={{ width: 200 }}
+          enterButton
+        />
+      </div>
+      
       <div style={{ width: '100%', overflowX: 'auto' }}>
         <Table
           rowClassName={() => styles.editableRow}
@@ -305,7 +299,7 @@ export const OrderList: React.FC = () => {
           style={{ marginTop: 20 }}
           components={components}
           bordered
-          dataSource={dataSource}
+          dataSource={filteredData} // ← フィルタリングされたデータを使用
           columns={columns as ColumnTypes}
           pagination={{ defaultPageSize: 50 }}
         />
