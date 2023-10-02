@@ -5,15 +5,15 @@ import styles from './styles/RegistrationForm.module.css';
 const { Option } = Select;
 const { TextArea } = Input;
 
-export const RegistrationForm: React.FC = () => {
+export const AddOrderForm: React.FC = () => {
   return (
-    <Form layout="vertical" className={styles.registrationform}> 
+    <Form layout="vertical" className={styles.registrationform}>
 
       <Form.Item label="受注No">
         <Input disabled value="自動採番"/>
       </Form.Item>
 
-      <Form.Item 
+      <Form.Item
         label="依頼内容"
         rules={[{ required: true, message: '依頼内容は必須です' }]}
       >
@@ -26,14 +26,14 @@ export const RegistrationForm: React.FC = () => {
       </Form.Item>
 
       <div className={styles.horizontalContainer}>
-        <Form.Item 
+        <Form.Item
           label="ユーザー"
           rules={[{ required: true, message: 'ユーザーは必須です' }]}
         >
           <Input />
         </Form.Item>
-        
-        <Form.Item 
+
+        <Form.Item
           label="顧客担当者"
           rules={[{ required: true, message: '顧客担当者は必須です' }]}
         >
@@ -65,17 +65,17 @@ export const RegistrationForm: React.FC = () => {
       </div>
 
       <div className={styles.horizontalContainer}>
-        <Form.Item 
+        <Form.Item
           label="品名"
           rules={[{ required: true, message: '品名は必須です' }]}
         >
           <Input />
         </Form.Item>
-        
+
         <Form.Item label="品番">
           <Input />
         </Form.Item>
-        
+
         <Form.Item label="台数">
           <Input />
         </Form.Item>
@@ -122,8 +122,8 @@ export const RegistrationForm: React.FC = () => {
       </Form.Item>
 
       <Form.Item>
-        <Button 
-          type="primary" 
+        <Button
+          type="primary"
           htmlType="submit"
           className={styles.submitButton}
         >

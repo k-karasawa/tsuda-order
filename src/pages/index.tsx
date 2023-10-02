@@ -1,13 +1,15 @@
 import { Inter } from 'next/font/google'
-import { HeaderPage } from '../../components/base/header'
-import { AggregationPage } from './aggregation'
+import { Dashboard } from "../features/Dashboard/Dashboard";
+import { NextPage } from "next";
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+const HomePage: NextPage = () => {
   return (
     <>
-      <HeaderPage />
+      <Dashboard />
     </>
-  )
+  );
 }
+
+export default HomePage;
