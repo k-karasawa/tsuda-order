@@ -5,6 +5,7 @@ import { AppProps } from "next/app";
 import { supabase } from "../../utils/supabase";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -27,7 +28,14 @@ function MyApp({ Component, pageProps }: AppProps) {
     };
   }, [router]);
 
-  return getLayout(<Component {...pageProps} />);
+  return (
+    <SessionContextProvider
+      supabaseClient={supabase}
+      initialSession={pageProps.initialSession}
+    >
+      {getLayout(<Component {...pageProps} />)}
+    </SessionContextProvider>
+  );
 }
 
 export default MyApp;
