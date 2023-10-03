@@ -1,5 +1,5 @@
 import React from "react";
-import { AddOrderForm } from "../features/OrderRegistration/AddOrderForm";
+import { AddOrderForm } from "../features/AddOrder/AddOrderForm";
 
 const AddOrder = () => {
   return (

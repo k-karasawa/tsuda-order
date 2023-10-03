@@ -3,7 +3,7 @@ import type { InputRef } from 'antd';
 import { Form, Input, Popconfirm, Table, Tag } from 'antd';
 import type { FormInstance } from 'antd/es/form';
 import { Item, DataType, initialData } from './TableData';
-import styles from './tableStyles.module.css';
+import styles from './styles/styles.module.css';
 
 const { Search } = Input;
 
@@ -73,7 +73,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   if (editable) {
     childNode = editing ? (
       <Form.Item
-        style={{ margin: 0, width: '100%' }}  // width を 100% にセットしてセルの幅を固定
+        style={{ margin: 0, width: '100%' }}
         name={dataIndex}
         rules={[
           {
@@ -99,7 +99,7 @@ type EditableTableProps = Parameters<typeof Table>[0];
 
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
-export const OrderList: React.FC = () => {
+export const OldOrderList: React.FC = () => {
   const [dataSource, setDataSource] = useState<DataType[]>(initialData);
   const [filteredData, setFilteredData] = useState<DataType[]>(initialData); // ← フィルタリングされたデータのためのstate
   const [count, setCount] = useState(2);
@@ -108,8 +108,8 @@ export const OrderList: React.FC = () => {
   useEffect(() => {
     if (searchText) {
       const loweredSearchText = searchText.toLowerCase();
-      const filtered = dataSource.filter(item => 
-        Object.values(item).some(value => 
+      const filtered = dataSource.filter(item =>
+        Object.values(item).some(value =>
           String(value).toLowerCase().includes(loweredSearchText)
         )
       );
@@ -291,7 +291,7 @@ export const OrderList: React.FC = () => {
           enterButton
         />
       </div>
-      
+
       <div style={{ width: '100%', overflowX: 'auto' }}>
         <Table
           rowClassName={() => styles.editableRow}
@@ -299,7 +299,7 @@ export const OrderList: React.FC = () => {
           style={{ marginTop: 20 }}
           components={components}
           bordered
-          dataSource={filteredData} // ← フィルタリングされたデータを使用
+          dataSource={filteredData}
           columns={columns as ColumnTypes}
           pagination={{ defaultPageSize: 50 }}
         />

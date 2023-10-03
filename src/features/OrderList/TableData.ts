@@ -16,7 +16,7 @@ export interface Item {
 	出荷日: null | string | number;
 	備考: string;
 }
-  
+
 export interface DataType {
   key: any;
 	受注No: null | string | number;
@@ -37,8 +37,6 @@ export interface DataType {
 	備考: string;
 }
 
-  
-// 初期テーブルのデータ
 export const initialData: DataType[] = [
 	{
 			"key": 1,
