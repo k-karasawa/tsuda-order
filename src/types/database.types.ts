@@ -79,13 +79,13 @@ export interface Database {
           item_receive_date: string | null
           item_return_date: string | null
           lot: string | null
-          order_code: string | null
+          order_code: string
           order_date: string | null
           order_form_code: string | null
           progress: number | null
           quantity: number | null
           receive_document_date: string | null
-          request: string | null
+          request: number | null
           send_document_date: string | null
           shipment_date: string | null
           soft: string | null
@@ -110,13 +110,13 @@ export interface Database {
           item_receive_date?: string | null
           item_return_date?: string | null
           lot?: string | null
-          order_code?: string | null
+          order_code: string
           order_date?: string | null
           order_form_code?: string | null
           progress?: number | null
           quantity?: number | null
           receive_document_date?: string | null
-          request?: string | null
+          request?: number | null
           send_document_date?: string | null
           shipment_date?: string | null
           soft?: string | null
@@ -141,13 +141,13 @@ export interface Database {
           item_receive_date?: string | null
           item_return_date?: string | null
           lot?: string | null
-          order_code?: string | null
+          order_code?: string
           order_date?: string | null
           order_form_code?: string | null
           progress?: number | null
           quantity?: number | null
           receive_document_date?: string | null
-          request?: string | null
+          request?: number | null
           send_document_date?: string | null
           shipment_date?: string | null
           soft?: string | null
@@ -170,154 +170,11 @@ export interface Database {
             columns: ["progress"]
             referencedRelation: "progress"
             referencedColumns: ["id"]
-          }
-        ]
-      }
-      order_list_duplicate: {
-        Row: {
-          accept_date: string | null
-          amount: string | null
-          comment: string | null
-          created_at: string
-          customer: number | null
-          customer_department: number | null
-          customer_group: string | null
-          customer_location: string | null
-          customer_management_code: string | null
-          customer_person: string | null
-          desired_delivery_date: string | null
-          estimate_code: string | null
-          estimate_date: string | null
-          id: number
-          item_code: string | null
-          item_name: string | null
-          item_receive_date: string | null
-          item_return_date: string | null
-          lot: string | null
-          order_code: string | null
-          order_date: string | null
-          order_form_code: string | null
-          progress: number | null
-          quantity: number | null
-          receive_document_date: string | null
-          request: string | null
-          send_document_date: string | null
-          shipment_date: string | null
-          soft: string | null
-        }
-        Insert: {
-          accept_date?: string | null
-          amount?: string | null
-          comment?: string | null
-          created_at?: string
-          customer?: number | null
-          customer_department?: number | null
-          customer_group?: string | null
-          customer_location?: string | null
-          customer_management_code?: string | null
-          customer_person?: string | null
-          desired_delivery_date?: string | null
-          estimate_code?: string | null
-          estimate_date?: string | null
-          id?: number
-          item_code?: string | null
-          item_name?: string | null
-          item_receive_date?: string | null
-          item_return_date?: string | null
-          lot?: string | null
-          order_code?: string | null
-          order_date?: string | null
-          order_form_code?: string | null
-          progress?: number | null
-          quantity?: number | null
-          receive_document_date?: string | null
-          request?: string | null
-          send_document_date?: string | null
-          shipment_date?: string | null
-          soft?: string | null
-        }
-        Update: {
-          accept_date?: string | null
-          amount?: string | null
-          comment?: string | null
-          created_at?: string
-          customer?: number | null
-          customer_department?: number | null
-          customer_group?: string | null
-          customer_location?: string | null
-          customer_management_code?: string | null
-          customer_person?: string | null
-          desired_delivery_date?: string | null
-          estimate_code?: string | null
-          estimate_date?: string | null
-          id?: number
-          item_code?: string | null
-          item_name?: string | null
-          item_receive_date?: string | null
-          item_return_date?: string | null
-          lot?: string | null
-          order_code?: string | null
-          order_date?: string | null
-          order_form_code?: string | null
-          progress?: number | null
-          quantity?: number | null
-          receive_document_date?: string | null
-          request?: string | null
-          send_document_date?: string | null
-          shipment_date?: string | null
-          soft?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "order_list_duplicate_customer_department_fkey"
-            columns: ["customer_department"]
-            referencedRelation: "customer_department"
-            referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "order_list_duplicate_customer_fkey"
-            columns: ["customer"]
-            referencedRelation: "customer"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "order_list_duplicate_progress_fkey"
-            columns: ["progress"]
-            referencedRelation: "progress"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      profiles: {
-        Row: {
-          avatar_url: string | null
-          full_name: string | null
-          id: string
-          updated_at: string | null
-          username: string | null
-          website: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          full_name?: string | null
-          id: string
-          updated_at?: string | null
-          username?: string | null
-          website?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          full_name?: string | null
-          id?: string
-          updated_at?: string | null
-          username?: string | null
-          website?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey"
-            columns: ["id"]
-            referencedRelation: "users"
+            foreignKeyName: "order_list_request_fkey"
+            columns: ["request"]
+            referencedRelation: "request"
             referencedColumns: ["id"]
           }
         ]
@@ -339,6 +196,27 @@ export interface Database {
           created_at?: string
           id?: number
           progress?: string
+          sort?: number | null
+        }
+        Relationships: []
+      }
+      request: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          sort: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+          sort?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
           sort?: number | null
         }
         Relationships: []
