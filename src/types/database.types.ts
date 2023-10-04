@@ -62,6 +62,7 @@ export interface Database {
         Row: {
           accept_date: string | null
           amount: string | null
+          attention: boolean
           comment: string | null
           created_at: string
           customer: number | null
@@ -82,6 +83,7 @@ export interface Database {
           order_code: string
           order_date: string | null
           order_form_code: string | null
+          priority: number
           progress: number | null
           quantity: number | null
           receive_document_date: string | null
@@ -93,6 +95,7 @@ export interface Database {
         Insert: {
           accept_date?: string | null
           amount?: string | null
+          attention?: boolean
           comment?: string | null
           created_at?: string
           customer?: number | null
@@ -113,6 +116,7 @@ export interface Database {
           order_code: string
           order_date?: string | null
           order_form_code?: string | null
+          priority?: number
           progress?: number | null
           quantity?: number | null
           receive_document_date?: string | null
@@ -124,6 +128,7 @@ export interface Database {
         Update: {
           accept_date?: string | null
           amount?: string | null
+          attention?: boolean
           comment?: string | null
           created_at?: string
           customer?: number | null
@@ -144,6 +149,7 @@ export interface Database {
           order_code?: string
           order_date?: string | null
           order_form_code?: string | null
+          priority?: number
           progress?: number | null
           quantity?: number | null
           receive_document_date?: string | null
@@ -166,6 +172,12 @@ export interface Database {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "order_list_priority_fkey"
+            columns: ["priority"]
+            referencedRelation: "priority"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "order_list_progress_fkey"
             columns: ["progress"]
             referencedRelation: "progress"
@@ -178,6 +190,24 @@ export interface Database {
             referencedColumns: ["id"]
           }
         ]
+      }
+      priority: {
+        Row: {
+          created_at: string
+          id: number
+          level: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          level?: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          level?: string
+        }
+        Relationships: []
       }
       progress: {
         Row: {

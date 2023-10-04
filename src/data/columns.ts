@@ -1,9 +1,11 @@
 import type { ColumnsType } from 'antd/es/table';
-import { OrderListDataType } from './types';
+import { OrderListDataType } from '../types/types';
 
 export const columns: ColumnsType<OrderListDataType> = [
+  { title: 'a', dataIndex: 'attention' },
   { title: 'ID', dataIndex: 'id' },
   { title: '受注番号', dataIndex: 'order_code' },
+  { title: 'priority', dataIndex: 'priority' },
   { title: '進捗', dataIndex: 'progress' },
   { title: '依頼内容', dataIndex: 'request' },
   { title: '顧客', dataIndex: 'customer' },
@@ -40,5 +42,3 @@ export const columns: ColumnsType<OrderListDataType> = [
   { title: '備考', dataIndex: 'comment' },
   { title: '登録日', dataIndex: 'created_at' },
 ];
-
-export default columns;
