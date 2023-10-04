@@ -10,7 +10,7 @@ export const useOrderList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await supabase.from('order_list').select('*');
+        const response = await supabase.from('order_list_extended').select('*');
 
         if (response.error) {
           throw response.error;
