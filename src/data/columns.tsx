@@ -1,6 +1,7 @@
 import type { ColumnsType } from 'antd/es/table';
 import { OrderListDataType } from '../types/types';
 import { CustomFilterDropdown, filterIcon } from '../components/OrderList/CustomFilterDropdown';
+import { ColorfulTag } from '../components/OrderList/TagColor';
 
 export const columns: ColumnsType<OrderListDataType> = [
   {
@@ -25,6 +26,7 @@ export const columns: ColumnsType<OrderListDataType> = [
     title: '進捗',
     dataIndex: 'progress_name',
     width: 100,
+    render: (text: string) => <ColorfulTag text={text} />,
     filterSearch: true,
     sorter: (a, b) => (a.estimate_date || '').localeCompare(b.estimate_date || ''),
   },

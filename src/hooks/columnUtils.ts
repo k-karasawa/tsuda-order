@@ -1,3 +1,4 @@
+// src/hooks/columnUtils.ts
 import type { ColumnType } from 'antd/lib/table';
 import type { OrderListDataType } from '../types/types';
 import { renderTooltip } from '../components/OrderList/RenderTooltip';
@@ -8,11 +9,18 @@ export const generateColumns = (
 ): ColumnType<OrderListDataType>[] => {
 
   return originalColumns.map((col: ColumnType<OrderListDataType>) => {
-    const baseCol = {
+    let baseCol = {
       ...col,
-      ellipsis: true,
-      render: (text: string, record: OrderListDataType, index: number) => renderTooltip(text, record, index, col) // renderTooltip should be defined or imported
+      ellipsis: true
     };
+
+    // 進捗の列でない場合のみ、renderTooltip を適用
+    if (col.dataIndex !== 'progress_name') {
+      baseCol = {
+        ...baseCol,
+        render: (text: string, record: OrderListDataType, index: number) => renderTooltip(text, record, index, col)
+      };
+    }
 
     if ('dataIndex' in col && dynamicFilters[col.dataIndex as keyof OrderListDataType]) {
       return {
