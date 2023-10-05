@@ -1,6 +1,6 @@
 import React from 'react';
 import { useOrderList } from '../hooks/useOrderList';
-import { OrderListPresentation } from '@/components/OrderListPresentation';
+import { OrderListPresentation } from '@/components/OrderList/OrderListPresentation';
 import { Spin } from 'antd';
 
 export const OrderListContainer: React.FC = () => {

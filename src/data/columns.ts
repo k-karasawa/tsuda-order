@@ -1,25 +1,19 @@
 import type { ColumnsType } from 'antd/es/table';
 import { OrderListDataType } from '../types/types';
+import { CustomFilterDropdown, filterIcon } from '../components/OrderList/CustomFilterDropdown';
 
 export const columns: ColumnsType<OrderListDataType> = [
   {
     dataIndex: 'attention',
-    fixed: 'left', width: 50,
-    // onCell: () => ({ style: { background: '#f5f5f5' } }),
+    fixed: 'left',
+    width: 50,
   },
-  { title: 'ID', dataIndex: 'id',fixed: 'left', width: 50, },
   {
     title: '受注番号',
     dataIndex: 'order_code',
     width: 100,
-    filterSearch: true
-    //前方一致か、完全一致かどうしようか考える
-    // onFilter: (value: any, record) => {
-    //   if (typeof value === 'string') {
-    //     return record.order_code.indexOf(value) === 0;
-    //   }
-    //   return false;
-    // },
+    filterDropdown: CustomFilterDropdown,
+    filterIcon: filterIcon,
   },
   {
     title: '優先度',
@@ -63,7 +57,8 @@ export const columns: ColumnsType<OrderListDataType> = [
     title: '担当者',
     dataIndex: 'customer_person',
     width: 100,
-    filterSearch:true
+    filterDropdown: CustomFilterDropdown,
+    filterIcon: filterIcon
   },
   {
     title: '商社',
@@ -74,13 +69,16 @@ export const columns: ColumnsType<OrderListDataType> = [
     title: '品番',
     dataIndex: 'item_code',
     width: 100,
-    filterSearch: true
+    filterDropdown: CustomFilterDropdown,
+    filterIcon: filterIcon
+
   },
   {
     title: '品名',
     dataIndex: 'item_name',
     width: 100,
-    filterSearch: true
+    filterDropdown: CustomFilterDropdown,
+    filterIcon: filterIcon
   },
   {
     title: 'ロット',
@@ -161,20 +159,27 @@ export const columns: ColumnsType<OrderListDataType> = [
     title: '見積No,',
     dataIndex: 'estimate_code',
     width: 100,
-    filterSearch: true
+    filterDropdown: CustomFilterDropdown,
+    filterIcon: filterIcon
   },
   {
     title: '注文書No,',
     dataIndex: 'order_form_code',
     width: 120,
-    filterSearch: true
+    filterDropdown: CustomFilterDropdown,
+    filterIcon: filterIcon
   },
-  { title: '金額', dataIndex: 'amount', width: 100 },
+  {
+    title: '金額',
+    dataIndex: 'amount',
+    width: 100
+  },
   {
     title: '備考',
     dataIndex: 'comment',
     width: 200,
-    filterSearch: true
+    filterDropdown: CustomFilterDropdown,
+    filterIcon: filterIcon
   },
   {
     title: '登録日',
