@@ -26,7 +26,7 @@ export function getItem(
 export const items: MenuItem[] = [
   getItem('ダッシュボード', '/', <BarChartOutlined />),
   getItem('案件登録', '/add-order', <FileTextOutlined />),
-  getItem('案件一覧', '99', <FileTextOutlined />),
+  getItem('案件一覧', '/order-list', <FileTextOutlined />),
   getItem('部門別一覧', '30', <LogoutOutlined />, [
     getItem('修理', '1'),
     getItem('複製', '2'),
