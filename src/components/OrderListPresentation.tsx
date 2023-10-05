@@ -8,22 +8,38 @@ interface OrderListPresentationProps {
 }
 
 export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data }) => {
-  // 一意なorder_codeの一覧を取得
-  const uniqueOrderCodes = [...new Set(data.map(item => item.order_code))];
 
-  // filtersを動的に生成
-  const orderCodeFilters = uniqueOrderCodes.map(code => ({
-    text: code,
-    value: code,
-  }));
+  const filterableColumns = [
+    'order_code',
+    'priority_level',
+    'progress_name',
+    'request_name',
+    'customer_name',
+    'customer_department_name',
+    'customer_person',
+    'item_code',
+    'item_name',
+    'customer_management_code',
+    'estimate_code',
+    'order_form_code',
+    'comment',
+    'farm_name'
+  ];
 
-  // 元のカラム定義を変更して、新しいfiltersとellipsis、カスタムツールチップを適用
+  const dynamicFilters = filterableColumns.reduce((acc, colName) => {
+    acc[colName] = [...new Set(data.map(item => item[colName]))].map(value => ({
+      text: value,
+      value: value,
+    }));
+    return acc;
+  }, {} as Record<string, any[]>);
+
   const columns = originalColumns.map(col => {
-    if (col.dataIndex === 'order_code') {
+    if (dynamicFilters[col.dataIndex as string]) {
       return {
         ...col,
-        filters: orderCodeFilters,
-        onFilter: (value, record) => record.order_code.includes(value as string),
+        filters: dynamicFilters[col.dataIndex as string],
+        onFilter: (value, record) => record[col.dataIndex].includes(value as string),
       };
     }
     return {
@@ -50,7 +66,7 @@ export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ da
         total: data.length,
         showSizeChanger: false,
       }}
-      scroll={{ x: 3600 }}
+      scroll={{ x: 3700 }}
     />
   );
 };

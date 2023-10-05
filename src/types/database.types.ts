@@ -58,6 +58,27 @@ export interface Database {
           }
         ]
       }
+      farm: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          sort: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+          sort?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
+          sort?: number | null
+        }
+        Relationships: []
+      }
       order_list: {
         Row: {
           accept_date: string | null
@@ -74,6 +95,7 @@ export interface Database {
           desired_delivery_date: string | null
           estimate_code: string | null
           estimate_date: string | null
+          farm: number | null
           id: number
           item_code: string | null
           item_name: string | null
@@ -107,6 +129,7 @@ export interface Database {
           desired_delivery_date?: string | null
           estimate_code?: string | null
           estimate_date?: string | null
+          farm?: number | null
           id?: number
           item_code?: string | null
           item_name?: string | null
@@ -140,6 +163,7 @@ export interface Database {
           desired_delivery_date?: string | null
           estimate_code?: string | null
           estimate_date?: string | null
+          farm?: number | null
           id?: number
           item_code?: string | null
           item_name?: string | null
@@ -169,6 +193,12 @@ export interface Database {
             foreignKeyName: "order_list_customer_fkey"
             columns: ["customer"]
             referencedRelation: "customer"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_list_farm_fkey"
+            columns: ["farm"]
+            referencedRelation: "farm"
             referencedColumns: ["id"]
           },
           {
