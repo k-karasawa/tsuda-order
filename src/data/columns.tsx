@@ -1,8 +1,7 @@
 import type { ColumnsType } from 'antd/es/table';
 import { OrderListDataType } from '../types/types';
 import { CustomFilterDropdown, filterIcon } from '../components/OrderList/CustomFilterDropdown';
-import { ColorfulTag } from '../components/OrderList/ColorfulTagcomponent';
-
+import { ColorfulTag } from '../components/OrderList/TagColor';
 
 export const columns: ColumnsType<OrderListDataType> = [
   {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tag } from 'antd';
 
-const TAG_COLORS: { [key: string]: string } = {
+const ProgressColors: { [key: string]: string } = {
   '作業中': 'blue',
   'OH作業中': 'blue',
   '受注済': 'blue',
@@ -17,6 +17,6 @@ interface ColorfulTagProps {
 }
 
 export const ColorfulTag: React.FC<ColorfulTagProps> = ({ text }) => {
-  const color = TAG_COLORS[text] || 'gray';
+  const color = ProgressColors[text] || 'gray';
   return <Tag color={color}>{text}</Tag>;
 }
