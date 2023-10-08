@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { Drawer, Form, Input, DatePicker, Row, Col, Divider, FloatButton } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import type { OrderListDataType } from '@/types/types';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
 
 interface OrderEditDrawerProps {
   selectedOrder?: OrderListDataType;
@@ -128,23 +132,35 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
 
           <Row gutter={16}>
             <Col span={6}>
-              <Form.Item label="見積日">
-                <DatePicker style={{ width: '100%' }} />
-              </Form.Item>
+            <Form.Item label="見積日">
+              <DatePicker
+                defaultValue={selectedOrder?.estimate_date ? dayjs(selectedOrder.estimate_date) : undefined}
+                style={{ width: '100%' }}
+              />
+            </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="受注日">
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker
+                  defaultValue={selectedOrder?.order_date ? dayjs(selectedOrder.order_date) : undefined}
+                  style={{ width: '100%' }}
+                />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="希望納期">
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker
+                  defaultValue={selectedOrder?.desired_delivery_date ? dayjs(selectedOrder.desired_delivery_date) : undefined}
+                  style={{ width: '100%' }}
+                />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="出荷日">
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker
+                  defaultValue={selectedOrder?.shipment_date ? dayjs(selectedOrder.shipment_date) : undefined}
+                  style={{ width: '100%' }}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -152,22 +168,34 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
           <Row gutter={16}>
             <Col span={6}>
               <Form.Item label="現品受領日">
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker
+                  defaultValue={selectedOrder?.item_receive_date ? dayjs(selectedOrder.item_receive_date) : undefined}
+                  style={{ width: '100%' }}
+                />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="現品返却日">
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker
+                  defaultValue={selectedOrder?.item_return_date ? dayjs(selectedOrder.item_return_date) : undefined}
+                  style={{ width: '100%' }}
+                />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="資料送付日">
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker
+                  defaultValue={selectedOrder?.send_document_date ? dayjs(selectedOrder.send_document_date) : undefined}
+                  style={{ width: '100%' }}
+                />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="資料受領日">
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker
+                  defaultValue={selectedOrder?.receive_document_date ? dayjs(selectedOrder.receive_document_date) : undefined}
+                  style={{ width: '100%' }}
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -194,7 +222,10 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item label="検収日">
-                <DatePicker style={{ width: '100%' }} />
+                <DatePicker
+                  defaultValue={selectedOrder?.accept_date ? dayjs(selectedOrder.accept_date) : undefined}
+                  style={{ width: '100%' }}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
