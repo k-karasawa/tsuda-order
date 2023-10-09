@@ -10,12 +10,11 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
     estimate_date: selectedOrder?.estimate_date || null,
   });
 
+  const [isAttention, setIsAttention] = useState(false);
   const { lookupTables } = useLookupTables();
-
   const handleUpdate = async () => {
     try {
       const values = form.getFieldsValue();
-
       const progressId = lookupTables.progress[values.progress_name];
       const priorityId = lookupTables.priority[values.priority_level];
       const requestId = lookupTables.request[values.request_name];
@@ -32,6 +31,7 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
         customer_department: departmentId,
         farm: farmId,
         estimate_date: dates.estimate_date,
+        attention: isAttention,
       };
 
       // 不要な名前のキーを削除
@@ -73,8 +73,10 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
   return {
     form,
     dates,
+    isAttention,
     setDates,
-    handleUpdate
+    handleUpdate,
+    setIsAttention,
   };
 };
 

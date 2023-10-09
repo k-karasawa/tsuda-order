@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Drawer, Form, Input, DatePicker, Row, Col, Divider, FloatButton } from 'antd';
-import { CheckOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Drawer, Form, Input, DatePicker, Row, Col, Divider, FloatButton, Switch } from 'antd';
+import { CheckOutlined, FlagOutlined, CloseOutlined } from '@ant-design/icons';
 import type { OrderListDataType } from '@/types/types';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -17,33 +17,52 @@ interface OrderEditDrawerProps {
 
 export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, selectedOrder, onUpdated }) => {
   const [visible, setVisible] = useState(false);
+
   const showDrawer = () => {
     setVisible(true);
   };
-
   const onClose = () => {
     setVisible(false);
   };
 
-  const { form, dates, setDates, handleUpdate } = useOrderUpdater(onClose, onUpdated, selectedOrder);
+  const { form, dates, setDates, handleUpdate, isAttention, setIsAttention } = useOrderUpdater(onClose, onUpdated, selectedOrder);
+
+  const handleAttention = () => {
+    setIsAttention((prevState: boolean) => !prevState);
+  };
+
+  useEffect(() => {
+    setIsAttention(!!selectedOrder?.attention);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOrder]);
 
   return (
     <>
       {children(showDrawer)}
       <Drawer
-        title={`受注番号 ${selectedOrder?.order_code}`}
+        title={
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {`受注番号 ${selectedOrder?.order_code}`}
+            <Switch
+              checkedChildren="重要"
+              unCheckedChildren="普通"
+              checked={isAttention}
+              onChange={handleAttention}
+            />
+          </div>
+        }
         width={800}
         onClose={onClose}
         open={visible}
-        bodyStyle={{ paddingBottom: 80 }}
+        bodyStyle={{ paddingBottom: 40 }}
       >
         <FloatButton
           icon={<CheckOutlined />}
           tooltip={<div>更新</div>}
           type="primary"
-          style={{ right: 20 }}
           onClick={handleUpdate}
         />
+
         <Form layout="vertical" form={form} initialValues={selectedOrder}>
           <Row gutter={16}>
             <Col span={8}>
