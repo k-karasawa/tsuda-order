@@ -10,7 +10,12 @@ export const useOrderList = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const response = await supabase.from('order_list_extended').select('*');
+      const response = await supabase
+        .from('order_list_extended')
+        .select('*')
+        .order('desired_delivery_date', { ascending: true }) // 期限が近い順
+        .order('priority', { ascending: true })              // 優先度の昇順
+        .order('id', { ascending: false })                   // idの降順
 
       if (response.error) {
         throw response.error;
@@ -23,6 +28,7 @@ export const useOrderList = () => {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     fetchData();
