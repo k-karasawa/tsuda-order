@@ -4,10 +4,10 @@ import { OrderListPresentation } from '@/components/OrderList/OrderListPresentat
 import { Spin } from 'antd';
 
 export const OrderListContainer: React.FC = () => {
-  const { data, loading, error } = useOrderList();
+  const { data, loading, error, refetchOrderList } = useOrderList();
 
   if (loading) return <Spin size="large" tip="Loading..." />;
   if (error) return <p>Error: {error.message}</p>;
 
-  return <OrderListPresentation data={data} />;
+  return <OrderListPresentation data={data} refetchOrderList={refetchOrderList} />;
 };

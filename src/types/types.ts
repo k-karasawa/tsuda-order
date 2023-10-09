@@ -4,4 +4,5 @@ export type OrderListDataType = Database['public']['Tables']['order_list']['Row'
 
 export interface OrderListPresentationProps {
   data: OrderListDataType[];
+  refetchOrderList: () => void;
 }

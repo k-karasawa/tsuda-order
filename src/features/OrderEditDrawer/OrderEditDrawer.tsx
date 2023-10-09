@@ -4,19 +4,19 @@ import { CheckOutlined } from '@ant-design/icons';
 import type { OrderListDataType } from '@/types/types';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { useOrderUpdater } from './hooks/useOrderUpdater';
 
 dayjs.extend(customParseFormat);
+const { TextArea } = Input;
 
 interface OrderEditDrawerProps {
   selectedOrder?: OrderListDataType;
   children: (showDrawer: () => void) => React.ReactNode;
+  onUpdated: () => void;
 }
 
-const { TextArea } = Input;
-
-export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, selectedOrder }) => {
+export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, selectedOrder, onUpdated }) => {
   const [visible, setVisible] = useState(false);
-
   const showDrawer = () => {
     setVisible(true);
   };
@@ -25,7 +25,7 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
     setVisible(false);
   };
 
-  console.log(selectedOrder)
+  const { form, dates, setDates, handleUpdate } = useOrderUpdater(onClose, onUpdated, selectedOrder);
 
   return (
     <>
@@ -37,8 +37,14 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
         open={visible}
         bodyStyle={{ paddingBottom: 80 }}
       >
-        <FloatButton icon={<CheckOutlined />} tooltip={<div>更新</div>} type="primary" style={{ right: 20 }} />
-        <Form layout="vertical" initialValues={selectedOrder}>
+        <FloatButton
+          icon={<CheckOutlined />}
+          tooltip={<div>更新</div>}
+          type="primary"
+          style={{ right: 20 }}
+          onClick={handleUpdate}
+        />
+        <Form layout="vertical" form={form} initialValues={selectedOrder}>
           <Row gutter={16}>
             <Col span={8}>
               <Form.Item label="進捗" name="progress_name">
@@ -134,8 +140,9 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
             <Col span={6}>
             <Form.Item label="見積日">
               <DatePicker
-                defaultValue={selectedOrder?.estimate_date ? dayjs(selectedOrder.estimate_date) : undefined}
+                value={dayjs(dates.estimate_date)}
                 style={{ width: '100%' }}
+                onChange={(date) => setDates(prev => ({ ...prev, estimate_date: date ? date.format("YYYY-MM-DD") : null }))}
               />
             </Form.Item>
             </Col>

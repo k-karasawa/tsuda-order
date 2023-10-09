@@ -7,25 +7,27 @@ export const useOrderList = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<any>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await supabase.from('order_list_extended').select('*');
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const response = await supabase.from('order_list_extended').select('*');
 
-        if (response.error) {
-          throw response.error;
-        }
-
-        setData(response.data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
+      if (response.error) {
+        throw response.error;
       }
-    };
 
+      setData(response.data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
   }, []);
 
-  return { data, loading, error };
+  return { data, loading, error, refetchOrderList: fetchData };
+
 };
