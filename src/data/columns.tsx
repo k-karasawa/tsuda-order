@@ -2,12 +2,18 @@ import type { ColumnsType } from 'antd/es/table';
 import { OrderListDataType } from '../types/types';
 import { CustomFilterDropdown, filterIcon } from '../components/OrderList/CustomFilterDropdown';
 import { ColorfulTag } from '../components/OrderList/TagColor';
+import { FlagOutlined } from '@ant-design/icons';
 
 export const columns: ColumnsType<OrderListDataType> = [
   {
     dataIndex: 'attention',
     fixed: 'left',
-    width: 50,
+    width: 45,
+    render: (text: boolean) => (
+      <div style={{ textAlign: 'center' }}>
+        {text ? <FlagOutlined style={{ color: 'red', fontSize: '16px' }} /> : null}
+      </div>
+    ),
   },
   {
     title: '受注番号',

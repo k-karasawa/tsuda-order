@@ -37,15 +37,15 @@ export const items: MenuItem[] = [
     getItem('工事', '7'),
   ]),
   getItem('商社別一覧', '31', <LogoutOutlined />, [
-    getItem('Tリバース Eng', '3'),
-    getItem('Sリバース Eng', '4'),
-    getItem('Mリバース Eng', '5'),
-    getItem('特機事業部案件', '6'),
+    getItem('Tリバース Eng', '8'),
+    getItem('Sリバース Eng', '9'),
+    getItem('Mリバース Eng', '10'),
+    getItem('特機事業部案件', '11'),
   ]),
-  getItem('帳票発行', '/salesaggregate', <PieChartOutlined />),
-  getItem('関連ファイル', '/salesaggregate', <PieChartOutlined />),
+  getItem('帳票発行', '/96', <PieChartOutlined />),
+  getItem('関連ファイル', '/97', <PieChartOutlined />),
   getItem('設定管理', '90', <SettingOutlined />, [
-    getItem('マスター管理', '/mastercontrol'),
-    getItem('システム設定', '/system-settings')
+    getItem('マスター管理', '/98'),
+    getItem('システム設定', '/99')
   ])
 ]
