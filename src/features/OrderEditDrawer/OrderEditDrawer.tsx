@@ -31,7 +31,7 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
     <>
       {children(showDrawer)}
       <Drawer
-        title="Edit Order"
+        title={`受注番号 ${selectedOrder?.order_code}`}
         width={800}
         onClose={onClose}
         open={visible}

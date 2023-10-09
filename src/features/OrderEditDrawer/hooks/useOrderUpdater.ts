@@ -77,7 +77,4 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
     handleUpdate
   };
 };
-function refetchOrderList() {
-  throw new Error('Function not implemented.');
-}
 
