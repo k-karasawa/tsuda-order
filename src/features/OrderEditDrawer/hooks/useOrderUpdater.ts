@@ -51,6 +51,14 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
         customer_department: departmentId,
         farm: farmId,
         estimate_date: dates.estimate_date,
+        order_date: dates.order_date,
+        desired_delivery_date: dates.desired_delivery_date,
+        shipment_date: dates.shipment_date,
+        item_receive_date: dates.item_receive_date,
+        item_return_date: dates.item_return_date,
+        send_document_date: dates.send_document_date,
+        receive_document_date: dates.receive_document_date,
+        accept_date: dates.accept_date,
         attention: isAttention,
       };
 

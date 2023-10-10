@@ -31,7 +31,7 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
     setIsAttention((prevState: boolean) => !prevState);
   };
 
-  useEffect(() => {
+useEffect(() => {
     setIsAttention(!!selectedOrder?.attention);
     if (selectedOrder) {
       setDates({
@@ -48,7 +48,6 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOrder]);
-
 
   return (
     <>
