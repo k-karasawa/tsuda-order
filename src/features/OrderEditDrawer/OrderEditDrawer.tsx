@@ -100,8 +100,13 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
 
           <Row gutter={16}>
             <Col span={8}>
-              <Form.Item label="顧客" name="customer_name">
-                <Input placeholder="顧客を入力" />
+              <Form.Item label="顧客" name="customer">
+                <SelectDataCreate
+                  tableName="customer"
+                  placeholder="顧客を選択"
+                  value={form.getFieldValue('customer')}
+                  onChange={value => form.setFieldsValue({ customer: value })}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -113,8 +118,13 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
 
           <Row gutter={16}>
             <Col span={8}>
-              <Form.Item label="部署" name="customer_department_name">
-                <Input placeholder="部署を入力" />
+              <Form.Item label="部署" name="customer_department">
+                <SelectDataCreate
+                  tableName="customer_department"
+                  placeholder="部署を選択"
+                  value={form.getFieldValue('customer_department')}
+                  onChange={value => form.setFieldsValue({ customer_department: value })}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -131,8 +141,13 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
 
           <Row gutter={16}>
             <Col span={8}>
-              <Form.Item label="商社" name="farm_name">
-                <Input placeholder="商社を入力" />
+              <Form.Item label="商社" name="farm">
+                <SelectDataCreate
+                  tableName="farm"
+                  placeholder="商社を選択"
+                  value={form.getFieldValue('farm')}
+                  onChange={value => form.setFieldsValue({ farm: value })}
+                />
               </Form.Item>
             </Col>
           </Row>

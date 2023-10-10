@@ -38,44 +38,37 @@ const fetchTableData = async (tableName: string): Promise<OptionType[]> => {
     const { data, error } = await supabase
       .from('progress')
       .select('id, progress');
+    return handleDataAndError(data, error, 'progress');
 
-    if (error) {
-      console.error("Error fetching data from Supabase:", error);
-      return [];
-    }
-
-    return data.map(item => ({
-      value: item.id,
-      label: item.progress
-    }));
   } else if (tableName === 'priority') {
     const { data, error } = await supabase
       .from('priority')
       .select('id, level');
+    return handleDataAndError(data, error, 'level');
 
-    if (error) {
-      console.error("Error fetching data from Supabase:", error);
-      return [];
-    }
-
-    return data.map(item => ({
-      value: item.id,
-      label: item.level
-    }));
   } else if (tableName === 'request') {
     const { data, error } = await supabase
       .from('request')
       .select('id, name');
+    return handleDataAndError(data, error, 'name');
 
-    if (error) {
-      console.error("Error fetching data from Supabase:", error);
-      return [];
-    }
+  } else if (tableName === 'customer') {
+    const { data, error } = await supabase
+      .from('customer')
+      .select('id, name');
+    return handleDataAndError(data, error, 'name');
 
-    return data.map(item => ({
-      value: item.id,
-      label: item.name
-    }));
+  } else if (tableName === 'customer_department') {
+    const { data, error } = await supabase
+      .from('customer_department')
+      .select('id, department');
+    return handleDataAndError(data, error, 'department');
+
+  } else if (tableName === 'farm') {
+    const { data, error } = await supabase
+      .from('farm')
+      .select('id, name');
+    return handleDataAndError(data, error, 'name');
   }
 
   // 他のテーブルのロジックを追加する場合はこちらを利用
@@ -85,3 +78,14 @@ const fetchTableData = async (tableName: string): Promise<OptionType[]> => {
   ];
 };
 
+const handleDataAndError = (data: any, error: any, labelField: string) => {
+  if (error) {
+    console.error("Error fetching data from Supabase:", error);
+    return [];
+  }
+
+  return data.map((item: any) => ({
+    value: item.id,
+    label: item[labelField]
+  }));
+};

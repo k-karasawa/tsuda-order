@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Form, message } from 'antd';
 import { updateOrder } from '../orderService';
 import { OrderListDataType } from '@/types/types';
-import { useLookupTables } from '../lookupTables';
 
 interface DatesType {
   estimate_date: string | null;
@@ -16,7 +15,6 @@ interface DatesType {
   accept_date: string | null;
 }
 
-//
 export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => void, selectedOrder?: OrderListDataType) => {
   const [form] = Form.useForm();
   const [dates, setDates] = useState<DatesType>({
@@ -32,23 +30,11 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
   });
 
   const [isAttention, setIsAttention] = useState(false);
-  const { lookupTables } = useLookupTables();
   const handleUpdate = async () => {
     try {
       const values = form.getFieldsValue();
-      const priorityId = values.priority;
-      const requestId = values.request;
-      const customerId = lookupTables.customer[values.customer_name];
-      const departmentId = lookupTables.customer_department[values.customer_department_name];
-      const farmId = lookupTables.farm[values.farm_name];
-
       const mergedData = {
         ...values,
-        priority: priorityId,
-        request: requestId,
-        customer: customerId,
-        customer_department: departmentId,
-        farm: farmId,
         estimate_date: dates.estimate_date,
         order_date: dates.order_date,
         desired_delivery_date: dates.desired_delivery_date,
@@ -61,11 +47,7 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
         attention: isAttention,
       };
 
-      // 不要な名前のキーを削除
     const {
-      customer_name,
-      farm_name,
-      customer_department_name,
       ...mergedDataWithoutNames
     } = mergedData;
 
@@ -92,7 +74,6 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
       message.error("未知のエラーが発生しました。");
     }
   };
-
 
   return {
     form,
