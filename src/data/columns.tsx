@@ -37,7 +37,7 @@ export const columns: ColumnsType<OrderListDataType> = [
   {
     title: '進捗',
     dataIndex: 'progress_name',
-    width: 100,
+    width: 110,
     render: (text: string) => <ColorfulTag text={text} />,
     filterSearch: true,
     sorter: (a, b) => (a.estimate_date || '').localeCompare(b.estimate_date || ''),

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Drawer, Form, Input, DatePicker, Row, Col, Divider, FloatButton, Switch } from 'antd';
+import React, { useState } from 'react';
+import { Drawer, Form, Input, Row, Col, Divider, FloatButton, Switch } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import type { OrderListDataType } from '@/types/types';
-import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import { useOrderUpdater } from './hooks/useOrderUpdater';
 import { CustomDatePicker } from './CustomDatePicker';
 import { useOrderEffect } from './hooks/useOrderEffect';
+import { SelectDataCreate } from '@/components/SelectDataCreate/SelectDataCreate';
+import dayjs from 'dayjs';
 
 dayjs.extend(customParseFormat);
 const { TextArea } = Input;
@@ -65,18 +66,33 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
         <Form layout="vertical" form={form} initialValues={selectedOrder}>
           <Row gutter={16}>
             <Col span={8}>
-              <Form.Item label="進捗" name="progress_name">
-                <Input placeholder="進捗を入力" />
+              <Form.Item label="進捗" name="progress">
+                <SelectDataCreate
+                  tableName="progress"
+                  placeholder="進捗を選択"
+                  value={form.getFieldValue('progress')}
+                  onChange={value => form.setFieldsValue({ progress: value })}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label="優先度" name="priority_level">
-                <Input placeholder="優先度を入力" />
+              <Form.Item label="優先度" name="priority">
+                <SelectDataCreate
+                  tableName="priority"
+                  placeholder="優先度を選択"
+                  value={form.getFieldValue('priority')}
+                  onChange={value => form.setFieldsValue({ priority: value })}
+                />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item label="依頼内容" name="request_name">
-                <Input placeholder="依頼内容を入力" />
+              <Form.Item label="依頼内容" name="request">
+                <SelectDataCreate
+                  tableName="request"
+                  placeholder="依頼内容を選択"
+                  value={form.getFieldValue('request')}
+                  onChange={value => form.setFieldsValue({ request: value })}
+                />
               </Form.Item>
             </Col>
           </Row>

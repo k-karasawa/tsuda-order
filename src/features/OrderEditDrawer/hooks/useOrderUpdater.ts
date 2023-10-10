@@ -16,6 +16,7 @@ interface DatesType {
   accept_date: string | null;
 }
 
+//
 export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => void, selectedOrder?: OrderListDataType) => {
   const [form] = Form.useForm();
   const [dates, setDates] = useState<DatesType>({
@@ -35,16 +36,14 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
   const handleUpdate = async () => {
     try {
       const values = form.getFieldsValue();
-      const progressId = lookupTables.progress[values.progress_name];
-      const priorityId = lookupTables.priority[values.priority_level];
-      const requestId = lookupTables.request[values.request_name];
+      const priorityId = values.priority;
+      const requestId = values.request;
       const customerId = lookupTables.customer[values.customer_name];
       const departmentId = lookupTables.customer_department[values.customer_department_name];
       const farmId = lookupTables.farm[values.farm_name];
 
       const mergedData = {
         ...values,
-        progress: progressId,
         priority: priorityId,
         request: requestId,
         customer: customerId,
@@ -63,15 +62,14 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
       };
 
       // 不要な名前のキーを削除
-      const {
-        progress_name,
-        priority_level,
-        request_name,
-        customer_name,
-        farm_name,
-        customer_department_name,
-        ...mergedDataWithoutNames
-      } = mergedData;
+    const {
+      customer_name,
+      farm_name,
+      customer_department_name,
+      ...mergedDataWithoutNames
+    } = mergedData;
+
+      console.log("@@@@@@@:", mergedDataWithoutNames);
 
       if (selectedOrder && selectedOrder.id) {
         const { data, error } = await updateOrder(mergedDataWithoutNames, selectedOrder.id);
@@ -105,4 +103,3 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
     setIsAttention,
   };
 };
-
