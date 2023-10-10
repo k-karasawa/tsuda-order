@@ -5,7 +5,7 @@ import { supabase } from '../../../utils/supabase';
 const { Option } = Select;
 
 interface Props {
-  tableName: string;
+  tableName: keyof TableMappingType;
   placeholder?: string;
   value?: string | number;
   onChange?: (value: string | number) => void;
@@ -15,6 +15,19 @@ interface OptionType {
   label: string;
   value: number | string;
 }
+
+type TableMappingType = {
+  [key in 'progress' | 'priority' | 'request' | 'customer' | 'customer_department' | 'farm']: string;
+};
+
+const tableMappings: TableMappingType = {
+  progress: 'progress',
+  priority: 'level',
+  request: 'name',
+  customer: 'name',
+  customer_department: 'department',
+  farm: 'name',
+};
 
 export const SelectDataCreate: React.FC<Props> = ({ tableName, placeholder, value, onChange }) => {
   const [data, setData] = useState<OptionType[]>([]);
@@ -33,49 +46,13 @@ export const SelectDataCreate: React.FC<Props> = ({ tableName, placeholder, valu
   );
 };
 
-const fetchTableData = async (tableName: string): Promise<OptionType[]> => {
-  if (tableName === 'progress') {
-    const { data, error } = await supabase
-      .from('progress')
-      .select('id, progress');
-    return handleDataAndError(data, error, 'progress');
+const fetchTableData = async (tableName: keyof TableMappingType): Promise<OptionType[]> => {
+  const labelField = tableMappings[tableName];
+  const { data, error } = await supabase
+    .from(tableName)
+    .select(`id, ${labelField}`);
 
-  } else if (tableName === 'priority') {
-    const { data, error } = await supabase
-      .from('priority')
-      .select('id, level');
-    return handleDataAndError(data, error, 'level');
-
-  } else if (tableName === 'request') {
-    const { data, error } = await supabase
-      .from('request')
-      .select('id, name');
-    return handleDataAndError(data, error, 'name');
-
-  } else if (tableName === 'customer') {
-    const { data, error } = await supabase
-      .from('customer')
-      .select('id, name');
-    return handleDataAndError(data, error, 'name');
-
-  } else if (tableName === 'customer_department') {
-    const { data, error } = await supabase
-      .from('customer_department')
-      .select('id, department');
-    return handleDataAndError(data, error, 'department');
-
-  } else if (tableName === 'farm') {
-    const { data, error } = await supabase
-      .from('farm')
-      .select('id, name');
-    return handleDataAndError(data, error, 'name');
-  }
-
-  // 他のテーブルのロジックを追加する場合はこちらを利用
-  return [
-    { value: 1, label: 'データ1' },
-    { value: 2, label: 'データ2' }
-  ];
+  return handleDataAndError(data, error, labelField);
 };
 
 const handleDataAndError = (data: any, error: any, labelField: string) => {
