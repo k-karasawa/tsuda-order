@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Drawer, Form, Input, DatePicker, Row, Col, Divider, FloatButton, Switch } from 'antd';
-import { CheckOutlined, FlagOutlined, CloseOutlined } from '@ant-design/icons';
+import { CheckOutlined } from '@ant-design/icons';
 import type { OrderListDataType } from '@/types/types';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -33,8 +33,22 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
 
   useEffect(() => {
     setIsAttention(!!selectedOrder?.attention);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (selectedOrder) {
+      setDates({
+        estimate_date: selectedOrder.estimate_date || null,
+        order_date: selectedOrder.order_date || null,
+        desired_delivery_date: selectedOrder.desired_delivery_date || null,
+        shipment_date: selectedOrder.shipment_date || null,
+        item_receive_date: selectedOrder.item_receive_date || null,
+        item_return_date: selectedOrder.item_return_date || null,
+        send_document_date: selectedOrder.send_document_date || null,
+        receive_document_date: selectedOrder.receive_document_date || null,
+        accept_date: selectedOrder.accept_date || null,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedOrder]);
+
 
   return (
     <>
@@ -157,35 +171,38 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
 
           <Row gutter={16}>
             <Col span={6}>
-            <Form.Item label="見積日">
-              <DatePicker
-                value={dayjs(dates.estimate_date)}
-                style={{ width: '100%' }}
-                onChange={(date) => setDates(prev => ({ ...prev, estimate_date: date ? date.format("YYYY-MM-DD") : null }))}
-              />
-            </Form.Item>
+              <Form.Item label="見積日">
+                <DatePicker
+                  value={dates.estimate_date ? dayjs(dates.estimate_date) : undefined}
+                  style={{ width: '100%' }}
+                  onChange={(date) => setDates(prev => ({ ...prev, estimate_date: date ? date.format("YYYY-MM-DD") : null }))}
+                />
+              </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="受注日">
                 <DatePicker
-                  defaultValue={selectedOrder?.order_date ? dayjs(selectedOrder.order_date) : undefined}
+                  value={dates.order_date ? dayjs(dates.order_date) : undefined}
                   style={{ width: '100%' }}
+                  onChange={(date) => setDates(prev => ({ ...prev, order_date: date ? date.format("YYYY-MM-DD") : null }))}
                 />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="希望納期">
                 <DatePicker
-                  defaultValue={selectedOrder?.desired_delivery_date ? dayjs(selectedOrder.desired_delivery_date) : undefined}
+                  value={dates.desired_delivery_date ? dayjs(dates.desired_delivery_date) : undefined}
                   style={{ width: '100%' }}
+                  onChange={(date) => setDates(prev => ({ ...prev, desired_delivery_date: date ? date.format("YYYY-MM-DD") : null }))}
                 />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="出荷日">
                 <DatePicker
-                  defaultValue={selectedOrder?.shipment_date ? dayjs(selectedOrder.shipment_date) : undefined}
+                  value={dates.shipment_date ? dayjs(dates.shipment_date) : undefined}
                   style={{ width: '100%' }}
+                  onChange={(date) => setDates(prev => ({ ...prev, shipment_date: date ? date.format("YYYY-MM-DD") : null }))}
                 />
               </Form.Item>
             </Col>
@@ -195,32 +212,36 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
             <Col span={6}>
               <Form.Item label="現品受領日">
                 <DatePicker
-                  defaultValue={selectedOrder?.item_receive_date ? dayjs(selectedOrder.item_receive_date) : undefined}
+                  value={dates.item_receive_date ? dayjs(dates.item_receive_date) : undefined}
                   style={{ width: '100%' }}
+                  onChange={(date) => setDates(prev => ({ ...prev, item_receive_date: date ? date.format("YYYY-MM-DD") : null }))}
                 />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="現品返却日">
                 <DatePicker
-                  defaultValue={selectedOrder?.item_return_date ? dayjs(selectedOrder.item_return_date) : undefined}
+                  value={dates.item_return_date ? dayjs(dates.item_return_date) : undefined}
                   style={{ width: '100%' }}
+                  onChange={(date) => setDates(prev => ({ ...prev, item_return_date: date ? date.format("YYYY-MM-DD") : null }))}
                 />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="資料送付日">
                 <DatePicker
-                  defaultValue={selectedOrder?.send_document_date ? dayjs(selectedOrder.send_document_date) : undefined}
+                  value={dates.send_document_date ? dayjs(dates.send_document_date) : undefined}
                   style={{ width: '100%' }}
+                  onChange={(date) => setDates(prev => ({ ...prev, send_document_date: date ? date.format("YYYY-MM-DD") : null }))}
                 />
               </Form.Item>
             </Col>
             <Col span={6}>
               <Form.Item label="資料受領日">
                 <DatePicker
-                  defaultValue={selectedOrder?.receive_document_date ? dayjs(selectedOrder.receive_document_date) : undefined}
+                  value={dates.receive_document_date ? dayjs(dates.receive_document_date) : undefined}
                   style={{ width: '100%' }}
+                  onChange={(date) => setDates(prev => ({ ...prev, receive_document_date: date ? date.format("YYYY-MM-DD") : null }))}
                 />
               </Form.Item>
             </Col>
@@ -249,8 +270,9 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
             <Col span={12}>
               <Form.Item label="検収日">
                 <DatePicker
-                  defaultValue={selectedOrder?.accept_date ? dayjs(selectedOrder.accept_date) : undefined}
+                  value={dates.accept_date ? dayjs(dates.accept_date) : undefined}
                   style={{ width: '100%' }}
+                  onChange={(date) => setDates(prev => ({ ...prev, accept_date: date ? date.format("YYYY-MM-DD") : null }))}
                 />
               </Form.Item>
             </Col>

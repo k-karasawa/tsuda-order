@@ -4,10 +4,30 @@ import { updateOrder } from '../orderService';
 import { OrderListDataType } from '@/types/types';
 import { useLookupTables } from '../lookupTables';
 
+interface DatesType {
+  estimate_date: string | null;
+  order_date: string | null;
+  desired_delivery_date: string | null;
+  shipment_date: string | null;
+  item_receive_date: string | null;
+  item_return_date: string | null;
+  send_document_date: string | null;
+  receive_document_date: string | null;
+  accept_date: string | null;
+}
+
 export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => void, selectedOrder?: OrderListDataType) => {
   const [form] = Form.useForm();
-  const [dates, setDates] = useState({
+  const [dates, setDates] = useState<DatesType>({
     estimate_date: selectedOrder?.estimate_date || null,
+    order_date: selectedOrder?.order_date || null,
+    desired_delivery_date: selectedOrder?.desired_delivery_date || null,
+    shipment_date: selectedOrder?.shipment_date || null,
+    item_receive_date: selectedOrder?.item_receive_date || null,
+    item_return_date: selectedOrder?.item_return_date || null,
+    send_document_date: selectedOrder?.send_document_date || null,
+    receive_document_date: selectedOrder?.receive_document_date || null,
+    accept_date: selectedOrder?.accept_date || null,
   });
 
   const [isAttention, setIsAttention] = useState(false);
@@ -44,8 +64,6 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
         customer_department_name,
         ...mergedDataWithoutNames
       } = mergedData;
-
-      console.log('Merged Data without names:', mergedDataWithoutNames);
 
       if (selectedOrder && selectedOrder.id) {
         const { data, error } = await updateOrder(mergedDataWithoutNames, selectedOrder.id);
