@@ -2,12 +2,24 @@ import type { ColumnsType } from 'antd/es/table';
 import { OrderListDataType } from '../types/types';
 import { CustomFilterDropdown, filterIcon } from '../components/OrderList/CustomFilterDropdown';
 import { ColorfulTag } from '../components/OrderList/TagColor';
+import { FlagOutlined } from '@ant-design/icons';
 
 export const columns: ColumnsType<OrderListDataType> = [
   {
     dataIndex: 'attention',
     fixed: 'left',
-    width: 50,
+    width: 45,
+    render: (text: boolean) => (
+      <div style={{ textAlign: 'center' }}>
+        {text ? <FlagOutlined style={{ color: 'red', fontSize: '16px' }} /> : null}
+      </div>
+    ),
+  },
+  {
+    title: 'ID',
+    dataIndex: 'id',
+    width: 100,
+    sorter: (a, b) => a.id - b.id,
   },
   {
     title: '受注番号',
@@ -25,7 +37,7 @@ export const columns: ColumnsType<OrderListDataType> = [
   {
     title: '進捗',
     dataIndex: 'progress_name',
-    width: 100,
+    width: 110,
     render: (text: string) => <ColorfulTag text={text} />,
     filterSearch: true,
     sorter: (a, b) => (a.estimate_date || '').localeCompare(b.estimate_date || ''),
