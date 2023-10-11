@@ -29,11 +29,9 @@ export const useOrderList = () => {
     }
   };
 
-
   useEffect(() => {
     fetchData();
   }, []);
 
   return { data, loading, error, refetchOrderList: fetchData };
-
 };

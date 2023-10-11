@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Form, message } from 'antd';
 import { updateOrder } from '../orderService';
 import { OrderListDataType } from '@/types/types';
+import { formatAmount } from '../formatAmountHelper';
 
 interface DatesType {
   estimate_date: string | null;
@@ -33,6 +34,9 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
   const handleUpdate = async () => {
     try {
       const values = form.getFieldsValue();
+      if (values.amount) {
+        values.amount = formatAmount(values.amount);
+      }
       const mergedData = {
         ...values,
         estimate_date: dates.estimate_date,
