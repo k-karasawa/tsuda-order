@@ -14,16 +14,19 @@ export interface Database {
           created_at: string
           id: number
           name: string | null
+          sort: number | null
         }
         Insert: {
           created_at?: string
           id?: number
           name?: string | null
+          sort?: number | null
         }
         Update: {
           created_at?: string
           id?: number
           name?: string | null
+          sort?: number | null
         }
         Relationships: []
       }
@@ -86,7 +89,7 @@ export interface Database {
           attention: boolean
           comment: string | null
           created_at: string
-          customer: number | null
+          customer: number
           customer_department: number | null
           customer_group: string | null
           customer_location: string | null
@@ -106,7 +109,7 @@ export interface Database {
           order_date: string | null
           order_form_code: string | null
           priority: number
-          progress: number | null
+          progress: number
           quantity: number | null
           receive_document_date: string | null
           request: number | null
@@ -120,7 +123,7 @@ export interface Database {
           attention?: boolean
           comment?: string | null
           created_at?: string
-          customer?: number | null
+          customer: number
           customer_department?: number | null
           customer_group?: string | null
           customer_location?: string | null
@@ -140,7 +143,7 @@ export interface Database {
           order_date?: string | null
           order_form_code?: string | null
           priority?: number
-          progress?: number | null
+          progress: number
           quantity?: number | null
           receive_document_date?: string | null
           request?: number | null
@@ -154,7 +157,7 @@ export interface Database {
           attention?: boolean
           comment?: string | null
           created_at?: string
-          customer?: number | null
+          customer?: number
           customer_department?: number | null
           customer_group?: string | null
           customer_location?: string | null
@@ -174,7 +177,7 @@ export interface Database {
           order_date?: string | null
           order_form_code?: string | null
           priority?: number
-          progress?: number | null
+          progress?: number
           quantity?: number | null
           receive_document_date?: string | null
           request?: number | null
@@ -226,16 +229,19 @@ export interface Database {
           created_at: string
           id: number
           level: string
+          sort: number | null
         }
         Insert: {
           created_at?: string
           id?: number
           level?: string
+          sort?: number | null
         }
         Update: {
           created_at?: string
           id?: number
           level?: string
+          sort?: number | null
         }
         Relationships: []
       }

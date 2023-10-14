@@ -50,7 +50,8 @@ const fetchTableData = async (tableName: keyof TableMappingType): Promise<Option
   const labelField = tableMappings[tableName];
   const { data, error } = await supabase
     .from(tableName)
-    .select(`id, ${labelField}`);
+    .select(`id, ${labelField}`)
+    .order('sort', { ascending: true });
 
   return handleDataAndError(data, error, labelField);
 };

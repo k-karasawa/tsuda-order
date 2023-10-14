@@ -13,9 +13,9 @@ export const useOrderList = () => {
       const response = await supabase
         .from('order_list_extended')
         .select('*')
+        .order('id', { ascending: false })                   // idの降順
         .order('desired_delivery_date', { ascending: true }) // 期限が近い順
         .order('priority', { ascending: true })              // 優先度の昇順
-        .order('id', { ascending: false })                   // idの降順
 
       if (response.error) {
         throw response.error;
