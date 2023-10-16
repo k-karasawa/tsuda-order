@@ -39,5 +39,12 @@ export const useOrderList = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // この位置で data をログ出力
+  console.log(data);
+
   return { data, loading, error, refetchOrderList: fetchData };
 };

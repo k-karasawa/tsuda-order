@@ -23,10 +23,17 @@ export const columns: ColumnsType<OrderListDataType> = [
   },
   {
     title: '受注番号',
-    dataIndex: 'order_code',
-    width: 100,
+    dataIndex: 'fullOrderCode',
+    key: 'fullOrderCode',
+    width: 150,
     filterDropdown: CustomFilterDropdown,
-    filterIcon: filterIcon,
+    filterIcon,
+    onFilter: (value: any, record: OrderListDataType) => {
+      if (typeof value === "string") {
+        return record.fullOrderCode.includes(value);
+      }
+      return false;
+    },
   },
   {
     title: '優先度',
