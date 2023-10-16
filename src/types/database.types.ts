@@ -66,23 +66,171 @@ export interface Database {
           created_at: string
           id: number
           name: string
+          prefix: string | null
           sort: number | null
         }
         Insert: {
           created_at?: string
           id?: number
           name: string
+          prefix?: string | null
           sort?: number | null
         }
         Update: {
           created_at?: string
           id?: number
           name?: string
+          prefix?: string | null
           sort?: number | null
         }
         Relationships: []
       }
       order_list: {
+        Row: {
+          accept_date: string | null
+          amount: string | null
+          attention: boolean
+          comment: string | null
+          created_at: string
+          customer: number
+          customer_department: number | null
+          customer_group: string | null
+          customer_location: string | null
+          customer_management_code: string | null
+          customer_person: string | null
+          desired_delivery_date: string | null
+          estimate_code: string | null
+          estimate_date: string | null
+          farm: number | null
+          id: number
+          item_code: string | null
+          item_name: string | null
+          item_receive_date: string | null
+          item_return_date: string | null
+          lot: string | null
+          order_code: string
+          order_date: string | null
+          order_form_code: string | null
+          prefix: string
+          priority: number
+          progress: number
+          quantity: number | null
+          receive_document_date: string | null
+          request: number
+          send_document_date: string | null
+          shipment_date: string | null
+          soft: string | null
+        }
+        Insert: {
+          accept_date?: string | null
+          amount?: string | null
+          attention?: boolean
+          comment?: string | null
+          created_at?: string
+          customer: number
+          customer_department?: number | null
+          customer_group?: string | null
+          customer_location?: string | null
+          customer_management_code?: string | null
+          customer_person?: string | null
+          desired_delivery_date?: string | null
+          estimate_code?: string | null
+          estimate_date?: string | null
+          farm?: number | null
+          id?: number
+          item_code?: string | null
+          item_name?: string | null
+          item_receive_date?: string | null
+          item_return_date?: string | null
+          lot?: string | null
+          order_code: string
+          order_date?: string | null
+          order_form_code?: string | null
+          prefix: string
+          priority?: number
+          progress: number
+          quantity?: number | null
+          receive_document_date?: string | null
+          request: number
+          send_document_date?: string | null
+          shipment_date?: string | null
+          soft?: string | null
+        }
+        Update: {
+          accept_date?: string | null
+          amount?: string | null
+          attention?: boolean
+          comment?: string | null
+          created_at?: string
+          customer?: number
+          customer_department?: number | null
+          customer_group?: string | null
+          customer_location?: string | null
+          customer_management_code?: string | null
+          customer_person?: string | null
+          desired_delivery_date?: string | null
+          estimate_code?: string | null
+          estimate_date?: string | null
+          farm?: number | null
+          id?: number
+          item_code?: string | null
+          item_name?: string | null
+          item_receive_date?: string | null
+          item_return_date?: string | null
+          lot?: string | null
+          order_code?: string
+          order_date?: string | null
+          order_form_code?: string | null
+          prefix?: string
+          priority?: number
+          progress?: number
+          quantity?: number | null
+          receive_document_date?: string | null
+          request?: number
+          send_document_date?: string | null
+          shipment_date?: string | null
+          soft?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_list_customer_department_fkey"
+            columns: ["customer_department"]
+            referencedRelation: "customer_department"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_list_customer_fkey"
+            columns: ["customer"]
+            referencedRelation: "customer"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_list_farm_fkey"
+            columns: ["farm"]
+            referencedRelation: "farm"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_list_priority_fkey"
+            columns: ["priority"]
+            referencedRelation: "priority"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_list_progress_fkey"
+            columns: ["progress"]
+            referencedRelation: "progress"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_list_request_fkey"
+            columns: ["request"]
+            referencedRelation: "request"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      order_list_back: {
         Row: {
           accept_date: string | null
           amount: string | null
@@ -187,37 +335,37 @@ export interface Database {
         }
         Relationships: [
           {
-            foreignKeyName: "order_list_customer_department_fkey"
+            foreignKeyName: "order_list_back_customer_department_fkey"
             columns: ["customer_department"]
             referencedRelation: "customer_department"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "order_list_customer_fkey"
+            foreignKeyName: "order_list_back_customer_fkey"
             columns: ["customer"]
             referencedRelation: "customer"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "order_list_farm_fkey"
+            foreignKeyName: "order_list_back_farm_fkey"
             columns: ["farm"]
             referencedRelation: "farm"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "order_list_priority_fkey"
+            foreignKeyName: "order_list_back_priority_fkey"
             columns: ["priority"]
             referencedRelation: "priority"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "order_list_progress_fkey"
+            foreignKeyName: "order_list_back_progress_fkey"
             columns: ["progress"]
             referencedRelation: "progress"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "order_list_request_fkey"
+            foreignKeyName: "order_list_back_request_fkey"
             columns: ["request"]
             referencedRelation: "request"
             referencedColumns: ["id"]

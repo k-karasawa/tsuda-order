@@ -6,6 +6,8 @@ import { SelectDataCreate } from '../../components/SelectDataCreate/SelectDataCr
 import { supabase } from '@/../utils/supabase';
 import dayjs from 'dayjs';
 import { useRouter } from "next/router";
+import { formatAmount } from '@/helper/formatAmountHelper';
+import { GenerateOrderNumber } from './GenerateOrderNumber';
 
 const { TextArea } = Input;
 
@@ -14,6 +16,8 @@ type FormData = {
 };
 
 export const AddOrderForm: React.FC = () => {
+  const [farmId, setFarmId] = useState<string | number | null>(null);
+  const [orderCode, setOrderCode] = useState<string>('');
   const [formData, setFormData] = useState<FormData>({});
   const formRef = useRef<any>(null);
   const router = useRouter();
@@ -43,9 +47,15 @@ export const AddOrderForm: React.FC = () => {
         if (key.includes('date') && dayjs.isDayjs(value)) {
           return [key, formatDate(value as dayjs.Dayjs)];
         }
+        if (key === 'amount' && value !== null && value !== undefined) {
+          return [key, formatAmount(value.toString())];
+        }
         return [key, value === undefined ? null : value];
       })
     );
+
+    sanitizedData.order_code = orderCode;
+    sanitizedData.progress = '0';
 
     const { data, error } = await supabase
       .from('order_list')
@@ -54,26 +64,25 @@ export const AddOrderForm: React.FC = () => {
     if (error) {
       message.error('受注登録が失敗しました。' + (error.message || '詳細不明のエラー'));
     } else {
-      // 入力内容をクリア
       formRef.current.resetFields();
-
-      // ダイアログを表示
       Modal.confirm({
-        title: '新規受注登録が完了しました。',
+        title: `『${orderCode}』として新規受注登録が完了しました。`,
         content: '続けて受注を登録しますか？',
         okText: '続ける',
         cancelText: '終了する',
         onOk() {
-          // ユーザーが「続ける」をクリックした場合の処理
         },
         onCancel() {
           router.push('/order-list');
         }
       });
     }
-};
+  };
 
-
+  const handleFarmChange = (selectedFarmId: string | number) => {
+    const newFarmId = `${selectedFarmId}_${Date.now()}`;
+    setFarmId(newFarmId);
+  };
 
   return (
     <>
@@ -93,11 +102,6 @@ export const AddOrderForm: React.FC = () => {
       >
         <Row gutter={16}>
           <Col span={7}>
-            <Form.Item label="受注番号" name="order_code">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
             <Form.Item
               label="依頼内容"
               name="request"
@@ -107,10 +111,11 @@ export const AddOrderForm: React.FC = () => {
             </Form.Item>
           </Col>
           <Col span={7}>
-            <Form.Item label="商社" name="farm" required >
+            <Form.Item label="商社" name="farm" required>
               <SelectDataCreate
-                tableName="farm"
-                placeholder="商社を選択"
+                  tableName="farm"
+                  placeholder="商社を選択"
+                  onChange={handleFarmChange}
               />
             </Form.Item>
           </Col>
@@ -118,14 +123,6 @@ export const AddOrderForm: React.FC = () => {
             <Form.Item name="priority" label="優先度" required >
               <SelectDataCreate
                 tableName="priority"
-                placeholder="優先度を選択"
-              />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item name="progress" label="進捗" >
-              <SelectDataCreate
-                tableName="progress"
                 placeholder="優先度を選択"
               />
             </Form.Item>
@@ -291,16 +288,20 @@ export const AddOrderForm: React.FC = () => {
             </Form.Item>
           </Col>
           <Col span={7}>
-            <Form.Item label="金額">
-              <Input name="amount" />
+            <Form.Item
+              label="金額"
+              name="amount"
+            >
+              <Input placeholder='数字で入力してください'/>
             </Form.Item>
           </Col>
         </Row>
 
-        <Form.Item label="備考">
-            <TextArea rows={4} name="comment" placeholder="備考を入力" />
+        <Form.Item label="備考" name="comment">
+            <TextArea rows={4} placeholder="備考を入力" />
         </Form.Item>
       </Form>
+      <GenerateOrderNumber farmId={farmId} onGenerated={setOrderCode} />
     </>
   );
 };

@@ -21,7 +21,13 @@ export const useOrderList = () => {
         throw response.error;
       }
 
-      setData(response.data);
+      // ここでデータにfullOrderCodeを追加
+      const enhancedData = response.data.map(item => ({
+        ...item,
+        fullOrderCode: item.prefix + item.order_code,
+      }));
+
+      setData(enhancedData);
     } catch (err) {
       setError(err);
     } finally {
