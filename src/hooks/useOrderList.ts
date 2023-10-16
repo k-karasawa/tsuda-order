@@ -21,7 +21,6 @@ export const useOrderList = () => {
         throw response.error;
       }
 
-      // ここでデータにfullOrderCodeを追加
       const enhancedData = response.data.map(item => ({
         ...item,
         fullOrderCode: item.prefix + item.order_code,
@@ -42,9 +41,6 @@ export const useOrderList = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
-  // この位置で data をログ出力
-  console.log(data);
 
   return { data, loading, error, refetchOrderList: fetchData };
 };

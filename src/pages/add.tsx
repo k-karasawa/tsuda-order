@@ -20,7 +20,6 @@ const AddOrder: React.FC = () => {
       if (error) {
         throw error;
       }
-      console.log('Order added:', data);
     } catch (error) {
       console.error('Error adding order:', error);
     }

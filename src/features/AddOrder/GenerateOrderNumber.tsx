@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { supabase } from '@/../utils/supabase';
 
 interface Props {
   farmId: string | number | null;
-  onGenerated: (orderNumber: string) => void;
+  setOrderCode: (code: string) => void;
+  setOrderPrefix: (prefix: string) => void;
 }
 
-export const GenerateOrderNumber: React.FC<Props> = ({ farmId, onGenerated }) => {
-  console.log('GenerateOrderNumber: farmId =', farmId);
+export const GenerateOrderNumber: React.FC<Props> = ({ farmId, setOrderCode, setOrderPrefix }) => {
 
   const generateOrderNumber = useCallback(async (id: string) => {
     const actualId = id.split('_')[0];
@@ -54,19 +54,11 @@ export const GenerateOrderNumber: React.FC<Props> = ({ farmId, onGenerated }) =>
 
     const newOrderCode = (currentMax + 1).toString();
 
-    const { data: insertedData, error: insertError } = await supabase
-      .from('order_list')
-      .insert([
-        { prefix, order_code: newOrderCode }
-      ]);
+    // ここで親コンポーネントのstateを直接更新
+    setOrderCode(newOrderCode);
+    setOrderPrefix(prefix);
 
-    if (insertError) {
-      console.error('Failed to insert new order number:', insertError);
-      return;
-    }
-
-    onGenerated(prefix + newOrderCode);
-  }, [onGenerated]);
+  }, [setOrderCode, setOrderPrefix]);
 
   useEffect(() => {
     if (farmId !== null && farmId !== undefined) {

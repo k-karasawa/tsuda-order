@@ -18,6 +18,7 @@ type FormData = {
 export const AddOrderForm: React.FC = () => {
   const [farmId, setFarmId] = useState<string | number | null>(null);
   const [orderCode, setOrderCode] = useState<string>('');
+  const [orderPrefix, setOrderPrefix] = useState<string>('');
   const [formData, setFormData] = useState<FormData>({});
   const formRef = useRef<any>(null);
   const router = useRouter();
@@ -55,6 +56,7 @@ export const AddOrderForm: React.FC = () => {
     );
 
     sanitizedData.order_code = orderCode;
+    sanitizedData.prefix = orderPrefix;
     sanitizedData.progress = '0';
 
     const { data, error } = await supabase
@@ -66,7 +68,7 @@ export const AddOrderForm: React.FC = () => {
     } else {
       formRef.current.resetFields();
       Modal.confirm({
-        title: `『${orderCode}』として新規受注登録が完了しました。`,
+        title: `『${orderPrefix}${orderCode}』として新規受注登録が完了しました。`,
         content: '続けて受注を登録しますか？',
         okText: '続ける',
         cancelText: '終了する',
@@ -301,7 +303,11 @@ export const AddOrderForm: React.FC = () => {
             <TextArea rows={4} placeholder="備考を入力" />
         </Form.Item>
       </Form>
-      <GenerateOrderNumber farmId={farmId} onGenerated={setOrderCode} />
+      <GenerateOrderNumber
+        farmId={farmId}
+        setOrderCode={setOrderCode}
+        setOrderPrefix={setOrderPrefix}
+      />
     </>
   );
 };
