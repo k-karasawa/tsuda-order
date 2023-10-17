@@ -138,19 +138,6 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
               </Form.Item>
             </Col>
           </Row>
-
-          <Row gutter={16}>
-            <Col span={8}>
-              <Form.Item label="商社" name="farm">
-                <SelectDataCreate
-                  tableName="farm"
-                  placeholder="商社を選択"
-                  value={form.getFieldValue('farm')}
-                  onChange={value => form.setFieldsValue({ farm: value })}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
           <Divider />
 
           <Row gutter={16}>

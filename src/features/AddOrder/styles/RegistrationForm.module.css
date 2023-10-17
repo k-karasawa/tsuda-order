@@ -1,22 +1,6 @@
-.registrationform {
-  width: 70%;
-  margin-top: 20px;
-  margin-left: 36px;
-}
-
-.horizontalContainer {
-  display: flex;
-  gap: 1.2rem;
-  margin-bottom: 1.2rem;
-  width: 100%;
-}
-
-.submitButton {
-  background-color: #1890ff !important;  /* !important を追加 */
-  border-color: #1890ff !important;
-}
-
-.submitButton:hover {
-  background-color: #40a9ff !important;  /* ホバー時の色 */
-  border-color: #40a9ff !important;
+.container {
+	height: 100%;
+	width: 100%;
+	background-color: #F5F5F5;
+	padding: 20px 60px 20px 60px;
 }

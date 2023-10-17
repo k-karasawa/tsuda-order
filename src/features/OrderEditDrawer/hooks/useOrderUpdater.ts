@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Form, message } from 'antd';
 import { updateOrder } from '../orderService';
 import { OrderListDataType } from '@/types/types';
-import { formatAmount } from '../formatAmountHelper';
+import { formatAmount } from '../../../helper/formatAmountHelper';
 
 interface DatesType {
   estimate_date: string | null;
@@ -54,8 +54,6 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
     const {
       ...mergedDataWithoutNames
     } = mergedData;
-
-      console.log("@@@@@@@:", mergedDataWithoutNames);
 
       if (selectedOrder && selectedOrder.id) {
         const { data, error } = await updateOrder(mergedDataWithoutNames, selectedOrder.id);

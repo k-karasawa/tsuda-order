@@ -13,13 +13,23 @@ export const generateColumns = (
       ellipsis: true
     };
 
- // 進捗の列とattentionの列でない場合のみ、renderTooltip を適用
-  if (col.dataIndex !== 'progress_name' && col.dataIndex !== 'attention') {
-    baseCol = {
-      ...baseCol,
-      render: (text: string, record: OrderListDataType, index: number) => renderTooltip(text, record, index, col)
-    };
-  }
+    // 進捗の列とattentionの列でない場合のみ、renderTooltip を適用
+    if (col.dataIndex !== 'progress_name' && col.dataIndex !== 'attention') {
+      baseCol = {
+        ...baseCol,
+        render: (text: string, record: OrderListDataType, index: number) => renderTooltip(text, record, index, col)
+      };
+    }
+
+    if (col.dataIndex === 'order_code') {
+      baseCol = {
+        ...baseCol,
+        render: (text: string, record: OrderListDataType, index: number) => renderTooltip(record.fullOrderCode, record, index, col),
+        onFilter: (value: string | number | boolean, record: OrderListDataType) => {
+          return record.fullOrderCode.includes(value.toString());
+        },
+      };
+    }
 
     if ('dataIndex' in col && dynamicFilters[col.dataIndex as keyof OrderListDataType]) {
       return {
@@ -31,6 +41,7 @@ export const generateColumns = (
         },
       };
     }
+
     return baseCol;
   });
 };

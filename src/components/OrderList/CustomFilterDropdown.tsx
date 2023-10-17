@@ -14,8 +14,8 @@ export const CustomFilterDropdown: React.FC<any> = ({
   return (
     <div style={{ padding: 8 }}>
       <Input
-        placeholder="Search order code"
-        value={selectedKeys[0]}
+        placeholder="Search full order code"
+        value={selectedKeys[0] || ''}
         onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
         onPressEnter={confirm}
         style={{ width: 188, marginBottom: 8, display: 'block' }}
@@ -28,7 +28,14 @@ export const CustomFilterDropdown: React.FC<any> = ({
       >
         Search
       </Button>
-      <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
+      <Button
+        onClick={() => {
+          setSelectedKeys([]);
+          clearFilters();
+        }}
+        size="small"
+        style={{ width: 90 }}
+      >
         Reset
       </Button>
     </div>
