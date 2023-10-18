@@ -9,5 +9,7 @@ export const OrderListContainer: React.FC = () => {
   if (loading) return <Spin size="large" tip="Loading..." />;
   if (error) return <p>Error: {error.message}</p>;
 
+  if (!data) return null;
+
   return <OrderListPresentation data={data} refetchOrderList={refetchOrderList} />;
 };
