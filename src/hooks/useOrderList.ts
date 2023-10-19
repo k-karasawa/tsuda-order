@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import { supabase } from '../../utils/supabase';
 import type { OrderListDataType } from '@/types/types';
 
@@ -18,10 +18,15 @@ const fetchOrders = async (): Promise<OrderListDataType[]> => {
 export const useOrderList = () => {
   const { data, error } = useSWR('orders', fetchOrders);
 
+  const revalidate = () => {
+    mutate('orders');
+  };
+
   return {
     data,
     loading: !error && !data,
     error,
     refetchOrderList: fetchOrders,
+    revalidate
   };
 };
