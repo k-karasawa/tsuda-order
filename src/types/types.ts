@@ -12,3 +12,8 @@ export interface OrderListPresentationProps {
   data: OrderListDataType[];
   refetchOrderList: () => void;
 }
+
+export type ProgressType = {
+  id: number;
+  progress: string;
+};

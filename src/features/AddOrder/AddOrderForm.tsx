@@ -90,7 +90,7 @@ export const AddOrderForm: React.FC = () => {
     <>
       <FloatButton
           icon={<FileAddOutlined />}
-          tooltip={<div>更新</div>}
+          tooltip={<div>追加</div>}
           type="primary"
           onClick={handleSubmit}
         />
