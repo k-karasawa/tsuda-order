@@ -5,7 +5,7 @@ import { Spin } from 'antd';
 import { OrderListDataType } from '@/types/types';
 
 type OrderListContainerProps = {
-  filter: (order: OrderListDataType) => boolean;
+  filter?: (order: OrderListDataType) => boolean;
 }
 
 export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter }) => {
