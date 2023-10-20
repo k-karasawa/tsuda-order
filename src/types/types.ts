@@ -11,6 +11,7 @@ export type OrderListDataType = BaseOrderListDataType & ExtendedAttributes;
 export interface OrderListPresentationProps {
   data: OrderListDataType[];
   refetchOrderList: () => void;
+  request_name?: string;
 }
 
 export type ProgressType = {

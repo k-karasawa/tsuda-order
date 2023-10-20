@@ -2,8 +2,13 @@ import React from 'react';
 import { useOrderList } from '../hooks/useOrderList';
 import { OrderListPresentation } from '@/components/OrderList/OrderListPresentation';
 import { Spin } from 'antd';
+import { OrderListDataType } from '@/types/types';
 
-export const OrderListContainer: React.FC = () => {
+type OrderListContainerProps = {
+  filter: (order: OrderListDataType) => boolean;
+}
+
+export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter }) => {
   const { data, loading, error, refetchOrderList } = useOrderList();
 
   if (loading) return <Spin size="large" tip="Loading..." />;
@@ -11,5 +16,8 @@ export const OrderListContainer: React.FC = () => {
 
   if (!data) return null;
 
-  return <OrderListPresentation data={data} refetchOrderList={refetchOrderList} />;
+  const filteredData = filter ? data.filter(filter) : data;
+
+  return <OrderListPresentation data={filteredData} refetchOrderList={refetchOrderList} />;
 };
+

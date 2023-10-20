@@ -25,7 +25,7 @@ export const columns: ColumnsType<OrderListDataType> = [
     title: '受注番号',
     dataIndex: 'fullOrderCode',
     key: 'fullOrderCode',
-    width: 150,
+    width: 120,
     filterDropdown: CustomFilterDropdown,
     filterIcon,
     onFilter: (value: any, record: OrderListDataType) => {
@@ -44,7 +44,7 @@ export const columns: ColumnsType<OrderListDataType> = [
   {
     title: '進捗',
     dataIndex: 'progress_name',
-    width: 110,
+    width: 100,
     render: (text: string) => <ColorfulTag text={text} />,
     filterSearch: true,
     sorter: (a, b) => (a.estimate_date || '').localeCompare(b.estimate_date || ''),
