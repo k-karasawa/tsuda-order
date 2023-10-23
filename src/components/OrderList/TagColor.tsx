@@ -4,12 +4,13 @@ import { Tag } from 'antd';
 const ProgressColors: { [key: string]: string } = {
   '作業中': 'blue',
   'OH作業中': 'blue',
-  '受注済': 'blue',
-  '見積提出': 'blue',
+  '受注済': 'red',
+  '見積提出': 'pink',
   '検証中': 'purple',
-  '失注': '#f5f5f5',
+  '失注': '#666666',
   '完了': 'green',
   '仮見積': 'orange',
+  '受付': 'orange',
 };
 
 interface ColorfulTagProps {
