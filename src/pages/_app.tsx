@@ -6,6 +6,7 @@ import { supabase } from "../../utils/supabase";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { RecoilRoot } from 'recoil';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -29,12 +30,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   }, [router]);
 
   return (
-    <SessionContextProvider
-      supabaseClient={supabase}
-      initialSession={pageProps.initialSession}
-    >
-      {getLayout(<Component {...pageProps} />)}
-    </SessionContextProvider>
+    <RecoilRoot>
+      <SessionContextProvider
+        supabaseClient={supabase}
+        initialSession={pageProps.initialSession}
+      >
+        {getLayout(<Component {...pageProps} />)}
+      </SessionContextProvider>
+    </RecoilRoot>
   );
 }
 

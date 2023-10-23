@@ -2,6 +2,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Tabs, Table, Spin } from 'antd';
 import type { OrderListDataType } from '@/types/types';
 import { useProgress } from '@/hooks/useProgress';
+import { useRecoilValue } from 'recoil';
+import { XScrollState } from '@/recoil/atoms';
 
 const { TabPane } = Tabs;
 
@@ -12,6 +14,7 @@ interface OrderTabsProps {
 }
 
 export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick }) => {
+  const scrollX = useRecoilValue(XScrollState);
   const [activeTab, setActiveTab] = useState<string | null>(null);
   const { data: progressData, loading: progressLoading } = useProgress();
 
@@ -63,7 +66,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: 3700 }}
+          scroll={{ x: scrollX }}
           onRow={(record) => ({
             onClick: () => onRowClick(record),
           })}
@@ -80,7 +83,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: 3700 }}
+          scroll={{ x: scrollX }}
           onRow={(record) => ({
             onClick: () => onRowClick(record),
           })}
@@ -97,7 +100,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: 3700 }}
+          scroll={{ x: scrollX }}
           onRow={(record) => ({
             onClick: () => onRowClick(record),
           })}
@@ -114,7 +117,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: 3700 }}
+          scroll={{ x: scrollX }}
           onRow={(record) => ({
             onClick: () => onRowClick(record),
           })}
@@ -131,7 +134,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: 3700 }}
+          scroll={{ x: scrollX }}
           onRow={(record) => ({
             onClick: () => onRowClick(record),
           })}

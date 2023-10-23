@@ -38,7 +38,7 @@ export const columns: ColumnsType<OrderListDataType> = [
   {
     title: '優先度',
     dataIndex: 'priority_level',
-    width: 100,
+    width: 120,
     sorter: (a, b) => (a.estimate_date || '').localeCompare(b.estimate_date || ''),
   },
   {

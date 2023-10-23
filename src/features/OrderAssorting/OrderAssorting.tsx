@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { OrderListContainer } from "@/containers/OrderListContainer";
 import styles from './styles.module.css';
 import { columns } from '@/data/columns';
+import { useRecoilState } from 'recoil';
+import { XScrollState } from '@/recoil/atoms';
+
 
 type OrderAssortingProps = {
   filterCondition: string;
 };
 
 const customColumnsForAssorting = [
-  columns[1], //ID
+  columns[0], //チェックボックス
   columns[2], //受注番号
   columns[3], //優先度
   columns[4], //進捗
@@ -25,10 +28,15 @@ const customColumnsForAssorting = [
   columns[22], //現品返却日
   columns[24], //資料受領日
   columns[30], //備考
-  columns[31], //登録日
 ];
 
 export const OrderAssorting: React.FC<OrderAssortingProps> = ({ filterCondition }) => {
+  const [scrollX, setScrollX] = useRecoilState(XScrollState);
+
+  useEffect(() => {
+    setScrollX(2000);
+  }, [setScrollX]);
+
   return (
     <div className={styles.container}>
       <OrderListContainer filter={(order: any) => order.request_name === filterCondition} customColumns={customColumnsForAssorting} />
