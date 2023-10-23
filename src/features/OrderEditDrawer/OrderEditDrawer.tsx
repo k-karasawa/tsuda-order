@@ -55,6 +55,7 @@ export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, sele
         onClose={onClose}
         open={visible}
         bodyStyle={{ paddingBottom: 40 }}
+        destroyOnClose
       >
         <FloatButton
           icon={<CheckOutlined />}

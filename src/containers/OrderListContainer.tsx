@@ -3,12 +3,14 @@ import { useOrderList } from '../hooks/useOrderList';
 import { OrderListPresentation } from '@/components/OrderList/OrderListPresentation';
 import { Spin } from 'antd';
 import { OrderListDataType } from '@/types/types';
+import { ColumnsType } from 'antd/es/table';
 
 type OrderListContainerProps = {
   filter?: (order: OrderListDataType) => boolean;
+  customColumns?: ColumnsType<OrderListDataType>;
 }
 
-export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter }) => {
+export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter, customColumns }) => {
   const { data, loading, error, refetchOrderList } = useOrderList();
 
   if (loading) return <Spin size="large" tip="Loading..." />;
@@ -18,6 +20,6 @@ export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter }
 
   const filteredData = filter ? data.filter(filter) : data;
 
-  return <OrderListPresentation data={filteredData} refetchOrderList={refetchOrderList} />;
+  return <OrderListPresentation data={filteredData} refetchOrderList={refetchOrderList} columns={customColumns} />;
 };
 

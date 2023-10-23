@@ -11,11 +11,11 @@ import { OrderEditDrawer } from '@/features/OrderEditDrawer/OrderEditDrawer';
 import { useOrderList } from '@/hooks/useOrderList';
 import Link from 'next/link';
 
-export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data, refetchOrderList }) => {
+export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data, refetchOrderList, columns }) => {
   const { revalidate } = useOrderList();
   const [selectedOrder, setSelectedOrder] = useState<OrderListDataType | undefined>();
   const dynamicFilters = createDynamicFilters(data, filterableColumns);
-  const columns = generateColumns(originalColumns, dynamicFilters);
+  const usedColumns = columns || generateColumns(originalColumns, dynamicFilters);
 
   const handleRowClick = (record: OrderListDataType) => {
     setSelectedOrder(record);
@@ -35,7 +35,7 @@ export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ da
           </Link>
           <OrderTabs
             data={data}
-            columns={columns}
+            columns={usedColumns}
             onRowClick={record => {
               handleRowClick(record);
               showDrawer();
