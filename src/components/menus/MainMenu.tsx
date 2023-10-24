@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { items } from './MenuItems';
 import { useRouter } from 'next/router';
+import { signOut } from '@/components/Auth/signout';
 
 const { Header, Content, Sider } = Layout;
 
@@ -13,7 +14,11 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
   } = theme.useToken();
 
   const handleMenuClick = ({ key }: { key: string }) => {
-    router.push(key);
+    if (key === "SIGN_OUT") {
+      signOut();
+    } else {
+      router.push(key);
+    }
   };
 
   const getPageTitle = (key: string): string => {
@@ -41,7 +46,8 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
           </div>
           <Menu
             theme="dark"
-            defaultSelectedKeys={['/']}
+            defaultSelectedKeys={['/']} // これは初回レンダリング時のデフォルトの選択を示します。
+            selectedKeys={[router.pathname]} // 現在のページのパスに基づいて選択されているキーを動的にセットします。
             mode="inline"
             items={items}
             onClick={handleMenuClick}
