@@ -36,11 +36,11 @@ export const items: MenuItem[] = [
     getItem('開発', '/order-development', <SnippetsOutlined />),
     getItem('工事', '/order-construction', <SnippetsOutlined />),
   ]),
-  getItem('商社別一覧', '31', <FolderOpenOutlined />, [
-    getItem('Tリバース Eng', '8', <SnippetsOutlined />),
-    getItem('Sリバース Eng', '9', <SnippetsOutlined />),
-    getItem('Mリバース Eng', '10', <SnippetsOutlined />),
-    getItem('特機事業部案件', '11', <SnippetsOutlined />),
+  getItem('商社別一覧', '', <FolderOpenOutlined />, [
+    getItem('Tリバース Eng', '/order-t', <SnippetsOutlined />),
+    getItem('Sリバース Eng', '/order-s', <SnippetsOutlined />),
+    getItem('Mリバース Eng', '/order-m', <SnippetsOutlined />),
+    getItem('特機事業部案件', '/order-ts', <SnippetsOutlined />),
   ]),
   getItem('設定管理', '90', <SettingOutlined />, [
     getItem('マスター管理', '/98'),
