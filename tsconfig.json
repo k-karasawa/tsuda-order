@@ -18,6 +18,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/features/Master/FarmManage"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/features/Master/FarmManage", "src/features/Master/types"],
   "exclude": ["node_modules"]
 }

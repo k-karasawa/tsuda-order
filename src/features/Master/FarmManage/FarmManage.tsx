@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Table, message, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Table, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { supabase } from '../../../../utils/supabase';
-import { useFarms } from '../hooks/useFarms';
+import { useFarms } from './useFarms';
 import { FarmModal } from './FarmModal';
 import { FarmColumns } from './FarmColumns';
 

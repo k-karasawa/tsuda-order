@@ -5,6 +5,8 @@ import type { CollapseProps } from 'antd';
 import { Collapse, theme } from 'antd';
 import styles from './styles/Master.module.css';
 import { FarmManage } from './FarmManage/FarmManage';
+import { ProgressManage } from './ProgressManage/ProgressManage';
+
 const text = `
   A dog is a type of domesticated animal.
   Known for its loyalty and faithfulness,
@@ -39,13 +41,7 @@ const getItems: (panelStyle: CSSProperties) => CollapseProps['items'] = (panelSt
   {
     key: '5',
     label: '進捗ラベル管理',
-    children: <p>{text}</p>,
-    style: panelStyle,
-  },
-  {
-    key: '6',
-    label: '依頼内容ラベル管理',
-    children: <p>{text}</p>,
+    children: <ProgressManage />,
     style: panelStyle,
   },
 ];
