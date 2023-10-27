@@ -85,6 +85,46 @@ export interface Database {
         }
         Relationships: []
       }
+      item_return: {
+        Row: {
+          created_at: string
+          id: number
+          remark: string | null
+          resipment_date: string | null
+          return_date: string
+          return_orderlist_id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          remark?: string | null
+          resipment_date?: string | null
+          return_date: string
+          return_orderlist_id: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          remark?: string | null
+          resipment_date?: string | null
+          return_date?: string
+          return_orderlist_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "item_return_return_orderlist_id_fkey"
+            columns: ["return_orderlist_id"]
+            referencedRelation: "order_list"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "item_return_return_orderlist_id_fkey"
+            columns: ["return_orderlist_id"]
+            referencedRelation: "order_list_extended"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       order_list: {
         Row: {
           accept_date: string | null
@@ -108,7 +148,7 @@ export interface Database {
           item_receive_date: string | null
           item_return_date: string | null
           lot: string | null
-          order_code: string
+          order_code: number
           order_date: string | null
           order_form_code: string | null
           prefix: string
@@ -143,7 +183,7 @@ export interface Database {
           item_receive_date?: string | null
           item_return_date?: string | null
           lot?: string | null
-          order_code: string
+          order_code: number
           order_date?: string | null
           order_form_code?: string | null
           prefix: string
@@ -178,7 +218,7 @@ export interface Database {
           item_receive_date?: string | null
           item_return_date?: string | null
           lot?: string | null
-          order_code?: string
+          order_code?: number
           order_date?: string | null
           order_form_code?: string | null
           prefix?: string
@@ -253,18 +293,21 @@ export interface Database {
       }
       progress: {
         Row: {
+          color: string | null
           created_at: string
           id: number
           progress: string
           sort: number | null
         }
         Insert: {
+          color?: string | null
           created_at?: string
           id?: number
           progress: string
           sort?: number | null
         }
         Update: {
+          color?: string | null
           created_at?: string
           id?: number
           progress?: string
@@ -321,7 +364,7 @@ export interface Database {
           item_receive_date: string | null
           item_return_date: string | null
           lot: string | null
-          order_code: string | null
+          order_code: number | null
           order_date: string | null
           order_form_code: string | null
           prefix: string | null

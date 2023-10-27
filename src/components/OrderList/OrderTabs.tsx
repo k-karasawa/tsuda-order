@@ -35,8 +35,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
 
     switch (activeTab) {
       case 'inProgress':
-        const filteredInProgress = data.filter(order => order.progress !== PROGRESS_LOST_ID && order.progress !== PROGRESS_COMPLETED_ID).sort((a, b) => b.id - a.id);
-        return filteredInProgress;
+        return data.filter(order => order.progress !== PROGRESS_LOST_ID && order.progress !== PROGRESS_COMPLETED_ID).sort((a, b) => b.id - a.id);
       case 'inReceived':
         return data.filter(order => order.progress === PROGRESS_INRECEIVED_ID).sort((a, b) => b.id - a.id);
       case 'completed':
@@ -57,6 +56,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
     <Tabs defaultActiveKey="inProgress" onChange={setActiveTab}>
       <TabPane tab="進行中" key="inProgress">
         <Table
+          size="small"
           columns={columns}
           dataSource={filteredData}
           rowKey="id"
@@ -74,6 +74,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
       </TabPane>
       <TabPane tab="受付" key="inReceived">
         <Table
+          size="small"
           columns={columns}
           dataSource={filteredData}
           rowKey="id"
@@ -91,6 +92,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
       </TabPane>
       <TabPane tab="完了" key="completed">
         <Table
+          size="small"
           columns={columns}
           dataSource={filteredData}
           rowKey="id"
@@ -108,6 +110,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
       </TabPane>
       <TabPane tab="失注" key="lost">
         <Table
+          size="small"
           columns={columns}
           dataSource={filteredData}
           rowKey="id"
@@ -125,6 +128,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
       </TabPane>
       <TabPane tab="全案件" key="all">
         <Table
+          size="small"
           columns={columns}
           dataSource={filteredData}
           rowKey="id"

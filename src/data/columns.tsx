@@ -20,6 +20,7 @@ export const columns: ColumnsType<OrderListDataType> = [
     dataIndex: 'id',
     width: 100,
     sorter: (a, b) => a.id - b.id,
+    fixed: 'left',
   },
   {
     title: '受注番号',
@@ -28,6 +29,7 @@ export const columns: ColumnsType<OrderListDataType> = [
     width: 120,
     filterDropdown: CustomFilterDropdown,
     filterIcon,
+    fixed: 'left',
     onFilter: (value: any, record: OrderListDataType) => {
       if (typeof value === "string") {
         return record.fullOrderCode.includes(value);

@@ -46,8 +46,8 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
           </div>
           <Menu
             theme="dark"
-            defaultSelectedKeys={['/']} // これは初回レンダリング時のデフォルトの選択を示します。
-            selectedKeys={[router.pathname]} // 現在のページのパスに基づいて選択されているキーを動的にセットします。
+            defaultSelectedKeys={['/']}
+            selectedKeys={[router.pathname]}
             mode="inline"
             items={items}
             onClick={handleMenuClick}

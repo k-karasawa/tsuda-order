@@ -46,7 +46,7 @@ export const items: MenuItem[] = [
     getItem('特機事業部案件', '/order-ts', <SnippetsOutlined />),
   ]),
   getItem('設定管理', '90', <SettingOutlined />, [
-    getItem('マスター管理', '/98'),
+    getItem('マスター管理', '/master'),
     getItem('システム設定', '/99')
   ]),
   getItem('サインアウト', 'SIGN_OUT', <LogoutOutlined />, undefined, signOut),

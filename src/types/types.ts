@@ -19,4 +19,5 @@ export interface OrderListPresentationProps {
 export type ProgressType = {
   id: number;
   progress: string;
+  color: string;
 };
