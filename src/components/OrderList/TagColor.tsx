@@ -1,23 +1,16 @@
 import React from 'react';
 import { Tag } from 'antd';
-
-const ProgressColors: { [key: string]: string } = {
-  '作業中': 'blue',
-  'OH作業中': 'blue',
-  '受注済': 'red',
-  '見積提出': 'pink',
-  '検証中': 'purple',
-  '失注': '#666666',
-  '完了': 'green',
-  '仮見積': 'orange',
-  '受付': 'orange',
-};
+import { useProgress } from '@/hooks/useProgress';
 
 interface ColorfulTagProps {
   text: string;
 }
 
 export const ColorfulTag: React.FC<ColorfulTagProps> = ({ text }) => {
-  const color = ProgressColors[text] || 'gray';
+  const { data: progresses } = useProgress();
+
+  const matchingProgress = progresses?.find(p => p.progress === text);
+  const color = matchingProgress ? matchingProgress.color : 'gray';
+
   return <Tag color={color}>{text}</Tag>;
 }
