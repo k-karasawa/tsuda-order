@@ -45,6 +45,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
       default:
         return data.sort((a, b) => b.id - a.id);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, data, PROGRESS_COMPLETED_ID, PROGRESS_INRECEIVED_ID, PROGRESS_LOST_ID]);
 
   if (progressLoading || !data) {
