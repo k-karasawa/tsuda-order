@@ -20,11 +20,13 @@ export const RequestColumns = ({
   return [
     {
       title: '名称',
-      dataIndex: 'name'
+      dataIndex: 'name',
+      width: 200
     },
     {
       title: '選択表示順',
-      dataIndex: 'sort'
+      dataIndex: 'sort',
+      width: 200
     },
     {
       title: '',

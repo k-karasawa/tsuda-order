@@ -72,6 +72,7 @@ export const RequestManage: React.FC = () => {
           setName('');
           setSort(null);
         }}
+        style={{ marginBottom: '20px' }}
       >
         追加
       </Button>

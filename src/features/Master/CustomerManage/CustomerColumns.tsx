@@ -2,23 +2,20 @@ import React from 'react';
 import { Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-interface FarmColumnProps {
-  setCurrentFarm: React.Dispatch<React.SetStateAction<any>>;
+interface CustomerColumnProps {
+  setCurrentCustomer: React.Dispatch<React.SetStateAction<any>>;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   setName: React.Dispatch<React.SetStateAction<string>>;
   setSort: React.Dispatch<React.SetStateAction<number | null>>;
-  setPrefix: React.Dispatch<React.SetStateAction<string>>;
-  handleDeleteFarm: (id: number) => void;
+  handleDeleteCustomer: (id: number) => void;
 }
 
-export const FarmColumns = ({
-  setCurrentFarm,
+export const CustomerColumns = ({
+  setCurrentCustomer,
   setVisible,
   setName,
-  setSort,
-  setPrefix,
-  handleDeleteFarm
-}: FarmColumnProps) => {
+  handleDeleteCustomer
+}: CustomerColumnProps) => {
   return [
     {
       title: '名称',
@@ -31,29 +28,22 @@ export const FarmColumns = ({
       width: 200
     },
     {
-      title: '受注番号の先頭記号',
-      dataIndex: 'prefix',
-      width: 200
-    },
-    {
       title: '',
       render: (_: any, record: any) => (
         <>
           <a
             onClick={() => {
-              setCurrentFarm(record);
+              setCurrentCustomer(record);
               setVisible(true);
               setName(record.name);
-              setSort(record.sort);
-              setPrefix(record.prefix);
             }}
             style={{ marginRight: '40px' }}
           >
             <EditOutlined />
           </a>
           <Popconfirm
-            title="この商社情報を削除してもよろしいですか？"
-            onConfirm={() => handleDeleteFarm(record.id)}
+            title="この顧客情報を削除してもよろしいですか？"
+            onConfirm={() => handleDeleteCustomer(record.id)}
             okText="はい"
             cancelText="いいえ"
           >

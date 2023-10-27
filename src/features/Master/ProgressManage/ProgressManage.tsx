@@ -75,6 +75,7 @@ export const ProgressManage: React.FC = () => {
           setSort(null);
           setColor('');
         }}
+        style={{ marginBottom: '20px' }}
       >
         追加
       </Button>
@@ -90,8 +91,8 @@ export const ProgressManage: React.FC = () => {
         setProgress={setProgress}
         setSort={setSort}
         currentProgress={currentProgress}
-        setColor={setColor}  // この行を追加
-        color={color}        // この行を追加
+        setColor={setColor}
+        color={color}
       />
     </div>
   );

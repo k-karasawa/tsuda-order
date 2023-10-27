@@ -20,14 +20,17 @@ export const ProgressColumns = ({
   return [
     {
       title: '進捗',
-      dataIndex: 'progress'
+      dataIndex: 'progress',
+      width: 200
     },
     {
       title: '選択表示順',
-      dataIndex: 'sort'
+      dataIndex: 'sort',
+      width: 200
     },
     {
       title: '表示色',
+      width: 200,
       dataIndex: 'color',
       render: (color: string) => (
         <div style={{ width: '20px', height: '20px', backgroundColor: color }} />

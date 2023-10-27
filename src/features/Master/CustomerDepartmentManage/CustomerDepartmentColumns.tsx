@@ -1,28 +1,27 @@
+// src/features/Master/CustomerDepartmentManage/CustomerDepartmentColumns.tsx
 import React from 'react';
 import { Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
-interface FarmColumnProps {
-  setCurrentFarm: React.Dispatch<React.SetStateAction<any>>;
+interface CustomerDepartmentColumnProps {
+  setCurrentDepartment: React.Dispatch<React.SetStateAction<any>>;
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  setName: React.Dispatch<React.SetStateAction<string>>;
+  setDepartment: React.Dispatch<React.SetStateAction<string>>;
   setSort: React.Dispatch<React.SetStateAction<number | null>>;
-  setPrefix: React.Dispatch<React.SetStateAction<string>>;
-  handleDeleteFarm: (id: number) => void;
+  handleDeleteDepartment: (id: number) => void;
 }
 
-export const FarmColumns = ({
-  setCurrentFarm,
+export const CustomerDepartmentColumns = ({
+  setCurrentDepartment,
   setVisible,
-  setName,
+  setDepartment,
   setSort,
-  setPrefix,
-  handleDeleteFarm
-}: FarmColumnProps) => {
+  handleDeleteDepartment
+}: CustomerDepartmentColumnProps) => {
   return [
     {
-      title: '名称',
-      dataIndex: 'name',
+      title: '部署名',
+      dataIndex: 'department',
       width: 200
     },
     {
@@ -31,8 +30,10 @@ export const FarmColumns = ({
       width: 200
     },
     {
-      title: '受注番号の先頭記号',
-      dataIndex: 'prefix',
+      title: '顧客名',
+      dataIndex: 'customer',
+      key: 'name',
+      render: (customer: any) => customer?.name || '',
       width: 200
     },
     {
@@ -41,19 +42,18 @@ export const FarmColumns = ({
         <>
           <a
             onClick={() => {
-              setCurrentFarm(record);
+              setCurrentDepartment(record);
               setVisible(true);
-              setName(record.name);
+              setDepartment(record.department);
               setSort(record.sort);
-              setPrefix(record.prefix);
             }}
             style={{ marginRight: '40px' }}
           >
             <EditOutlined />
           </a>
           <Popconfirm
-            title="この商社情報を削除してもよろしいですか？"
-            onConfirm={() => handleDeleteFarm(record.id)}
+            title="この部署情報を削除してもよろしいですか？"
+            onConfirm={() => handleDeleteDepartment(record.id)}
             okText="はい"
             cancelText="いいえ"
           >

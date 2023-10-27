@@ -76,6 +76,7 @@ export const FarmManage: React.FC = () => {
           setSort(null);
           setPrefix('');
         }}
+        style={{ marginBottom: '20px' }}
       >
         追加
       </Button>
