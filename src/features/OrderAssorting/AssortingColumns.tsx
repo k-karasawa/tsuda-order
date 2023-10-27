@@ -15,9 +15,6 @@ export const customColumnsForAssorting = [
     ...columns[30], // 備考
     render: ellipsisRender
   },
-  columns[6], // 顧客
-  columns[7], // 部署
-  columns[8], // 拠点
   {
     ...columns[12], // 品番
     render: ellipsisRender
@@ -26,6 +23,9 @@ export const customColumnsForAssorting = [
     ...columns[13], // 品名
     render: ellipsisRender
   },
+  columns[6], // 顧客
+  columns[7], // 部署
+  columns[8], // 拠点
   columns[16], // 台数
   columns[20], // 出荷日
   columns[21], // 現品受領日
