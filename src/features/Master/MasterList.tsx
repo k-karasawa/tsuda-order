@@ -6,6 +6,7 @@ import { Collapse, theme } from 'antd';
 import styles from './styles/Master.module.css';
 import { FarmManage } from './FarmManage/FarmManage';
 import { ProgressManage } from './ProgressManage/ProgressManage';
+import { RequestManage } from './RequestManage/RequestManage';
 
 const text = `
   A dog is a type of domesticated animal.
@@ -35,7 +36,7 @@ const getItems: (panelStyle: CSSProperties) => CollapseProps['items'] = (panelSt
   {
     key: '4',
     label: '依頼内容管理',
-    children: <p>{text}</p>,
+    children: <RequestManage />,
     style: panelStyle,
   },
   {
