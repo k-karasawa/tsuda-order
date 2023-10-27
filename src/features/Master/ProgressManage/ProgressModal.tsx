@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Input, InputNumber, ColorPicker } from 'antd';
+import { Modal, Input, InputNumber, Select } from 'antd';
 
 interface ProgressModalProps {
   visible: boolean;
@@ -14,13 +14,6 @@ interface ProgressModalProps {
   color: string;
 }
 
-const rgbToHex = (r: number, g: number, b: number) => {
-  return '#' + [r, g, b].map(x => {
-    const hex = Math.round(x).toString(16);
-    return hex.length === 1 ? '0' + hex : hex;
-  }).join('');
-};
-
 export const ProgressModal: React.FC<ProgressModalProps> = ({
   visible,
   onOk,
@@ -33,6 +26,10 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
   setColor,
   color
 }) => {
+  const colorOptions = [
+    'magenta', 'red', 'volcano', 'orange', 'gold', 'lime', 'green', 'cyan', 'blue', 'geekblue', 'purple', 'pink', 'gray'
+  ];
+
   return (
     <Modal title={currentProgress ? '進捗情報の編集' : '進捗情報の追加'} visible={visible} onOk={onOk} onCancel={onCancel}>
       <div style={{ marginBottom: '20px' }}>
@@ -45,15 +42,17 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
       </div>
       <div style={{ marginBottom: '20px' }}>
         <div style={{ marginBottom: '10px' }}>色:</div>
-        <ColorPicker
+        <Select
           value={color}
-          showText
-          onChange={(colorValue: any) => {
-            const rgb = colorValue.metaColor;
-            const rgbColor = rgbToHex(rgb.r, rgb.g, rgb.b);
-            setColor(rgbColor);
-          }}
-        />
+          onChange={(value: string) => setColor(value)}
+          style={{ width: '100%' }}
+        >
+          {colorOptions.map(option => (
+            <Select.Option key={option} value={option}>
+              {option}
+            </Select.Option>
+          ))}
+        </Select>
       </div>
     </Modal>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popconfirm } from 'antd';
+import { Popconfirm, Tag } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
 interface ProgressColumnProps {
@@ -30,10 +30,10 @@ export const ProgressColumns = ({
     },
     {
       title: '表示色',
-      width: 200,
       dataIndex: 'color',
-      render: (color: string) => (
-        <div style={{ width: '20px', height: '20px', backgroundColor: color }} />
+      key: 'color',
+      render: (color: string, record: any) => (
+        <Tag color={color}>{record.progress}</Tag>
       ),
     },
     {
