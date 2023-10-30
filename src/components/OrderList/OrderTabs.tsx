@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Tabs, Table, Spin } from 'antd';
-import type { OrderListDataType } from '@/types/types';
-import { useProgress } from '@/hooks/useProgress';
+import type { OrderListDataType } from '../../types/types';
+import { useProgress } from '../../hooks/useProgress';
 import { useRecoilValue } from 'recoil';
-import { XScrollState } from '@/recoil/atoms';
+import { XScrollState } from '../../recoil/atoms';
 
 const { TabPane } = Tabs;
 
