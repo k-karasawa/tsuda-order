@@ -9,19 +9,21 @@
   import { SecondaryDrawer } from './SecondaryDrawer';
   import customParseFormat from 'dayjs/plugin/customParseFormat';
   import dayjs from 'dayjs';
+  import { useRecoilValue } from 'recoil';
+  import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
 
   dayjs.extend(customParseFormat);
   const { TextArea } = Input;
 
   interface OrderEditDrawerProps {
-    selectedOrder?: OrderListDataType;
     children: (showDrawer: () => void) => React.ReactNode;
     onUpdated: () => void;
   }
 
-  export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, selectedOrder, onUpdated }) => {
+  export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, onUpdated }) => {
     const [visible, setVisible] = useState(false);
     const [secondaryDrawerVisible, setSecondaryDrawerVisible] = useState(false);
+    const selectedOrder = useRecoilValue(selectedOrderAtom);
 
     const openSecondaryDrawer = () => {
       setSecondaryDrawerVisible(true);
@@ -59,7 +61,7 @@
         <Drawer
           title={
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              {`受注番号 ${selectedOrder?.order_code}`}
+              {`受注番号　${selectedOrder?.prefix}${selectedOrder?.order_code}`}
               <Switch
                 checkedChildren="重要"
                 unCheckedChildren="普通"
