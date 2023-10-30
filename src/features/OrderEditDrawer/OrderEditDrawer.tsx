@@ -1,7 +1,6 @@
   import React, { useState, useEffect } from 'react';
   import { Drawer, Form, Input, Row, Col, Divider, FloatButton, Switch } from 'antd';
   import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
-  import type { OrderListDataType } from '../../types/types';
   import { useOrderUpdater } from './hooks/useOrderUpdater';
   import { CustomDatePicker } from './CustomDatePicker';
   import { useOrderEffect } from './hooks/useOrderEffect';
@@ -61,7 +60,7 @@
         <Drawer
           title={
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              {`受注番号　${selectedOrder?.prefix}${selectedOrder?.order_code}`}
+              {`受注番号　${selectedOrder?.prefix}${selectedOrder?.order_code}${selectedOrder?.id}`}
               <Switch
                 checkedChildren="重要"
                 unCheckedChildren="普通"

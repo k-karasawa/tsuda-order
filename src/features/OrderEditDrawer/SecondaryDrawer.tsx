@@ -1,8 +1,9 @@
 import React from 'react';
-import { Drawer, Form, Input, Row, Col, Button, DatePicker } from 'antd';
+import { Drawer, Form, Input, Row, Col, Button, DatePicker, message } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import { FloatButton } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
+import { useRegisterReturn } from './hooks/useRegisterReturn';
 
 interface SecondaryDrawerProps {
   visible: boolean;
@@ -11,12 +12,29 @@ interface SecondaryDrawerProps {
 
 export const SecondaryDrawer: React.FC<SecondaryDrawerProps> = ({ visible, onClose }) => {
   const [form] = Form.useForm();
+  const { registerReturn } = useRegisterReturn();
+
+  const handleRegister = async () => {
+    try {
+      const values = await form.validateFields();
+      await registerReturn({
+        return_date: values.return_date.format('YYYY-MM-DD'),
+        reshipment_date: values.reshipment_date.format('YYYY-MM-DD'),
+        remark: values.comment,
+      });
+      message.success('登録に成功しました！');
+      onClose();
+    } catch (error) {
+      console.error('Error registering return:', error);
+      message.error('登録に失敗しました。出戻り日は必須です。');
+    }
+  };
 
   return (
     <Drawer
       title={
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          出戻登録の詳細
+          出戻り登録の詳細
           <Button onClick={onClose}>
             キャンセル
           </Button>
@@ -24,13 +42,13 @@ export const SecondaryDrawer: React.FC<SecondaryDrawerProps> = ({ visible, onClo
       }
       width={600}
       onClose={onClose}
-      visible={visible}
+      open={visible}
       destroyOnClose
     >
       <Form layout="vertical" form={form}>
         <Row gutter={16}>
           <Col span={12}>
-            <Form.Item label="出戻日" name="return_date" initialValue={moment()}>
+            <Form.Item label="出戻日" name="return_date" initialValue={dayjs()}>
               <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" />
             </Form.Item>
           </Col>
@@ -48,7 +66,13 @@ export const SecondaryDrawer: React.FC<SecondaryDrawerProps> = ({ visible, onClo
           </Col>
         </Row>
       </Form>
-      <FloatButton icon={<CheckOutlined />} type="primary" style={{ right: 24 }} />
+      <FloatButton
+        icon={<CheckOutlined />}
+        type="primary"
+        tooltip={<div>登録</div>}
+        style={{ right: 24 }}
+        onClick={handleRegister}
+      />
     </Drawer>
   );
 };
