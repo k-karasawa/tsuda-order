@@ -1,11 +1,12 @@
   import React, { useState, useEffect } from 'react';
   import { Drawer, Form, Input, Row, Col, Divider, FloatButton, Switch } from 'antd';
-  import { CheckOutlined } from '@ant-design/icons';
-  import type { OrderListDataType } from '@/types/types';
+  import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
+  import type { OrderListDataType } from '../../types/types';
   import { useOrderUpdater } from './hooks/useOrderUpdater';
   import { CustomDatePicker } from './CustomDatePicker';
   import { useOrderEffect } from './hooks/useOrderEffect';
-  import { SelectDataCreate } from '@/components/SelectDataCreate/SelectDataCreate';
+  import { SelectDataCreate } from '../../components/SelectDataCreate/SelectDataCreate';
+  import { SecondaryDrawer } from './SecondaryDrawer';
   import customParseFormat from 'dayjs/plugin/customParseFormat';
   import dayjs from 'dayjs';
 
@@ -20,6 +21,14 @@
 
   export const OrderEditDrawer: React.FC<OrderEditDrawerProps> = ({ children, selectedOrder, onUpdated }) => {
     const [visible, setVisible] = useState(false);
+    const [secondaryDrawerVisible, setSecondaryDrawerVisible] = useState(false);
+
+    const openSecondaryDrawer = () => {
+      setSecondaryDrawerVisible(true);
+    };
+    const closeSecondaryDrawer = () => {
+      setSecondaryDrawerVisible(false);
+    };
 
     const showDrawer = () => {
       setVisible(true);
@@ -65,12 +74,19 @@
           bodyStyle={{ paddingBottom: 40 }}
           destroyOnClose
         >
-          <FloatButton
-            icon={<CheckOutlined />}
-            tooltip={<div>更新</div>}
-            type="primary"
-            onClick={handleUpdate}
-          />
+          <FloatButton.Group shape="circle" style={{ right: 24 }}>
+            <FloatButton
+              icon={<RollbackOutlined />}
+              tooltip={<div>出戻登録</div>}
+              onClick={openSecondaryDrawer}
+            />
+            <FloatButton
+              icon={<CheckOutlined />}
+              tooltip={<div>更新</div>}
+              type="primary"
+              onClick={handleUpdate}
+            />
+          </FloatButton.Group>
 
           <Form layout="vertical" form={form} initialValues={selectedOrder}>
             <Row gutter={16}>
@@ -106,6 +122,7 @@
               </Col>
             </Row>
             <Divider />
+            <SecondaryDrawer visible={secondaryDrawerVisible} onClose={closeSecondaryDrawer} />
 
             <Row gutter={16}>
               <Col span={8}>
