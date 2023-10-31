@@ -54,7 +54,7 @@ export const SecondaryDrawer: React.FC<SecondaryDrawerProps> = ({ visible, onClo
       destroyOnClose
     >
       {existingData && existingData.length > 0 ? (
-        <ExistingDataList data={existingData} onAddNew={() => setExistingData(null)} />
+        <ExistingDataList data={existingData} onAddNew={() => setExistingData(null)} onClose={onClose} />
       ) : (
         <Form layout="vertical" form={form}>
           <Row gutter={16}>

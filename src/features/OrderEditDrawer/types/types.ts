@@ -27,6 +27,7 @@ export interface DatesType {
 export interface ExistingDataListProps {
   data: ExistingData[];
   onAddNew: () => void;
+  onClose?: () => void;
 }
 
 export interface SecondaryDrawerProps {

@@ -34,7 +34,7 @@ export const useUpdateExistingData = () => {
         return currentData?.map((item: ExistingData) =>
           item.id === updatedData.id ? updatedData : item
         );
-      });
+      }, true);
 
     } catch (err) {
       console.error('Failed to update data:', err);

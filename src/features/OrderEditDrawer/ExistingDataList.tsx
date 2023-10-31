@@ -5,7 +5,7 @@ import { PlusOutlined, EditOutlined, CheckOutlined, CloseOutlined } from '@ant-d
 import { useUpdateExistingData } from './hooks/useExistingDataUpdate';
 import dayjs from 'dayjs';
 
-export const ExistingDataList: React.FC<ExistingDataListProps> = ({ data, onAddNew }) => {
+export const ExistingDataList: React.FC<ExistingDataListProps> = ({ data, onAddNew, onClose }) => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [tempData, setTempData] = useState<Partial<ExistingData>>({});
 
@@ -29,6 +29,7 @@ export const ExistingDataList: React.FC<ExistingDataListProps> = ({ data, onAddN
       try {
         await updateData(tempData as ExistingData);
         message.success(`${index + 1}回目の出戻り情報を更新しました。`);
+        if (onClose) onClose();
       } catch (error) {
         message.error("出戻り情報の更新に失敗しました。");
       }
