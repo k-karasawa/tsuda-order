@@ -1,5 +1,6 @@
 import { useSelectedOrder } from './useSelectedOrder';
 import { registerNewReturn, fetchAllExistingReturns } from '../helpers/itemReturnHelper';
+import { mutate } from 'swr';
 
 export const useRegisterReturn = () => {
   const selectedOrder = useSelectedOrder();
@@ -13,7 +14,8 @@ export const useRegisterReturn = () => {
       throw new Error('Order ID not found.');
     }
 
-    return registerNewReturn(selectedOrder.id, data);
+    await registerNewReturn(selectedOrder.id, data);
+    mutate('orders');
   };
 
   return {

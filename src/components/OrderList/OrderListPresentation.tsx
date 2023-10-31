@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { FloatButton } from 'antd';
 import { FileAddOutlined } from '@ant-design/icons';
 import { columns as originalColumns } from '@/data/columns';
@@ -22,6 +22,11 @@ export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ da
   const handleRowClick = (record: OrderListDataType) => {
     setSelectedOrder(record);
   };
+
+  useEffect(() => {
+    revalidate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOrder]);
 
   return (
     <OrderEditDrawer onUpdated={revalidate}>

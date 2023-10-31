@@ -1,4 +1,6 @@
 import { supabase } from '../../../../utils/supabase';
+import { useRecoilState } from 'recoil';
+import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
 
 export const checkExistingReturn = async (orderId: string) => {
   const { data, error } = await supabase
@@ -42,6 +44,16 @@ export const registerNewReturn = async (orderId: number, data: {
 
   if (error) {
     throw new Error(error.message);
+  }
+
+  // 追加：order_listテーブルのprogressカラムを12に更新
+  const { error: updateError } = await supabase
+    .from('order_list')
+    .update({ progress: 12 })
+    .eq('id', orderId);
+
+  if (updateError) {
+    throw new Error(updateError.message);
   }
 };
 
