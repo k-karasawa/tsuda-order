@@ -1,19 +1,10 @@
 import { Card, DatePicker, Select, Space } from 'antd';
 import React, { useState } from 'react';
 import styles from './styles/Dashboard.module.css'
-import dayjs from 'dayjs';
 
 const { RangePicker } = DatePicker;
 
 export const FilterCard: React.FC = () => {
-  const [currentMonth, setCurrentMonth] = useState(dayjs());
-
-  const handleChange = (date: dayjs.Dayjs | null, dateString: string) => {
-    console.log(`selected ${dateString}`);
-    if (date) {
-      setCurrentMonth(date);
-    }
-  }
 
   return (
     <div className={styles.cardscontainer}>

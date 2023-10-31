@@ -2,25 +2,31 @@ import React from 'react';
 import { List, DatePicker, Input } from 'antd';
 import dayjs from 'dayjs';
 import { ExistingData } from './types/types';
-
-interface ExistingDataListItemProps {
-  data: ExistingData;
-  isEditing: boolean;
-  onEditChange: (key: keyof ExistingData, value: any) => void;
-}
+import { ExistingDataListItemProps } from './types/types';
 
 export const ExistingDataListItem: React.FC<ExistingDataListItemProps> = ({ data, isEditing, onEditChange }) => {
+  const handleDateChange = (key: keyof ExistingData, date: dayjs.Dayjs | null) => {
+    onEditChange(key, date?.format('YYYY-MM-DD'));
+  };
+
+  const handleRemarkChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    onEditChange('remark', e.target.value);
+  };
+
   if (isEditing) {
     return (
       <>
         <List.Item style={{ marginLeft: '1rem' }}>
-          出戻り日: <DatePicker value={dayjs(data.return_date)} onChange={date => onEditChange('return_date', date?.format('YYYY-MM-DD'))} />
+          出戻り日:
+          <DatePicker value={dayjs(data.return_date)} onChange={date => handleDateChange('return_date', date)} />
         </List.Item>
         <List.Item style={{ marginLeft: '1rem' }}>
-          再出荷日: <DatePicker value={dayjs(data.reshipment_date)} onChange={date => onEditChange('reshipment_date', date?.format('YYYY-MM-DD'))} />
+          再出荷日:
+          <DatePicker value={dayjs(data.reshipment_date)} onChange={date => handleDateChange('reshipment_date', date)} />
         </List.Item>
         <List.Item style={{ marginLeft: '1rem' }}>
-          備考: <Input.TextArea value={data.remark} onChange={e => onEditChange('remark', e.target.value)} />
+          備考:
+          <Input.TextArea value={data.remark} onChange={handleRemarkChange} />
         </List.Item>
       </>
     );

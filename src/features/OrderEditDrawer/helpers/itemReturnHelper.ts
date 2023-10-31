@@ -18,7 +18,8 @@ export const fetchAllExistingReturns = async (orderId: string) => {
   const { data, error } = await supabase
     .from('item_return')
     .select('*')
-    .eq('return_orderlist_id', orderId);
+    .eq('return_orderlist_id', orderId)
+    .order('id', { ascending: true });
 
   if (error) {
     throw new Error(error.message);

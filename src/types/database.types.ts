@@ -90,7 +90,7 @@ export interface Database {
           created_at: string
           id: number
           remark: string | null
-          resipment_date: string | null
+          reshipment_date: string | null
           return_date: string
           return_orderlist_id: number
         }
@@ -98,7 +98,7 @@ export interface Database {
           created_at?: string
           id?: number
           remark?: string | null
-          resipment_date?: string | null
+          reshipment_date?: string | null
           return_date: string
           return_orderlist_id: number
         }
@@ -106,7 +106,7 @@ export interface Database {
           created_at?: string
           id?: number
           remark?: string | null
-          resipment_date?: string | null
+          reshipment_date?: string | null
           return_date?: string
           return_orderlist_id?: number
         }

@@ -124,7 +124,6 @@
             </Row>
             <Divider />
             <SecondaryDrawer visible={secondaryDrawerVisible} onClose={closeSecondaryDrawer} selectedOrder={selectedOrder} />
-
             <Row gutter={16}>
               <Col span={8}>
                 <Form.Item label="顧客" name="customer">

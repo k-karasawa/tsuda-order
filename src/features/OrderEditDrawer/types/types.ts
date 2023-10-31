@@ -9,6 +9,7 @@ export type ExistingData = {
   return_date: string;
   reshipment_date: string;
   remark: string;
+  return_orderlist_id: string | number;
 };
 
 export interface DatesType {
@@ -32,4 +33,10 @@ export interface SecondaryDrawerProps {
   visible: boolean;
   onClose: () => void;
   selectedOrder?: { id: number };
+}
+
+export interface ExistingDataListItemProps {
+  data: ExistingData;
+  isEditing: boolean;
+  onEditChange: (key: keyof ExistingData, value: any) => void;
 }

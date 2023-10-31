@@ -48,10 +48,8 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
         const { data, error } = await updateOrder(mergedDataWithoutNames, selectedOrder.id);
 
         if (error) {
-          console.error("Error updating order:", error);
           message.error("注文の更新に失敗しました。");
         } else {
-          console.log("Order updated successfully:", data);
           message.success("注文が正常に更新されました。");
           onClose();
           refetchOrderList();

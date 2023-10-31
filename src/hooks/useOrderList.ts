@@ -33,7 +33,6 @@ const fetchItemReturns = async (): Promise<any[]> => {
   if (response.error) {
     throw response.error;
   }
-  console.log(response.data)
   return response.data;
 
 };
