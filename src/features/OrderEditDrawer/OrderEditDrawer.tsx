@@ -60,7 +60,7 @@
         <Drawer
           title={
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              {`受注番号　${selectedOrder?.prefix}${selectedOrder?.order_code}${selectedOrder?.id}`}
+              {`受注番号　${selectedOrder?.prefix}${selectedOrder?.order_code}`}
               <Switch
                 checkedChildren="重要"
                 unCheckedChildren="普通"
@@ -123,7 +123,7 @@
               </Col>
             </Row>
             <Divider />
-            <SecondaryDrawer visible={secondaryDrawerVisible} onClose={closeSecondaryDrawer} />
+            <SecondaryDrawer visible={secondaryDrawerVisible} onClose={closeSecondaryDrawer} selectedOrder={selectedOrder} />
 
             <Row gutter={16}>
               <Col span={8}>
