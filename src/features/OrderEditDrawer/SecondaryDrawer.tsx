@@ -1,26 +1,14 @@
-
 import React from 'react';
 import { Drawer, Form, Input, Row, Col, Button, DatePicker, message, FloatButton } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import { useRegisterReturn } from './hooks/useRegisterReturn';
-
-type ExistingData = {
-  id: number;
-  return_date: string;
-  reshipment_date: string;
-  remark: string;
-};
-
-interface SecondaryDrawerProps {
-  visible: boolean;
-  onClose: () => void;
-  selectedOrder?: { id: number };
-}
+import { ExistingDataList } from './ExistingDataList';
+import { ReturnData, ExistingData, SecondaryDrawerProps } from './types/types';
 
 export const SecondaryDrawer: React.FC<SecondaryDrawerProps> = ({ visible, onClose }) => {
   const [form] = Form.useForm();
-  const { registerReturn, fetchExistingReturn, selectedOrder } = useRegisterReturn();
+  const { addNewReturn, fetchExistingReturn, selectedOrder } = useRegisterReturn();
   const [existingData, setExistingData] = React.useState<ExistingData[] | null>(null);
 
   React.useEffect(() => {
@@ -35,12 +23,13 @@ export const SecondaryDrawer: React.FC<SecondaryDrawerProps> = ({ visible, onClo
   const handleRegister = async () => {
     try {
       const values = await form.validateFields();
-
-      await registerReturn({
+      const returnData: ReturnData = {
         return_date: values.return_date.format('YYYY-MM-DD'),
         reshipment_date: values.reshipment_date ? values.reshipment_date.format('YYYY-MM-DD') : null,
         remark: values.comment,
-      });
+      };
+
+      await addNewReturn(returnData);
       message.success('登録に成功しました！');
       onClose();
     } catch (error) {
@@ -61,22 +50,11 @@ export const SecondaryDrawer: React.FC<SecondaryDrawerProps> = ({ visible, onClo
       }
       width={600}
       onClose={onClose}
-      visible={visible}
+      open={visible}
       destroyOnClose
     >
       {existingData && existingData.length > 0 ? (
-        <div>
-          {existingData.map((data, index) => (
-            <div key={index}>
-              <p>出戻り日: {data.return_date}</p>
-              <p>再出荷日: {data.reshipment_date}</p>
-              <p>備考: {data.remark}</p>
-            </div>
-          ))}
-          <Button type="dashed" onClick={() => setExistingData(null)}>
-            新しいレコードを追加
-          </Button>
-        </div>
+        <ExistingDataList data={existingData} onAddNew={() => setExistingData(null)} />
       ) : (
         <Form layout="vertical" form={form}>
           <Row gutter={16}>
