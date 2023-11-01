@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FloatButton, List, Input, DatePicker, message } from 'antd';
+import { FloatButton, List, Input, DatePicker, message, Popconfirm } from 'antd';
 import { ExistingDataListProps, ExistingData } from './types/types';
 import { PlusOutlined, EditOutlined, CheckOutlined, CloseOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useUpdateExistingData } from './hooks/useExistingDataUpdate';
@@ -48,6 +48,10 @@ export const ExistingDataList: React.FC<ExistingDataListProps> = ({ data, onAddN
     setTempData({});
   };
 
+  const confirmDelete = async (returnId: string, index: number) => {
+    handleDelete(returnId, index);
+  };
+
   const handleDelete = async (returnId: string, index: number) => {
     const isDeleted = await deleteReturn(parseInt(returnId));
     if (isDeleted) {
@@ -73,9 +77,19 @@ export const ExistingDataList: React.FC<ExistingDataListProps> = ({ data, onAddN
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               {`出戻り${index + 1}回目`}
               <div>
-              <a onClick={() => handleDelete(item.id.toString(), index)} style={{ marginRight: '1rem' }}>
-                  <DeleteOutlined /> 削除
-                </a>
+                {editingIndex !== index ? (
+                  <Popconfirm
+                    title="本当に削除しますか？"
+                    onConfirm={() => handleDelete(item.id.toString(), index)}
+                    okText="はい"
+                    cancelText="いいえ"
+                  >
+                    <a style={{ marginRight: '1rem' }}>
+                      <DeleteOutlined /> 削除
+                    </a>
+                  </Popconfirm>
+                ) : null}
+
                 {editingIndex === index ? (
                   <>
                     <a onClick={cancelEditing} style={{ marginRight: '1rem' }}>
