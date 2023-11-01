@@ -1,7 +1,7 @@
 
 import useSWR from 'swr';
 import { supabase } from '../../utils/supabase';
-import type { ProgressType } from '@/types/types';
+import type { ProgressType } from '../types/types';
 
 const fetchProgress = async (): Promise<ProgressType[]> => {
   const response = await supabase.from('progress').select('id, progress, color');

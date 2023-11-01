@@ -3,18 +3,7 @@ import { Form, message } from 'antd';
 import { updateOrder } from '../orderService';
 import { OrderListDataType } from '@/types/types';
 import { formatAmount } from '../../../helper/formatAmountHelper';
-
-interface DatesType {
-  estimate_date: string | null;
-  order_date: string | null;
-  desired_delivery_date: string | null;
-  shipment_date: string | null;
-  item_receive_date: string | null;
-  item_return_date: string | null;
-  send_document_date: string | null;
-  receive_document_date: string | null;
-  accept_date: string | null;
-}
+import { DatesType } from '../types/types';
 
 export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => void, selectedOrder?: OrderListDataType) => {
   const [form] = Form.useForm();
@@ -59,10 +48,8 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
         const { data, error } = await updateOrder(mergedDataWithoutNames, selectedOrder.id);
 
         if (error) {
-          console.error("Error updating order:", error);
           message.error("注文の更新に失敗しました。");
         } else {
-          console.log("Order updated successfully:", data);
           message.success("注文が正常に更新されました。");
           onClose();
           refetchOrderList();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { FloatButton } from 'antd';
 import { FileAddOutlined } from '@ant-design/icons';
 import { columns as originalColumns } from '@/data/columns';
@@ -10,10 +10,12 @@ import { OrderTabs } from './OrderTabs';
 import { OrderEditDrawer } from '@/features/OrderEditDrawer/OrderEditDrawer';
 import { useOrderList } from '@/hooks/useOrderList';
 import Link from 'next/link';
+import { useRecoilState } from 'recoil';
+import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
 
 export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data, refetchOrderList, columns }) => {
   const { revalidate } = useOrderList();
-  const [selectedOrder, setSelectedOrder] = useState<OrderListDataType | undefined>();
+  const [selectedOrder, setSelectedOrder] = useRecoilState(selectedOrderAtom);
   const dynamicFilters = createDynamicFilters(data, filterableColumns);
   const usedColumns = columns || generateColumns(originalColumns, dynamicFilters);
 
@@ -21,8 +23,13 @@ export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ da
     setSelectedOrder(record);
   };
 
+  useEffect(() => {
+    revalidate();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedOrder]);
+
   return (
-    <OrderEditDrawer selectedOrder={selectedOrder} onUpdated={revalidate}>
+    <OrderEditDrawer onUpdated={revalidate}>
       {showDrawer => (
         <>
           <Link href="/add-order">

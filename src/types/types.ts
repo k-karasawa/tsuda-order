@@ -1,4 +1,4 @@
-import { Database } from '@/types/database.types';
+import { Database } from '../types/database.types';
 import { ColumnsType } from 'antd/es/table';
 
 type BaseOrderListDataType = Database['public']['Tables']['order_list']['Row'];

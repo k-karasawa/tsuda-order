@@ -1,8 +1,8 @@
 import React from 'react';
 import { useOrderList } from '../hooks/useOrderList';
-import { OrderListPresentation } from '@/components/OrderList/OrderListPresentation';
+import { OrderListPresentation } from '../components/OrderList/OrderListPresentation';
 import { Spin } from 'antd';
-import { OrderListDataType } from '@/types/types';
+import { OrderListDataType } from '../types/types';
 import { ColumnsType } from 'antd/es/table';
 
 type OrderListContainerProps = {
