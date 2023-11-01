@@ -1,6 +1,4 @@
 import { supabase } from '../../../../utils/supabase';
-import { useRecoilState } from 'recoil';
-import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
 
 export const checkExistingReturn = async (orderId: string) => {
   const { data, error } = await supabase
@@ -34,7 +32,7 @@ export const registerNewReturn = async (orderId: number, data: {
   return_date: string;
   reshipment_date: string | null;
   remark: string;
-}) => {
+}, progressId: number) => {
   const { error } = await supabase.from('item_return').insert([
     {
       return_orderlist_id: orderId,
@@ -46,10 +44,9 @@ export const registerNewReturn = async (orderId: number, data: {
     throw new Error(error.message);
   }
 
-  // 追加：order_listテーブルのprogressカラムを12に更新
   const { error: updateError } = await supabase
     .from('order_list')
-    .update({ progress: 12 })
+    .update({ progress: progressId })
     .eq('id', orderId);
 
   if (updateError) {
@@ -74,5 +71,15 @@ export const updateExistingReturn = async (orderId: number, data: {
 
   if (error) {
     throw new Error(error.message);
+  }
+};
+
+export const deleteExistingReturn = async (returnId: string): Promise<void> => {
+  try {
+    await fetch(`item_return/${returnId}`, {
+      method: 'DELETE',
+    });
+  } catch (error) {
+    throw new Error('Failed to delete the return item.');
   }
 };

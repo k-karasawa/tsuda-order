@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { FloatButton, List, Input, DatePicker, message } from 'antd';
 import { ExistingDataListProps, ExistingData } from './types/types';
-import { PlusOutlined, EditOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { PlusOutlined, EditOutlined, CheckOutlined, CloseOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useUpdateExistingData } from './hooks/useExistingDataUpdate';
+import { useDeleteReturn } from './hooks/useDeleteReturn';
+import useSWR, { mutate } from 'swr';
 import dayjs from 'dayjs';
 
 export const ExistingDataList: React.FC<ExistingDataListProps> = ({ data, onAddNew, onClose }) => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [tempData, setTempData] = useState<Partial<ExistingData>>({});
 
+  const { deleteReturn } = useDeleteReturn();
   const { updateData } = useUpdateExistingData();
 
   const startEditing = (index: number, item: ExistingData) => {
@@ -45,6 +48,22 @@ export const ExistingDataList: React.FC<ExistingDataListProps> = ({ data, onAddN
     setTempData({});
   };
 
+  const handleDelete = async (returnId: string, index: number) => {
+    const isDeleted = await deleteReturn(parseInt(returnId));
+    if (isDeleted) {
+      message.success(`${index + 1}回目の出戻り情報を削除しました。`);
+
+      mutate('/api/existingData', (currentData: ExistingData[] | undefined) => {
+        return currentData?.filter((item: ExistingData) => item.id.toString() !== returnId);
+      }, true);
+
+      if (onClose) onClose();
+
+    } else {
+      message.error("出戻り情報の削除に失敗しました。");
+    }
+  };
+
   return (
     <div>
       {data.map((item, index) => (
@@ -53,14 +72,25 @@ export const ExistingDataList: React.FC<ExistingDataListProps> = ({ data, onAddN
           header={
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               {`出戻り${index + 1}回目`}
-              {editingIndex === index ? (
-                <div>
-                  <a onClick={cancelEditing} style={{ marginRight: '1rem' }}><CloseOutlined /> キャンセル</a>
-                  <a onClick={() => saveChanges(index)}><CheckOutlined /> 更新</a>
-                </div>
-              ) : (
-                <a onClick={() => startEditing(index, item)}><EditOutlined /> 編集</a>
-              )}
+              <div>
+              <a onClick={() => handleDelete(item.id.toString(), index)} style={{ marginRight: '1rem' }}>
+                  <DeleteOutlined /> 削除
+                </a>
+                {editingIndex === index ? (
+                  <>
+                    <a onClick={cancelEditing} style={{ marginRight: '1rem' }}>
+                      <CloseOutlined /> キャンセル
+                    </a>
+                    <a onClick={() => saveChanges(index)}>
+                      <CheckOutlined /> 更新
+                    </a>
+                  </>
+                ) : (
+                  <a onClick={() => startEditing(index, item)}>
+                    <EditOutlined /> 編集
+                  </a>
+                )}
+              </div>
             </div>
           }
           bordered
