@@ -55,7 +55,7 @@ export const FilterCard: React.FC = () => {
       fetchOrders();
       setReloadData(false);
     }
-  }, [reloadData]);
+  }, [reloadData, setOrderData]);
 
   if (error) {
     return <div>エラーが発生しました。</div>;

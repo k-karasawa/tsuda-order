@@ -12,7 +12,7 @@ export const Dashboard: React.FC = () => {
 
   useEffect(() => {
     setTableData(orderData);
-  }, [orderData]);
+  }, [orderData, setTableData]);
 
   const aggregatedData = {
     受注: `${orderData.length} 件`,
