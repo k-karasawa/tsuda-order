@@ -1,15 +1,22 @@
-import { Card, DatePicker, Select, Space, Spin } from 'antd';
-import React, { useState } from 'react';
+import { Card, DatePicker, Select, Space } from 'antd';
+import React, { useState, useEffect } from 'react';
 import styles from './styles/Dashboard.module.css'
 import { getStartEndOfMonth } from './helpers/dateHelpers';
 import dayjs from 'dayjs';
 import { useProgress } from '@/hooks/useProgress';
 import { useRequest } from '@/hooks/useRequest';
-
+import { supabase } from '../../../utils/supabase';
+import { useRecoilState } from 'recoil';
+import { orderDataState, selectedProgressState } from '@/recoil/dashboard';
+import { selectedRequestState } from '@/recoil/dashboard';
 
 const { RangePicker } = DatePicker;
 
 export const FilterCard: React.FC = () => {
+  const [reloadData, setReloadData] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useRecoilState(selectedRequestState);
+  const [orderData, setOrderData] = useRecoilState(orderDataState);
+  const [selectedProgress, setSelectedProgress] = useRecoilState(selectedProgressState);
   const [selectedDateRange, setSelectedDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>(
     getStartEndOfMonth(dayjs())
   );
@@ -28,6 +35,27 @@ export const FilterCard: React.FC = () => {
     label: item.name,
     sort: item.sort
   })).sort((a, b) => a.sort - b.sort).map(({ value, label }) => ({ value, label }));
+
+  useEffect(() => {
+    setReloadData(true);
+  }, [progressOptions, requestOptions]);
+
+  useEffect(() => {
+    if (reloadData) {
+      const fetchOrders = async () => {
+        const { data, error } = await supabase.from('order_list_extended').select('*');
+
+        if (error) {
+          console.error(error);
+        } else {
+          setOrderData(data || []);
+        }
+      };
+
+      fetchOrders();
+      setReloadData(false);
+    }
+  }, [reloadData]);
 
   if (error) {
     return <div>エラーが発生しました。</div>;
@@ -50,12 +78,14 @@ export const FilterCard: React.FC = () => {
             defaultValue="全て"
             style={{ width: 120 }}
             options={progressOptions}
+            onChange={(value) => setSelectedProgress(value)}
           />
           依頼内容：
           <Select
             defaultValue="全体"
             style={{ width: 120 }}
             options={requestOptions}
+            onChange={(value) => setSelectedRequest(value)}
           />
         </Space>
         </Card>
