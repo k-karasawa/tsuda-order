@@ -4,6 +4,7 @@ import styles from './styles/Dashboard.module.css'
 import { useRecoilValue } from 'recoil';
 import { selectedProgressState, tableDataState } from '@/recoil/dashboard';
 import { selectedRequestState } from '@/recoil/dashboard';
+import dayjs from 'dayjs';
 
 interface StateCardProps {
   data: {
@@ -15,6 +16,7 @@ interface StateCardProps {
 }
 
 export const StateCard: React.FC<StateCardProps> = ({ data }) => {
+  const today = dayjs();
   const selectedProgress = useRecoilValue(selectedProgressState);
   const tableData = useRecoilValue(tableDataState);
   const selectedRequest = useRecoilValue(selectedRequestState);
@@ -23,7 +25,13 @@ export const StateCard: React.FC<StateCardProps> = ({ data }) => {
     String(item.progress) === String(selectedProgress) && String(item.request) === String(selectedRequest)
   );
 
+  const delayedOrders = filteredData.filter((item: any) =>
+  dayjs(item.desired_delivery_date).isBefore(today) || dayjs(item.desired_delivery_date).isSame(today)
+  );
+
   const orderCount = filteredData.length;
+  const totalSales = filteredData.reduce((total, item) => total + (item.amount || 0), 0);
+  const delayedOrderCount = delayedOrders.length;
 
   return (
     <div className={styles.cardscontainer}>
@@ -41,7 +49,9 @@ export const StateCard: React.FC<StateCardProps> = ({ data }) => {
         <div className={styles.statecardwrapper}>
           <Card style={{ height: 120, position: 'relative' }}>
             <p>売上</p>
-            <span className={styles.bigText}>{data.売上}</span>
+            <span className={styles.bigText}>
+              ¥{totalSales.toLocaleString()}
+            </span>
           </Card>
         </div>
 
@@ -59,8 +69,8 @@ export const StateCard: React.FC<StateCardProps> = ({ data }) => {
           <Card style={{ height: 120, position: 'relative' }}>
             <p>納期遅れ</p>
             <span className={styles.bigText}>
-              {data.納期遅れ.slice(0, -1)}
-              <span className={styles.smallText}>{data.納期遅れ.slice(-1)}</span>
+              {delayedOrderCount}
+              <span className={styles.smallText}>件</span>
             </span>
           </Card>
         </div>
