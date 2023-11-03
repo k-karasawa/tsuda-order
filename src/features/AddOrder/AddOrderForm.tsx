@@ -97,7 +97,7 @@ export const AddOrderForm: React.FC = () => {
         onFinish={handleSubmit}
         onValuesChange={handleValuesChange}
         ref={formRef}
-        initialValues={{ quantity: 1 }}
+        initialValues={{ quantity: 1, priority: '普通' }}
       >
         <Row gutter={16}>
           <Col span={7}>
