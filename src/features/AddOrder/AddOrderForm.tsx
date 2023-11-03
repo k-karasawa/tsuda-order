@@ -6,7 +6,6 @@ import { SelectDataCreate } from '../../components/SelectDataCreate/SelectDataCr
 import { supabase } from '@/../utils/supabase';
 import dayjs from 'dayjs';
 import { useRouter } from "next/router";
-import { formatAmount } from '@/helper/formatAmountHelper';
 import { GenerateOrderNumber } from './GenerateOrderNumber';
 
 const { TextArea } = Input;
@@ -47,9 +46,6 @@ export const AddOrderForm: React.FC = () => {
       Object.entries(formData).map(([key, value]) => {
         if (key.includes('date') && dayjs.isDayjs(value)) {
           return [key, formatDate(value as dayjs.Dayjs)];
-        }
-        if (key === 'amount' && value !== null && value !== undefined) {
-          return [key, formatAmount(value.toString())];
         }
         return [key, value === undefined ? null : value];
       })
@@ -101,6 +97,7 @@ export const AddOrderForm: React.FC = () => {
         onFinish={handleSubmit}
         onValuesChange={handleValuesChange}
         ref={formRef}
+        initialValues={{ quantity: 1 }}
       >
         <Row gutter={16}>
           <Col span={7}>
@@ -293,8 +290,14 @@ export const AddOrderForm: React.FC = () => {
             <Form.Item
               label="金額"
               name="amount"
+              rules={[
+                {
+                  pattern: /^[0-9]*$/,
+                  message: '数字のみを入力してください。',
+                },
+              ]}
             >
-              <Input placeholder='数字で入力してください'/>
+              <Input placeholder='半角数字のみを入力してください' />
             </Form.Item>
           </Col>
         </Row>

@@ -5,9 +5,9 @@ export const orderDataState = atom<any[]>({
   default: [],
 });
 
-export const selectedProgressState = atom<string>({
+export const selectedProgressState = atom<string | null>({
   key: 'selectedProgressState',
-  default: '全て',
+  default: null,
 });
 
 export const tableDataState = atom<any[]>({
