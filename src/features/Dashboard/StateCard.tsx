@@ -10,7 +10,7 @@ interface StateCardProps {
   data: {
     受注: string;
     売上: string;
-    対応中: string;
+    最優先: string;
     納期遅れ: string;
   };
 }
@@ -29,9 +29,12 @@ export const StateCard: React.FC<StateCardProps> = ({ data }) => {
   dayjs(item.desired_delivery_date).isBefore(today) || dayjs(item.desired_delivery_date).isSame(today)
   );
 
+  const highestPriorityOrders = filteredData.filter((item: any) => item.priority_level === '最優先');
+
   const orderCount = filteredData.length;
   const totalSales = filteredData.reduce((total, item) => total + (item.amount || 0), 0);
   const delayedOrderCount = delayedOrders.length;
+  const highestPriorityCount = highestPriorityOrders.length;
 
   return (
     <div className={styles.cardscontainer}>
@@ -57,10 +60,10 @@ export const StateCard: React.FC<StateCardProps> = ({ data }) => {
 
         <div className={styles.statecardwrapper}>
           <Card style={{ height: 120, position: 'relative' }}>
-            <p>対応中</p>
+            <p>最優先</p>
             <span className={styles.bigText}>
-              {data.対応中.slice(0, -1)}
-              <span className={styles.smallText}>{data.対応中.slice(-1)}</span>
+              {highestPriorityCount}
+              <span className={styles.smallText}>件</span>
             </span>
           </Card>
         </div>

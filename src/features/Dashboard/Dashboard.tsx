@@ -17,7 +17,7 @@ export const Dashboard: React.FC = () => {
   const aggregatedData = {
     受注: `${orderData.length} 件`,
     売上: '¥0',
-    対応中: '0 件',
+    最優先: '0 件',
     納期遅れ: '0 件',
   };
 
