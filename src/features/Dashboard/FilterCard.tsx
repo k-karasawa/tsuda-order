@@ -63,9 +63,9 @@ export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
         query = query.filter('request', 'eq', selectedRequest);
       }
 
-      // 日付の範囲をフィルターとして追加する場合
-      // query = query.filter('yourDateColumnName', 'gte', selectedDateRange[0].format('YYYY-MM-DD'))
-      //              .filter('yourDateColumnName', 'lte', selectedDateRange[1].format('YYYY-MM-DD'));
+      // 日付の範囲をフィルターとして追加
+      query = query.filter('order_date', 'gte', selectedDateRange[0].format('YYYY-MM-DD'))
+                   .filter('order_date', 'lte', selectedDateRange[1].format('YYYY-MM-DD'));
 
       const { data, error } = await query;
 
@@ -77,6 +77,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
     };
 
     fetchOrders();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedProgress, selectedRequest, selectedDateRange]);
 
   if (error) {
@@ -90,10 +91,16 @@ export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
         <Space>
           月選択：
           <RangePicker
-              picker="month"
-              value={selectedDateRange}
-              onChange={(dates) => setSelectedDateRange(dates as [dayjs.Dayjs, dayjs.Dayjs])}
-            />
+            picker="month"
+            value={selectedDateRange}
+            onChange={(dates) => {
+              if (dates) {
+                const startDate = dates[0].startOf('month');
+                const endDate = dates[1].endOf('month');
+                setSelectedDateRange([startDate, endDate]);
+              }
+            }}
+          />
           ステータス：
           <Select
             listHeight={500}
