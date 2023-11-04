@@ -52,22 +52,32 @@ export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
   }, [progressOptions, requestOptions]);
 
   useEffect(() => {
-    if (reloadData) {
-      const fetchOrders = async () => {
-        const { data, error } = await supabase.from('order_list_extended').select('*');
+    const fetchOrders = async () => {
+      let query = supabase.from('order_list_extended').select('*');
 
-        if (error) {
-          console.error(error);
-        } else {
-          setOrderData(data || []);
-        }
-        setReloadData(false);
-      };
+      if (selectedProgress !== 'none') {
+        query = query.filter('progress', 'eq', selectedProgress);
+      }
 
-      fetchOrders();
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reloadData]);
+      if (selectedRequest !== 'none') {
+        query = query.filter('request', 'eq', selectedRequest);
+      }
+
+      // 日付の範囲をフィルターとして追加する場合
+      // query = query.filter('yourDateColumnName', 'gte', selectedDateRange[0].format('YYYY-MM-DD'))
+      //              .filter('yourDateColumnName', 'lte', selectedDateRange[1].format('YYYY-MM-DD'));
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error(error);
+      } else {
+        setOrderData(data || []);
+      }
+    };
+
+    fetchOrders();
+  }, [selectedProgress, selectedRequest, selectedDateRange]);
 
   if (error) {
     return <div>エラーが発生しました。</div>;

@@ -1,35 +1,22 @@
 import { Card } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './styles/Dashboard.module.css';
 import dayjs from 'dayjs';
 
 interface StateCardProps {
-  data?: {
-    受注?: string;
-    売上?: string;
-    最優先?: string;
-    納期遅れ?: string;
-  };
   orderData: any[];
 }
 
 export const StateCard: React.FC<StateCardProps> = ({ orderData }) => {
-  const [selectedProgress, setSelectedProgress] = useState<string | null>(null);
-  const [selectedRequest, setSelectedRequest] = useState<string | null>(null);
   const today = dayjs();
 
-  const filteredData = orderData.filter((item: any) =>
-    String(item.progress) === String(selectedProgress) && String(item.request) === String(selectedRequest)
-  );
-
-  const delayedOrders = filteredData.filter((item: any) =>
+  const delayedOrders = orderData.filter((item: any) =>
     dayjs(item.desired_delivery_date).isBefore(today) || dayjs(item.desired_delivery_date).isSame(today)
   );
 
-  const highestPriorityOrders = filteredData.filter((item: any) => item.priority_level === '最優先');
+  const highestPriorityOrders = orderData.filter((item: any) => item.priority_level === '最優先');
 
-  const orderCount = filteredData.length;
-  const totalSales = filteredData.reduce((total: number, item: any) => total + (item.amount || 0), 0);
+  const totalSales = orderData.reduce((total: number, item: any) => total + (item.amount || 0), 0);
   const delayedOrderCount = delayedOrders.length;
   const highestPriorityCount = highestPriorityOrders.length;
 
