@@ -4,16 +4,16 @@ import styles from './styles/Dashboard.module.css';
 import dayjs from 'dayjs';
 
 interface StateCardProps {
-  data: {
-    受注: string;
-    売上: string;
-    最優先: string;
-    納期遅れ: string;
+  data?: {
+    受注?: string;
+    売上?: string;
+    最優先?: string;
+    納期遅れ?: string;
   };
   orderData: any[];
 }
 
-export const StateCard: React.FC<StateCardProps> = ({ data, orderData }) => {
+export const StateCard: React.FC<StateCardProps> = ({ orderData }) => {
   const [selectedProgress, setSelectedProgress] = useState<string | null>(null);
   const [selectedRequest, setSelectedRequest] = useState<string | null>(null);
   const today = dayjs();
@@ -40,8 +40,8 @@ export const StateCard: React.FC<StateCardProps> = ({ data, orderData }) => {
           <Card style={{ height: 120, position: 'relative' }}>
             <p>受注</p>
             <span className={styles.bigText}>
-              {orderCount}
-              <span className={styles.smallText}>{data.受注.slice(-1)}</span>
+              {orderData.length}
+              <span className={styles.smallText}>件</span>
             </span>
           </Card>
         </div>

@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import { useProgress } from '@/hooks/useProgress';
 import { useRequest } from '@/hooks/useRequest';
 import { supabase } from '../../../utils/supabase';
-import { useRecoilState } from 'recoil';
 
 const { RangePicker } = DatePicker;
 
@@ -15,7 +14,7 @@ interface FilterCardProps {
 }
 
 export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
-  const [reloadData, setReloadData] = useState(false);
+  const [reloadData, setReloadData] = useState(false); // 初期値をfalseに設定
   const [selectedRequest, setSelectedRequest] = useState<string>('none');
   const [selectedProgress, setSelectedProgress] = useState<string>('none');
   const [selectedDateRange, setSelectedDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>(
@@ -44,7 +43,12 @@ export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
   ], [requestData]);
 
   useEffect(() => {
-    setReloadData(true);
+  }, [reloadData]);
+
+  useEffect(() => {
+    if (progressOptions.length > 0 && requestOptions.length > 0) {
+      setReloadData(true);
+    }
   }, [progressOptions, requestOptions]);
 
   useEffect(() => {
@@ -62,7 +66,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
 
       fetchOrders();
     }
-  }, [reloadData, setOrderData]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reloadData]);
 
   if (error) {
     return <div>エラーが発生しました。</div>;
