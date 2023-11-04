@@ -4,7 +4,11 @@ import styles from "./styles/Dashboard.module.css";
 import { AreaChartPage } from "./AreaChart";
 import { PieCard } from './PieCard';
 
-export const ChartCard: React.FC = () => {
+interface ChartCardProps {
+  orderData: any[];
+}
+
+export const ChartCard: React.FC<ChartCardProps> = ({ orderData }) => {
   return (
     <div className={styles.cardscontainer}>
       <h2 className={styles.chartTitle}>全体状況</h2>

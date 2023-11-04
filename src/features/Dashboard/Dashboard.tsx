@@ -6,12 +6,16 @@ import styles from './styles/Dashboard.module.css';
 
 export const Dashboard: React.FC = () => {
   const [orderData, setOrderData] = useState<any[]>([]);
+  const [chartOrderData, setChartOrderData] = useState<any[]>([]);
 
   return (
     <div className={styles.container}>
-      <FilterCard setOrderData={setOrderData} />
+      <FilterCard
+        setOrderData={setOrderData}
+        setChartOrderData={setChartOrderData}
+      />
       <StateCard orderData={orderData} />
-      <ChartCard />
+      <ChartCard orderData={chartOrderData} />
     </div>
   );
 };
