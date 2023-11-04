@@ -1,9 +1,6 @@
 import { Card } from 'antd';
-import React from 'react';
-import styles from './styles/Dashboard.module.css'
-import { useRecoilValue } from 'recoil';
-import { selectedProgressState, tableDataState } from '@/recoil/dashboard';
-import { selectedRequestState } from '@/recoil/dashboard';
+import React, { useState } from 'react';
+import styles from './styles/Dashboard.module.css';
 import dayjs from 'dayjs';
 
 interface StateCardProps {
@@ -13,26 +10,26 @@ interface StateCardProps {
     最優先: string;
     納期遅れ: string;
   };
+  orderData: any[];
 }
 
-export const StateCard: React.FC<StateCardProps> = ({ data }) => {
+export const StateCard: React.FC<StateCardProps> = ({ data, orderData }) => {
+  const [selectedProgress, setSelectedProgress] = useState<string | null>(null);
+  const [selectedRequest, setSelectedRequest] = useState<string | null>(null);
   const today = dayjs();
-  const selectedProgress = useRecoilValue(selectedProgressState);
-  const tableData = useRecoilValue(tableDataState);
-  const selectedRequest = useRecoilValue(selectedRequestState);
 
-  const filteredData = tableData.filter((item: any) =>
+  const filteredData = orderData.filter((item: any) =>
     String(item.progress) === String(selectedProgress) && String(item.request) === String(selectedRequest)
   );
 
   const delayedOrders = filteredData.filter((item: any) =>
-  dayjs(item.desired_delivery_date).isBefore(today) || dayjs(item.desired_delivery_date).isSame(today)
+    dayjs(item.desired_delivery_date).isBefore(today) || dayjs(item.desired_delivery_date).isSame(today)
   );
 
   const highestPriorityOrders = filteredData.filter((item: any) => item.priority_level === '最優先');
 
   const orderCount = filteredData.length;
-  const totalSales = filteredData.reduce((total, item) => total + (item.amount || 0), 0);
+  const totalSales = filteredData.reduce((total: number, item: any) => total + (item.amount || 0), 0);
   const delayedOrderCount = delayedOrders.length;
   const highestPriorityCount = highestPriorityOrders.length;
 

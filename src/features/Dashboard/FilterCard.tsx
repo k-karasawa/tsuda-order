@@ -1,5 +1,5 @@
 import { Card, DatePicker, Select, Space } from 'antd';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styles from './styles/Dashboard.module.css'
 import { getStartEndOfMonth } from './helpers/dateHelpers';
 import dayjs from 'dayjs';
@@ -7,34 +7,41 @@ import { useProgress } from '@/hooks/useProgress';
 import { useRequest } from '@/hooks/useRequest';
 import { supabase } from '../../../utils/supabase';
 import { useRecoilState } from 'recoil';
-import { orderDataState, selectedProgressState } from '@/recoil/dashboard';
-import { selectedRequestState } from '@/recoil/dashboard';
 
 const { RangePicker } = DatePicker;
 
-export const FilterCard: React.FC = () => {
+interface FilterCardProps {
+  setOrderData: React.Dispatch<React.SetStateAction<any[]>>;
+}
+
+export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
   const [reloadData, setReloadData] = useState(false);
-  const [selectedRequest, setSelectedRequest] = useRecoilState(selectedRequestState);
-  const [orderData, setOrderData] = useRecoilState(orderDataState);
-  const [selectedProgress, setSelectedProgress] = useRecoilState(selectedProgressState);
+  const [selectedRequest, setSelectedRequest] = useState<string>('none');
+  const [selectedProgress, setSelectedProgress] = useState<string>('none');
   const [selectedDateRange, setSelectedDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>(
     getStartEndOfMonth(dayjs())
   );
 
   const { data: progressData, loading, error } = useProgress();
 
-  const progressOptions = progressData?.map((item) => ({
-    value: item.id.toString(),
-    label: item.progress
-  }));
+  const progressOptions = useMemo(() => [
+    { value: 'none', label: '選択なし' },
+    ...(progressData?.map((item) => ({
+      value: item.id.toString(),
+      label: item.progress
+    })) || [])
+  ], [progressData]);
 
   const { data: requestData, loading: requestLoading, error: requestError } = useRequest();
 
-  const requestOptions = requestData?.map((item) => ({
-    value: item.id.toString(),
-    label: item.name,
-    sort: item.sort
-  })).sort((a, b) => a.sort - b.sort).map(({ value, label }) => ({ value, label }));
+  const requestOptions = useMemo(() => [
+    { value: 'none', label: '選択なし' },
+    ...(requestData?.map((item) => ({
+      value: item.id.toString(),
+      label: item.name,
+      sort: item.sort
+    })).sort((a, b) => a.sort - b.sort).map(({ value, label }) => ({ value, label })) || [])
+  ], [requestData]);
 
   useEffect(() => {
     setReloadData(true);
@@ -50,10 +57,10 @@ export const FilterCard: React.FC = () => {
         } else {
           setOrderData(data || []);
         }
+        setReloadData(false);
       };
 
       fetchOrders();
-      setReloadData(false);
     }
   }, [reloadData, setOrderData]);
 
@@ -75,14 +82,14 @@ export const FilterCard: React.FC = () => {
           ステータス：
           <Select
             listHeight={500}
-            defaultValue="全て"
+            defaultValue="none"
             style={{ width: 120 }}
             options={progressOptions}
             onChange={(value) => setSelectedProgress(value)}
           />
           依頼内容：
           <Select
-            defaultValue="全体"
+            defaultValue="none"
             style={{ width: 120 }}
             options={requestOptions}
             onChange={(value) => setSelectedRequest(value)}
