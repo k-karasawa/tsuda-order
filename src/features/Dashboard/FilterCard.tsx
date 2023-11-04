@@ -94,7 +94,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
             picker="month"
             value={selectedDateRange}
             onChange={(dates) => {
-              if (dates) {
+              if (dates && dates[0] && dates[1]) {
                 const startDate = dates[0].startOf('month');
                 const endDate = dates[1].endOf('month');
                 setSelectedDateRange([startDate, endDate]);
