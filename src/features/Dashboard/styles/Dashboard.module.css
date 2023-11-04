@@ -44,7 +44,7 @@
 }
 
 .statecardwrapper2 {
-	width: calc(100% - 2 * 1.6rem); /* 3カードの合計幅を取得 (100% - 2 gaps) */
+	width: calc(77% - 1.6rem);  /* AreaChartの横幅を少し小さく */
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
@@ -54,7 +54,7 @@
 }
 
 .largecard {
-	width: calc(25% - 1.6rem); /* こちらを変更 */
+	width: calc(26% - 1.6rem); /* PieChartの横幅を少し大きく */
 	box-sizing: border-box;
 	text-align: center;
 }
@@ -77,4 +77,13 @@
 
 .container {
   padding: 0px 40px 20px 40px;
+}
+
+.chartTitle {
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 4px;
+  text-align: left;
+  padding-left: 16px;
+  align-self: flex-start;
 }

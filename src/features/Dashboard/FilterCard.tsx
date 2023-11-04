@@ -14,7 +14,7 @@ interface FilterCardProps {
 }
 
 export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
-  const [reloadData, setReloadData] = useState(false); // 初期値をfalseに設定
+  const [reloadData, setReloadData] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<string>('none');
   const [selectedProgress, setSelectedProgress] = useState<string>('none');
   const [selectedDateRange, setSelectedDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>(
@@ -63,7 +63,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData }) => {
         query = query.filter('request', 'eq', selectedRequest);
       }
 
-      // 日付の範囲をフィルターとして追加
       query = query.filter('order_date', 'gte', selectedDateRange[0].format('YYYY-MM-DD'))
                    .filter('order_date', 'lte', selectedDateRange[1].format('YYYY-MM-DD'));
 
