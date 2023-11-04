@@ -9,7 +9,9 @@ const SalesData = [
     { name: "検証中", value: 30 },
 ];
 
-export const PieCard: React.FC = () => {
+export const PieCard: React.FC<{ orderData: any[] }> = ({ orderData }) => {
+  console.log("PieCard orderData:", orderData);
+
   const RADIAN = Math.PI / 180;
   const total = SalesData.reduce((acc, curr) => acc + curr.value, 0);
   const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];

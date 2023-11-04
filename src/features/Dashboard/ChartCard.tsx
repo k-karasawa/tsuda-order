@@ -16,14 +16,14 @@ export const ChartCard: React.FC<ChartCardProps> = ({ orderData }) => {
         <div className={styles.statecardwrapper2}>
           <Card style={{ height: 360, width: '100%', paddingBottom: '14px' }}>
             <p style={{ margin: '5px 0' }}>売上高</p>
-            <AreaChartPage />
+            <AreaChartPage orderData={orderData} />
           </Card>
         </div>
 
         <div className={styles.largecard}>
           <Card style={{ height: 360, width: "100%" }}>
             <p>案件消化率</p>
-            <PieCard />
+            <PieCard orderData={orderData} />
           </Card>
         </div>
       </div>
