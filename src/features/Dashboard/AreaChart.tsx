@@ -55,8 +55,6 @@ const data = [
 ];
 
 export const AreaChartPage: React.FC<{ orderData: any[] }> = ({ orderData }) => {
-  console.log("AreaChart orderData:", orderData);
-
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {

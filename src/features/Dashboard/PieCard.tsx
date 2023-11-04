@@ -1,20 +1,53 @@
 import React from 'react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { LabelProps } from './types/ChartTypes';
-
-const SalesData = [
-    { name: "見積中", value: 40 },
-    { name: "完了", value: 30 },
-    { name: "作業中", value: 30 },
-    { name: "検証中", value: 30 },
-];
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
 export const PieCard: React.FC<{ orderData: any[] }> = ({ orderData }) => {
-  console.log("PieCard orderData:", orderData);
-
   const RADIAN = Math.PI / 180;
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A8368D", "#D15F80"];
+
+  const generateSalesData = () => {
+    const salesData = {
+      受付: 0,
+      検証中: 0,
+      完了: 0,
+      出戻り: 0,
+      失注: 0,
+      作業中: 0,
+    };
+
+    orderData.forEach((data) => {
+      switch (data.progress_name) {
+        case '受付':
+        case '見積提出':
+        case '仮見積':
+          salesData.受付++;
+          break;
+        case '検証中':
+          salesData.検証中++;
+          break;
+        case '完了':
+          salesData.完了++;
+          break;
+        case '出戻り':
+          salesData.出戻り++;
+          break;
+        case '失注':
+          salesData.失注++;
+          break;
+        default:
+          salesData.作業中++;
+          break;
+      }
+    });
+
+    return Object.entries(salesData).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  };
+
+  const SalesData = generateSalesData();
   const total = SalesData.reduce((acc, curr) => acc + curr.value, 0);
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
   const renderCustomizedLabel = ({
     cx,
@@ -22,16 +55,11 @@ export const PieCard: React.FC<{ orderData: any[] }> = ({ orderData }) => {
     midAngle,
     innerRadius,
     outerRadius,
-    payload,
-  }: LabelProps) => {
-
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.45;
+    percent
+  }: any) => {
+    const radius = innerRadius + (outerRadius - innerRadius) * 0.6;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
-    const entry = payload;
-
-    // 2. 各データポイントのパーセンテージを計算します。
-    const percentage = Math.ceil((entry.value / total) * 100);
 
     return (
       <text
@@ -42,7 +70,7 @@ export const PieCard: React.FC<{ orderData: any[] }> = ({ orderData }) => {
         dominantBaseline="central"
         fontSize="14"
       >
-        {entry.name} {`${percentage}%`}
+        {`${(percent * 100).toFixed(0)}%`}
       </text>
     );
   };
@@ -57,7 +85,7 @@ export const PieCard: React.FC<{ orderData: any[] }> = ({ orderData }) => {
       textAlign: 'center'
     }}>
       <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
+      <PieChart margin={{ top: -30, right: 0, bottom: 0, left: 0 }}>
           <Pie
             dataKey="value"
             isAnimationActive={false}
@@ -77,6 +105,7 @@ export const PieCard: React.FC<{ orderData: any[] }> = ({ orderData }) => {
             }
           </Pie>
           <Tooltip />
+          <Legend align="center" verticalAlign="bottom" layout="horizontal" wrapperStyle={{ paddingBottom: '20px' }}/>
         </PieChart>
       </ResponsiveContainer>
     </div>

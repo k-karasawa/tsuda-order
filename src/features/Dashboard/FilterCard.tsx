@@ -11,7 +11,7 @@ const { RangePicker } = DatePicker;
 
 interface FilterCardProps {
   setOrderData: React.Dispatch<React.SetStateAction<any[]>>;
-  setChartOrderData: React.Dispatch<React.SetStateAction<any[]>>; // 1. 追加
+  setChartOrderData: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
 export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData, setChartOrderData }) => {
