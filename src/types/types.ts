@@ -21,3 +21,9 @@ export type ProgressType = {
   progress: string;
   color: string;
 };
+
+export type RequestType = {
+  id: number;
+  name: string;
+  sort: number;
+};

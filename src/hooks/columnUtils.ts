@@ -14,7 +14,7 @@ export const generateColumns = (
     };
 
     // 進捗の列とattentionの列でない場合のみ、renderTooltip を適用
-    if (col.dataIndex !== 'progress_name' && col.dataIndex !== 'attention') {
+    if (col.dataIndex !== 'progress_name' && col.dataIndex !== 'attention' && col.dataIndex !== 'amount') {
       baseCol = {
         ...baseCol,
         render: (text: string, record: OrderListDataType, index: number) => renderTooltip(text, record, index, col)

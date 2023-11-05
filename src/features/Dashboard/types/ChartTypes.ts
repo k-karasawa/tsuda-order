@@ -13,7 +13,7 @@ export interface ProfitDataType {
   KC: number;
   CT: number;
 }
-  
+
 export interface LabelProps {
   cx: number;
   cy: number;

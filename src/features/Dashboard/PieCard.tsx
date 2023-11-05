@@ -1,47 +1,13 @@
 import React from 'react';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { LabelProps } from './types/ChartTypes';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { generateSalesData } from './helpers/generateSalesData';
+import { renderCustomizedLabel } from './helpers/renderCustomizedLabel';
 
-const SalesData = [
-    { name: "見積中", value: 40 },
-    { name: "完了", value: 30 },
-    { name: "作業中", value: 30 },
-    { name: "検証中", value: 30 },
-];
+export const PieCard: React.FC<{ orderData: any[] }> = ({ orderData }) => {
+  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#A8368D", "#D15F80"];
 
-export const PieCard: React.FC = () => {
-  const RADIAN = Math.PI / 180;
+  const SalesData = generateSalesData(orderData);
   const total = SalesData.reduce((acc, curr) => acc + curr.value, 0);
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
-  
-  const renderCustomizedLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    payload,
-  }: LabelProps) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-    const entry = payload;
-    
-    // 2. 各データポイントのパーセンテージを計算します。
-    const percentage = Math.ceil((entry.value / total) * 100);
-  
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="8884d8"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-      >
-        {entry.name} {`${percentage}%`}
-      </text>
-    );
-  };
 
   return (
     <div style={{
@@ -53,7 +19,7 @@ export const PieCard: React.FC = () => {
       textAlign: 'center'
     }}>
       <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
+        <PieChart margin={{ top: -30, right: 0, bottom: 0, left: 0 }}>
           <Pie
             dataKey="value"
             isAnimationActive={false}
@@ -67,12 +33,13 @@ export const PieCard: React.FC = () => {
             fillOpacity={0.7}
           >
             {
-              SalesData.map((entry, index) => 
+              SalesData.map((entry, index) =>
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
               )
             }
           </Pie>
           <Tooltip />
+          <Legend align="center" verticalAlign="bottom" layout="horizontal" wrapperStyle={{ paddingBottom: '20px' }} />
         </PieChart>
       </ResponsiveContainer>
     </div>

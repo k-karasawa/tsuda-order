@@ -16,7 +16,6 @@ export const useDeleteReturn = () => {
 
       if (error) throw error;
 
-      // SWRのデータをミューテートして、削除されたデータを反映
       mutate('/api/existingData', (currentData: ExistingData[] | undefined) => {
         return currentData?.filter((item: ExistingData) => item.id !== id);
       }, true);

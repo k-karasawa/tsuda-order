@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Form, message } from 'antd';
 import { updateOrder } from '../orderService';
 import { OrderListDataType } from '@/types/types';
-import { formatAmount } from '../../../helper/formatAmountHelper';
 import { DatesType } from '../types/types';
 
 export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => void, selectedOrder?: OrderListDataType) => {
@@ -20,12 +19,11 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
   });
 
   const [isAttention, setIsAttention] = useState(false);
+
   const handleUpdate = async () => {
     try {
       const values = form.getFieldsValue();
-      if (values.amount) {
-        values.amount = formatAmount(values.amount);
-      }
+
       const mergedData = {
         ...values,
         estimate_date: dates.estimate_date,
@@ -40,12 +38,8 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
         attention: isAttention,
       };
 
-    const {
-      ...mergedDataWithoutNames
-    } = mergedData;
-
       if (selectedOrder && selectedOrder.id) {
-        const { data, error } = await updateOrder(mergedDataWithoutNames, selectedOrder.id);
+        const { data, error } = await updateOrder(mergedData, selectedOrder.id);
 
         if (error) {
           message.error("注文の更新に失敗しました。");

@@ -13,12 +13,11 @@ import Link from 'next/link';
 import { useRecoilState } from 'recoil';
 import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
 
-export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data, refetchOrderList, columns }) => {
+export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data, columns }) => {
   const { revalidate } = useOrderList();
   const [selectedOrder, setSelectedOrder] = useRecoilState(selectedOrderAtom);
   const dynamicFilters = createDynamicFilters(data, filterableColumns);
   const usedColumns = columns || generateColumns(originalColumns, dynamicFilters);
-
   const handleRowClick = (record: OrderListDataType) => {
     setSelectedOrder(record);
   };

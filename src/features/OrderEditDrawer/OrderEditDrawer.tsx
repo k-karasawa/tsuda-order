@@ -24,6 +24,13 @@
     const [secondaryDrawerVisible, setSecondaryDrawerVisible] = useState(false);
     const selectedOrder = useRecoilValue(selectedOrderAtom);
 
+    const validateNumberInput = (value: string) => {
+      const numberPattern = /^[0-9]+$/;
+      return numberPattern.test(value) ?
+             { validateStatus: 'success', errorMsg: null } :
+             { validateStatus: 'error', errorMsg: '半角数値のみを入力してください' };
+    };
+
     const openSecondaryDrawer = () => {
       setSecondaryDrawerVisible(true);
     };
@@ -288,9 +295,23 @@
                 />
               </Col>
               <Col span={12}>
-                <Form.Item label="金額" name="amount">
-                  <Input placeholder="金額を入力" />
-                </Form.Item>
+              <Form.Item
+                label="金額"
+                name="amount"
+                rules={[
+                  {
+                    validator: (_, value) => {
+                      const { validateStatus, errorMsg } = validateNumberInput(value);
+                      if (validateStatus === 'error') {
+                        return Promise.reject(errorMsg);
+                      }
+                      return Promise.resolve();
+                    }
+                  }
+                ]}
+              >
+                <Input placeholder="金額を入力" />
+              </Form.Item>
               </Col>
             </Row>
 
