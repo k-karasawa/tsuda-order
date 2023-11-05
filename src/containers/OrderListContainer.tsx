@@ -8,7 +8,7 @@ import { ColumnsType } from 'antd/es/table';
 type OrderListContainerProps = {
   filter?: (order: OrderListDataType) => boolean;
   customColumns?: ColumnsType<OrderListDataType>;
-  sortOrder?: 'default' | 'assorting';  // <- この行を追加
+  sortOrder?: 'default' | 'assorting';
 }
 
 export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter, customColumns, sortOrder = 'default' }) => {
@@ -20,9 +20,6 @@ export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter, 
   if (!data) return null;
 
   const filteredData = filter ? data.filter(filter) : data;
-
-  console.log("Sorting Data:", filteredData, "Sort Order:", sortOrder);
-
 
   let sortedData = filteredData;
   if (sortOrder === 'assorting') {
