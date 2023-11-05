@@ -3,12 +3,18 @@ import { Card } from "antd";
 import styles from "./styles/Dashboard.module.css";
 import { AreaChartPage } from "./AreaChart";
 import { PieCard } from './PieCard';
+import dayjs from "dayjs";
 
 interface ChartCardProps {
   orderData: any[];
+  selectedDateRange: [dayjs.Dayjs, dayjs.Dayjs];
 }
 
-export const ChartCard: React.FC<ChartCardProps> = ({ orderData }) => {
+interface AreaChartPageProps {
+  selectedDateRange: [dayjs.Dayjs, dayjs.Dayjs];
+}
+
+export const ChartCard: React.FC<ChartCardProps> = ({ orderData, selectedDateRange }) => {
   return (
     <div className={styles.cardscontainer}>
       <h2 className={styles.chartTitle}>全体状況（現在は受注日が入っているもののみ集計）</h2>
@@ -16,7 +22,7 @@ export const ChartCard: React.FC<ChartCardProps> = ({ orderData }) => {
         <div className={styles.statecardwrapper2}>
           <Card style={{ height: 360, width: '100%', paddingBottom: '14px' }}>
             <p style={{ margin: '5px 0' }}>売上高</p>
-            <AreaChartPage orderData={orderData} />
+            <AreaChartPage selectedDateRange={selectedDateRange} />
           </Card>
         </div>
 

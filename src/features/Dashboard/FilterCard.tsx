@@ -12,14 +12,19 @@ const { RangePicker } = DatePicker;
 interface FilterCardProps {
   setOrderData: React.Dispatch<React.SetStateAction<any[]>>;
   setChartOrderData: React.Dispatch<React.SetStateAction<any[]>>;
+  selectedDateRange: [dayjs.Dayjs, dayjs.Dayjs];
+  setSelectedDateRange: React.Dispatch<React.SetStateAction<[dayjs.Dayjs, dayjs.Dayjs]>>;
 }
 
-export const FilterCard: React.FC<FilterCardProps> = ({ setOrderData, setChartOrderData }) => {
+export const FilterCard: React.FC<FilterCardProps> = ({
+  setOrderData,
+  setChartOrderData,
+  selectedDateRange,
+  setSelectedDateRange
+}) => {
   const [selectedRequest, setSelectedRequest] = useState<string>('none');
   const [selectedProgress, setSelectedProgress] = useState<string>('none');
-  const [selectedDateRange, setSelectedDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>(
-    getStartEndOfMonth(dayjs())
-  );
+
 
   const { data: progressData, loading, error } = useProgress();
 
