@@ -17,7 +17,7 @@ interface AreaChartPageProps {
 export const ChartCard: React.FC<ChartCardProps> = ({ orderData, selectedDateRange }) => {
   return (
     <div className={styles.cardscontainer}>
-      <h2 className={styles.chartTitle}>全体状況（現在は受注日が入っているもののみ集計）</h2>
+      <h2 className={styles.chartTitle}>全体状況（現在空白は除外）</h2>
       <div className={styles.lowercards2}>
         <div className={styles.statecardwrapper2}>
           <Card style={{ height: 360, width: '100%', paddingBottom: '14px' }}>

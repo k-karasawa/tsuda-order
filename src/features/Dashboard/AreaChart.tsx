@@ -45,7 +45,7 @@ export const AreaChartPage: React.FC<AreaChartPageProps> = ({ selectedDateRange 
       }, {});
 
       const salesByCompleted = completedRecords?.reduce((acc, curr) => {
-        const month = dayjs(curr.order_date).format('YYYY-MM'); // order_date か accept_date のどちらかに合わせてください。
+        const month = dayjs(curr.order_date).format('YYYY-MM');
         acc[month] = (acc[month] || 0) + curr.amount;
         return acc;
       }, {});
@@ -78,9 +78,9 @@ export const AreaChartPage: React.FC<AreaChartPageProps> = ({ selectedDateRange 
         height={280}
         data={chartData}
         margin={{
-          top: 10,
-          right: 30,
-          left: 0,
+          top: 4,
+          right: 20,
+          left: 30,
           bottom: 4,
         }}
       >
