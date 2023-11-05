@@ -36,15 +36,15 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
 
     switch (activeTab) {
       case 'inProgress':
-        return data.filter(order => order.progress !== PROGRESS_LOST_ID && order.progress !== PROGRESS_COMPLETED_ID).sort((a, b) => b.id - a.id);
+        return data.filter(order => order.progress !== PROGRESS_LOST_ID && order.progress !== PROGRESS_COMPLETED_ID);
       case 'inReceived':
-        return data.filter(order => order.progress === PROGRESS_INRECEIVED_ID).sort((a, b) => b.id - a.id);
+        return data.filter(order => order.progress === PROGRESS_INRECEIVED_ID);
       case 'completed':
-        return data.filter(order => order.progress === PROGRESS_COMPLETED_ID).sort((a, b) => b.id - a.id);
+        return data.filter(order => order.progress === PROGRESS_COMPLETED_ID);
       case 'lost':
-        return data.filter(order => order.progress === PROGRESS_LOST_ID).sort((a, b) => b.id - a.id);
+        return data.filter(order => order.progress === PROGRESS_LOST_ID);
       default:
-        return data.sort((a, b) => b.id - a.id);
+        return data;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, data, PROGRESS_COMPLETED_ID, PROGRESS_INRECEIVED_ID, PROGRESS_LOST_ID]);

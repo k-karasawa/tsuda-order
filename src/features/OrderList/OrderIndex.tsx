@@ -4,6 +4,6 @@ import { OrderListContainer } from '@/containers/OrderListContainer';
 
 export const OrderIndex: React.FC = () => (
   <div className={styles.container}>
-    <OrderListContainer />
+    <OrderListContainer sortOrder="default" />
   </div>
 );
