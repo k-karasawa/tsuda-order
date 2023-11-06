@@ -10,10 +10,9 @@ export const ProgressManage: React.FC = () => {
   const { progresses, loading, fetchProgresses } = useProgresses();
   const [visible, setVisible] = useState(false);
   const [currentProgress, setCurrentProgress] = useState<any>(null);
-  const [color, setColor] = useState<string>('');
-
   const [progress, setProgress] = useState<string>('');
   const [sort, setSort] = useState<number | null>(null);
+  const [color, setColor] = useState<string>('');
 
   const handleAddOrEditProgress = async () => {
     if (progress && sort !== null) {
@@ -80,7 +79,7 @@ export const ProgressManage: React.FC = () => {
         追加
       </Button>
 
-      <Table columns={columns} dataSource={progresses.sort((a, b) => a.sort - b.sort)} loading={loading} rowKey="id" />
+      <Table columns={columns} dataSource={progresses.sort((a, b) => a.sort - b.sort)} loading={loading} rowKey="id" pagination={false}/>
 
       <ProgressModal
         visible={visible}

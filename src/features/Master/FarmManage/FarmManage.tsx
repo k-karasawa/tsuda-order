@@ -81,7 +81,7 @@ export const FarmManage: React.FC = () => {
         追加
       </Button>
 
-      <Table columns={columns} dataSource={farms.sort((a, b) => a.sort - b.sort)} loading={loading} rowKey="id" />
+      <Table columns={columns} dataSource={farms.sort((a, b) => a.sort - b.sort)} loading={loading} rowKey="id" pagination={false} />
 
       <FarmModal
         visible={visible}

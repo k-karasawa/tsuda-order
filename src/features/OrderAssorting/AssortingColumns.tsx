@@ -23,7 +23,10 @@ export const customColumnsForAssorting = [
     ...columns[13], // 品名
     render: ellipsisRender
   },
-  columns[6], // 顧客
+  {
+    ...columns[6], // 顧客
+    render: ellipsisRender
+  },
   columns[7], // 部署
   columns[8], // 拠点
   columns[16], // 台数

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Input, InputNumber } from 'antd';
+import { Modal, Input, InputNumber, Form } from 'antd';
 
 interface FarmModalProps {
   visible: boolean;
@@ -22,9 +22,22 @@ export const FarmModal: React.FC<FarmModalProps> = ({ visible, onOk, onCancel, n
       onOk={onOk}
       onCancel={onCancel}
     >
-      <Input value={name} onChange={e => setName(e.target.value)} placeholder="新規で追加する商社の名称を入力" />
-      <InputNumber value={sort} onChange={value => setSort(value)} placeholder="選択肢での表示順番を数字で指定（入力なしも可）" style={{ width: '100%', marginTop: '1rem' }} />
-      <Input value={prefix} onChange={e => setPrefix(e.target.value)} placeholder="受注番号の先頭に付与される記号を指定" style={{ marginTop: '1rem' }} />
+      <Form layout="vertical">
+        <Form.Item label="商社の名称">
+          <Input value={name} onChange={e => setName(e.target.value)} placeholder="新規取引先名" />
+        </Form.Item>
+        <Form.Item label="選択表示順">
+          <InputNumber
+            value={sort}
+            onChange={value => setSort(typeof value === 'number' ? value : null)}
+            placeholder="選択表示順"
+            style={{ width: '40%' }}
+          />
+        </Form.Item>
+        <Form.Item label="受注番号の先頭記号">
+          <Input value={prefix} onChange={e => setPrefix(e.target.value)} placeholder="プレフィックス" />
+        </Form.Item>
+      </Form>
     </Modal>
   );
 };

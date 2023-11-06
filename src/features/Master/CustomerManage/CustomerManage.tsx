@@ -14,7 +14,7 @@ export const CustomerManage: React.FC = () => {
   const [sort, setSort] = useState<number | null>(null);
 
   const handleAddOrEditCustomer = async () => {
-    if (name) {
+    if (name && sort !== null) {
       const customerData = {
         name,
         sort
@@ -69,13 +69,14 @@ export const CustomerManage: React.FC = () => {
           setVisible(true);
           setCurrentCustomer(null);
           setName('');
+          setSort(null);
         }}
         style={{ marginBottom: '20px' }}
       >
         追加
       </Button>
 
-      <Table columns={columns} dataSource={customers} loading={loading} rowKey="id" />
+      <Table columns={columns} dataSource={customers} loading={loading} rowKey="id" pagination={false} />
 
       <CustomerModal
         visible={visible}
@@ -84,6 +85,8 @@ export const CustomerManage: React.FC = () => {
         name={name}
         setName={setName}
         currentCustomer={undefined}
+        sort={sort}
+        setSort={setSort}
       />
     </div>
   );

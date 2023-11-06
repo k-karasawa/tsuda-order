@@ -11,6 +11,7 @@ interface CustomerColumnProps {
 }
 
 export const CustomerColumns = ({
+  setSort,
   setCurrentCustomer,
   setVisible,
   setName,
@@ -36,6 +37,7 @@ export const CustomerColumns = ({
               setCurrentCustomer(record);
               setVisible(true);
               setName(record.name);
+              setSort(record.sort);
             }}
             style={{ marginRight: '40px' }}
           >
