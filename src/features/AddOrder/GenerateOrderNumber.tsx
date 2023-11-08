@@ -12,6 +12,7 @@ export const GenerateOrderNumber: React.FC<Props> = ({ farmId, setOrderCode, set
   const generateOrderNumber = useCallback(async (id: string) => {
     const actualId = id.split('_')[0];
 
+    // プレフィックスを取得
     const { data: prefixData, error: prefixError } = await supabase
       .from('farm')
       .select('prefix')
@@ -30,35 +31,33 @@ export const GenerateOrderNumber: React.FC<Props> = ({ farmId, setOrderCode, set
 
     const prefix = prefixData.prefix;
 
+    // 注文コードのリストを取得
     const { data, error: fetchError } = await supabase
       .from('order_list')
       .select('order_code')
       .eq('prefix', prefix)
-      .order('order_code', { ascending: false })
-      .limit(1);
+      .order('order_code', { ascending: false });
 
     if (fetchError) {
-      console.error('Failed to fetch order number:', fetchError);
+      console.error('Failed to fetch order numbers:', fetchError);
       return;
     }
 
-    let currentMax = 0;
-    if (data && data[0] && data[0].order_code) {
-      currentMax = parseInt(data[0].order_code);
-    }
+    // 5桁の数値を除外して最大値を見つける
+    const maxOrderCode = data
+      ?.map((record) => record.order_code)
+      .filter((code) => code.toString().length < 5) // 5桁の数値を除外
+      .reduce((max, code) => Math.max(max, parseInt(code)), 0);
 
-    if (isNaN(currentMax)) {
-      console.error('Failed to parse order number from:', data[0]?.order_code);
-      return;
-    }
+    // 新しい注文コードを生成
+    const newOrderCode = maxOrderCode + 1;
 
-    const newOrderCode = (currentMax + 1).toString();
-
-    // ここで親コンポーネントのstateを直接更新
-    setOrderCode(newOrderCode);
+    // 新しい注文コードを親コンポーネントのステートにセット
+    setOrderCode(newOrderCode.toString());
     setOrderPrefix(prefix);
 
   }, [setOrderCode, setOrderPrefix]);
+
 
   useEffect(() => {
     if (farmId !== null && farmId !== undefined) {
