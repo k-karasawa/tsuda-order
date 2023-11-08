@@ -63,11 +63,12 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
           rowKey="id"
           pagination={{
             position: ['bottomLeft'],
-            pageSize: 20,
+            pageSize: 50,
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: scrollX }}
+          scroll={{ x: scrollX, y: 680 }}
+          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
           onRow={(record) => ({
             onClick: () => {
               setSelectedOrder(record);
@@ -84,11 +85,12 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
           rowKey="id"
           pagination={{
             position: ['bottomLeft'],
-            pageSize: 20,
+            pageSize: 50,
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: scrollX }}
+          scroll={{ x: scrollX, y: 680 }}
+          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
           onRow={(record) => ({
             onClick: () => {
               setSelectedOrder(record);
@@ -105,11 +107,12 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
           rowKey="id"
           pagination={{
             position: ['bottomLeft'],
-            pageSize: 20,
+            pageSize: 50,
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: scrollX }}
+          scroll={{ x: scrollX, y: 680 }}
+          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
           onRow={(record) => ({
             onClick: () => {
               setSelectedOrder(record);
@@ -126,11 +129,12 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
           rowKey="id"
           pagination={{
             position: ['bottomLeft'],
-            pageSize: 20,
+            pageSize: 50,
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: scrollX }}
+          scroll={{ x: scrollX, y: 680 }}
+          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
           onRow={(record) => ({
             onClick: () => {
               setSelectedOrder(record);
@@ -147,11 +151,12 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
           rowKey="id"
           pagination={{
             position: ['bottomLeft'],
-            pageSize: 20,
+            pageSize: 50,
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: scrollX }}
+          scroll={{ x: scrollX, y: 680 }}
+          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
           onRow={(record) => ({
             onClick: () => {
               setSelectedOrder(record);
