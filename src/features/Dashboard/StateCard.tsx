@@ -11,7 +11,9 @@ export const StateCard: React.FC<StateCardProps> = ({ orderData }) => {
   const today = dayjs();
 
   const delayedOrders = orderData.filter((item: any) =>
-    dayjs(item.desired_delivery_date).isBefore(today) || dayjs(item.desired_delivery_date).isSame(today)
+    (dayjs(item.desired_delivery_date).isBefore(today) || dayjs(item.desired_delivery_date).isSame(today)) &&
+    item.progress_name !== '完了' &&
+    item.progress_name !== '失注'
   );
 
   const highestPriorityOrders = orderData.filter((item: any) => item.priority_level === '最優先');

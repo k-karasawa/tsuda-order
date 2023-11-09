@@ -36,18 +36,18 @@ export const FilterCard: React.FC<FilterCardProps> = ({
     }
 
     if (allOrderData) {
+      const startOfRange = selectedDateRange[0].startOf('day');
+      const endOfRange = selectedDateRange[1].endOf('day');
+
       const filteredOrders = allOrderData.filter(order => {
         const orderDate = dayjs(order.order_date);
-        const isWithinRange = orderDate.isBetween(selectedDateRange[0], selectedDateRange[1], null, '[]');
-        const matchesProgress = selectedProgress === 'none' || order.progress.toString() === selectedProgress;
-        const matchesRequest = selectedRequest === 'none' || order.request.toString() === selectedRequest;
-        return isWithinRange && matchesProgress && matchesRequest;
+        return orderDate.isAfter(startOfRange) && orderDate.isBefore(endOfRange);
       });
 
       setOrderData(filteredOrders);
       setChartOrderData(filteredOrders);
     }
-  }, [allOrderData, orderListError, selectedProgress, selectedRequest, selectedDateRange, setOrderData, setChartOrderData]);
+  }, [allOrderData, orderListError, selectedDateRange, setOrderData, setChartOrderData]);
 
   const { data: progressData, loading: progressLoading, error: progressError } = useProgress();
   const progressOptions = useMemo(() => [
