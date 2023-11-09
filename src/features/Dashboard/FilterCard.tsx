@@ -3,10 +3,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import styles from './styles/Dashboard.module.css';
 import { getStartEndOfMonth } from './helpers/dateHelpers';
 import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween';
 import { useProgress } from '@/hooks/useProgress';
 import { useRequest } from '@/hooks/useRequest';
-import { supabase } from '../../../utils/supabase';
+import { useOrderList } from '@/hooks/useOrderList';
 
+dayjs.extend(isBetween);
 const { RangePicker } = DatePicker;
 
 interface FilterCardProps {
@@ -25,9 +27,29 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const [selectedRequest, setSelectedRequest] = useState<string>('none');
   const [selectedProgress, setSelectedProgress] = useState<string>('none');
 
+  const { data: allOrderData, error: orderListError } = useOrderList();
 
-  const { data: progressData, loading, error } = useProgress();
+  useEffect(() => {
+    if (orderListError) {
+      console.error('Error fetching order data:', orderListError);
+      return;
+    }
 
+    if (allOrderData) {
+      const filteredOrders = allOrderData.filter(order => {
+        const orderDate = dayjs(order.order_date);
+        const isWithinRange = orderDate.isBetween(selectedDateRange[0], selectedDateRange[1], null, '[]');
+        const matchesProgress = selectedProgress === 'none' || order.progress.toString() === selectedProgress;
+        const matchesRequest = selectedRequest === 'none' || order.request.toString() === selectedRequest;
+        return isWithinRange && matchesProgress && matchesRequest;
+      });
+
+      setOrderData(filteredOrders);
+      setChartOrderData(filteredOrders);
+    }
+  }, [allOrderData, orderListError, selectedProgress, selectedRequest, selectedDateRange, setOrderData, setChartOrderData]);
+
+  const { data: progressData, loading: progressLoading, error: progressError } = useProgress();
   const progressOptions = useMemo(() => [
     { value: 'none', label: '選択なし' },
     ...(progressData?.map((item) => ({
@@ -37,7 +59,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   ], [progressData]);
 
   const { data: requestData, loading: requestLoading, error: requestError } = useRequest();
-
   const requestOptions = useMemo(() => [
     { value: 'none', label: '選択なし' },
     ...(requestData?.map((item) => ({
@@ -46,74 +67,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       sort: item.sort
     })).sort((a, b) => a.sort - b.sort).map(({ value, label }) => ({ value, label })) || [])
   ], [requestData]);
-
-  const fetchOrders = async () => {
-    let query = supabase.from('order_list_extended').select('*');
-
-    if (selectedProgress !== 'none') {
-      query = query.filter('progress', 'eq', selectedProgress);
-    }
-
-    if (selectedRequest !== 'none') {
-      query = query.filter('request', 'eq', selectedRequest);
-    }
-
-    query = query.filter('order_date', 'gte', selectedDateRange[0].format('YYYY-MM-DD'))
-                 .filter('order_date', 'lte', selectedDateRange[1].format('YYYY-MM-DD'));
-
-    const { data, error } = await query;
-
-    if (error) {
-      console.error(error);
-    } else {
-      setOrderData(data || []);
-    }
-  };
-
-  const fetchChartOrders = async () => {
-    const query = supabase.from('order_list_extended')
-                          .select('*')
-                          .filter('order_date', 'gte', selectedDateRange[0].format('YYYY-MM-DD'))
-                          .filter('order_date', 'lte', selectedDateRange[1].format('YYYY-MM-DD'));
-
-    const { data, error } = await query;
-
-    if (error) {
-      console.error(error);
-    } else {
-      setChartOrderData(data || []);
-    }
-  };
-
-  useEffect(() => {
-    const fetchChartOrders = async () => {
-      let query = supabase.from('order_list_extended').select('*');
-
-      query = query.filter('order_date', 'gte', selectedDateRange[0].format('YYYY-MM-DD'))
-                   .filter('order_date', 'lte', selectedDateRange[1].format('YYYY-MM-DD'));
-
-      const { data, error } = await query;
-
-      if (error) {
-        console.error(error);
-      } else {
-        setChartOrderData(data || []);  // 2. 日付のみで取得したデータをsetChartOrderDataに渡す
-      }
-    };
-
-    fetchChartOrders();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedDateRange]);
-
-  useEffect(() => {
-    fetchOrders();
-    fetchChartOrders();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedProgress, selectedRequest, selectedDateRange]);
-
-  if (error) {
-    return <div>エラーが発生しました。</div>;
-  }
 
   return (
     <div className={styles.cardscontainer}>
