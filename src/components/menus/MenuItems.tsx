@@ -35,6 +35,7 @@ export const items: MenuItem[] = [
     getItem('複製', '/order-duplicate', <SnippetsOutlined />),
     getItem('OH', '/order-oh', <SnippetsOutlined />),
     getItem('その他', '/order-other', <SnippetsOutlined />),
+    getItem('調査', '/order-survey', <SnippetsOutlined />),
     getItem('販売', '/order-sale', <SnippetsOutlined />),
     getItem('開発', '/order-development', <SnippetsOutlined />),
     getItem('工事', '/order-construction', <SnippetsOutlined />),

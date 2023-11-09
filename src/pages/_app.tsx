@@ -18,12 +18,8 @@ function MyApp({ Component, pageProps }: AppProps) {
         if (event === "SIGNED_OUT") {
           router.push("/auth");
         }
-        if (event === "SIGNED_IN") {
-          router.push("/");
-        }
       }
     );
-
     return () => {
       authListener.subscription.unsubscribe();
     };
