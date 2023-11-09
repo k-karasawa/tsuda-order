@@ -7,6 +7,8 @@ export const useRequireLogin = () => {
   const router = useRouter();
 
   useEffect(() => {
+    console.log('Session Loading:', session.isLoading);
+    console.log('Session:', session.session);
     if (!session.isLoading && !session.session) {
       router.push('/auth');
     }
