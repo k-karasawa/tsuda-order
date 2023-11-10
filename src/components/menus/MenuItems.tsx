@@ -41,6 +41,7 @@ export const items: MenuItem[] = [
     getItem('工事', '/order-construction', <SnippetsOutlined />),
   ]),
   getItem('商社別一覧', '2', <FolderOpenOutlined />, [
+    getItem('富士フイルム', '/order-f', <SnippetsOutlined />),
     getItem('Tリバース Eng', '/order-t', <SnippetsOutlined />),
     getItem('Sリバース Eng', '/order-s', <SnippetsOutlined />),
     getItem('Mリバース Eng', '/order-m', <SnippetsOutlined />),
