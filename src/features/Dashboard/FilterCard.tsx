@@ -1,12 +1,15 @@
 import { Card, DatePicker, Select, Space } from 'antd';
 import React, { useState, useEffect, useMemo } from 'react';
 import styles from './styles/Dashboard.module.css';
-import { getStartEndOfMonth } from './helpers/dateHelpers';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { useProgress } from '@/hooks/useProgress';
 import { useRequest } from '@/hooks/useRequest';
 import { useOrderList } from '@/hooks/useOrderList';
+import locale from 'antd/es/date-picker/locale/ja_JP';
+import 'dayjs/locale/ja';
+
+
 
 dayjs.extend(isBetween);
 const { RangePicker } = DatePicker;
@@ -75,6 +78,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
           <Space>
             月選択：
             <RangePicker
+              locale={locale}
               picker="month"
               value={selectedDateRange}
               onChange={(dates) => {
