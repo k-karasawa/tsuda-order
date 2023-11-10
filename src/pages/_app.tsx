@@ -7,6 +7,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import { RecoilRoot } from 'recoil';
+import { ConfigProvider } from 'antd';
+import jaJP from 'antd/lib/locale/ja_JP';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -27,12 +29,16 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <RecoilRoot>
+          <ConfigProvider locale={jaJP}>
+
       <SessionContextProvider
         supabaseClient={supabase}
         initialSession={pageProps.initialSession}
       >
         {getLayout(<Component {...pageProps} />)}
       </SessionContextProvider>
+      </ConfigProvider>
+
     </RecoilRoot>
   );
 }
