@@ -23,8 +23,6 @@ const fetchAllOrders = async (from = 0): Promise<OrderListDataType[]> => {
 
 const fetchOrders = async (): Promise<OrderListDataType[]> => {
   const allData = await fetchAllOrders();
-  console.log(`Total fetched data count: ${allData.length}`);
-
   return allData.map(item => ({
     ...item,
     fullOrderCode: item.prefix + item.order_code,

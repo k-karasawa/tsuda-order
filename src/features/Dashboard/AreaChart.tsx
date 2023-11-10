@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   ComposedChart,
-  Line,
   Area,
   Bar,
   XAxis,
@@ -12,41 +11,46 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import dayjs from 'dayjs';
-import { supabase } from '../../../utils/supabase';
+import { useOrderList } from '@/hooks/useOrderList';
+import { OrderListDataType } from '@/types/types';
 
 interface AreaChartPageProps {
   selectedDateRange: [dayjs.Dayjs, dayjs.Dayjs];
 }
 
+interface GroupedData {
+  [key: string]: number;
+}
+
 export const AreaChartPage: React.FC<AreaChartPageProps> = ({ selectedDateRange }) => {
   const [chartData, setChartData] = useState<any[]>([]);
+  const { data: orderData, error } = useOrderList();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await supabase.from('order_list_extended').select('*');
+    if (orderData && !error) {
+      const completedRecords = orderData.filter((record: OrderListDataType) => record.progress_name === '完了');
 
-      if (error) {
-        console.error('Error fetching data', error);
-        return;
-      }
-
-      const completedRecords = data?.filter(record => record.progress_name === '完了');
-
-      const groupedByOrderDate = data?.reduce((acc, curr) => {
-        const month = dayjs(curr.order_date).format('YYYY-MM');
-        acc[month] = (acc[month] || 0) + curr.amount;
+      const groupedByOrderDate: GroupedData = orderData.reduce((acc: GroupedData, curr: OrderListDataType) => {
+        if (curr.order_date) {
+          const month = dayjs(curr.order_date).format('YYYY-MM');
+          acc[month] = (acc[month] || 0) + parseFloat(curr.amount || '0');
+        }
         return acc;
       }, {});
 
-      const groupedByAcceptDate = data?.reduce((acc, curr) => {
-        const month = dayjs(curr.accept_date).format('YYYY-MM');
-        acc[month] = (acc[month] || 0) + curr.amount;
+      const groupedByAcceptDate: GroupedData = orderData.reduce((acc: GroupedData, curr: OrderListDataType) => {
+        if (curr.accept_date) {
+          const month = dayjs(curr.accept_date).format('YYYY-MM');
+          acc[month] = (acc[month] || 0) + parseFloat(curr.amount || '0');
+        }
         return acc;
       }, {});
 
-      const salesByCompleted = completedRecords?.reduce((acc, curr) => {
-        const month = dayjs(curr.order_date).format('YYYY-MM');
-        acc[month] = (acc[month] || 0) + curr.amount;
+      const salesByCompleted: GroupedData = completedRecords.reduce((acc: GroupedData, curr: OrderListDataType) => {
+        if (curr.order_date) {
+          const month = dayjs(curr.order_date).format('YYYY-MM');
+          acc[month] = (acc[month] || 0) + parseFloat(curr.amount || '0');
+        }
         return acc;
       }, {});
 
@@ -65,11 +69,13 @@ export const AreaChartPage: React.FC<AreaChartPageProps> = ({ selectedDateRange 
       }));
 
       setChartData(formattedData);
-    };
+    }
+  }, [orderData, selectedDateRange, error]);
 
-    fetchData();
-  }, [selectedDateRange]);
-
+  if (error) {
+    console.error('Error fetching data', error);
+    return null;
+  }
 
   return (
     <ResponsiveContainer width="100%" height={300}>
@@ -82,8 +88,7 @@ export const AreaChartPage: React.FC<AreaChartPageProps> = ({ selectedDateRange 
           right: 20,
           left: 30,
           bottom: 4,
-        }}
-      >
+        }}>
         <CartesianGrid stroke="#f5f5f5" />
         <XAxis dataKey="name" scale="band" />
         <YAxis />

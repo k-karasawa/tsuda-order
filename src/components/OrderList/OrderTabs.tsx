@@ -67,7 +67,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
             total: filteredData.length,
             showSizeChanger: false,
           }}
-          scroll={{ x: scrollX, y: 680 }}
+          scroll={{ x: scrollX, y: 520 }}
           sticky={{ offsetScroll: 0, offsetHeader: 0 }}
           onRow={(record) => ({
             onClick: () => {
