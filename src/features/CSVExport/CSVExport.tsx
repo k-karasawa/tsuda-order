@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
 import { exportToCsv } from './exportToCsv';
 
 interface CSVDownloaderProps {
@@ -13,6 +14,12 @@ export const CSVDownloader: React.FC<CSVDownloaderProps> = ({ data, filename }) 
   };
 
   return (
-    <Button onClick={handleDownload}>CSVダウンロード</Button>
+    <Button
+      onClick={handleDownload}
+      type="primary"
+      icon={<DownloadOutlined />}
+    >
+      CSV
+    </Button>
   );
 };
