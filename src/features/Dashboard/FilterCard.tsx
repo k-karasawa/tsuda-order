@@ -6,6 +6,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import { useProgress } from '@/hooks/useProgress';
 import { useRequest } from '@/hooks/useRequest';
 import { useOrderList } from '@/hooks/useOrderList';
+import { CSVDownloader } from '@/features/CSVExport/CSVExport';
 import 'dayjs/locale/ja';
 
 dayjs.extend(isBetween);
@@ -24,6 +25,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   selectedDateRange,
   setSelectedDateRange
 }) => {
+  const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<string>('none');
   const [selectedProgress, setSelectedProgress] = useState<string>('none');
 
@@ -44,6 +46,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
         return orderDate.isAfter(startOfRange) && orderDate.isBefore(endOfRange);
       });
 
+      setFilteredOrders(filteredOrders);
       setOrderData(filteredOrders);
       setChartOrderData(filteredOrders);
     }
@@ -75,7 +78,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
           <Space>
             月選択：
             <RangePicker
-              // locale={locale}
               picker="month"
               value={selectedDateRange}
               onChange={(dates) => {
@@ -101,6 +103,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               options={requestOptions}
               onChange={(value) => setSelectedRequest(value)}
             />
+            <CSVDownloader data={filteredOrders} filename="filtered_orders.csv" />
           </Space>
         </Card>
       </div>
