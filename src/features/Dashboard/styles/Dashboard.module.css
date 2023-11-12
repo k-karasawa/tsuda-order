@@ -15,7 +15,7 @@
 
 /* StateCardとFilterCardで使用 */
 .statecardwrapper {
-	width: calc(33.33% - 1.6rem); /* こちらを変更 */
+	width: calc(33.33% - 1.6rem);
 	box-sizing: border-box;
 	margin-bottom: 1.2rem;
 }
@@ -72,7 +72,7 @@
 }
 
 .smallText {
-    font-size: 20px; /* 任意のサイズに設定 */
+    font-size: 20px;
 }
 
 .container {
@@ -86,4 +86,17 @@
   text-align: left;
   padding-left: 16px;
   align-self: flex-start;
+}
+
+.filterGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.filterItem {
+  flex: 1 1 auto;
+  min-width: 140px;
+  margin-bottom: 16px;
 }

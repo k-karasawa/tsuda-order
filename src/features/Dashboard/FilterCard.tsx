@@ -6,6 +6,8 @@ import isBetween from 'dayjs/plugin/isBetween';
 import { useProgress } from '@/hooks/useProgress';
 import { useRequest } from '@/hooks/useRequest';
 import { useOrderList } from '@/hooks/useOrderList';
+import { CSVDownloader } from '@/features/CSVExport/CSVExport';
+import { filterOrdersByDate } from './utils/filterOrders';
 import 'dayjs/locale/ja';
 
 dayjs.extend(isBetween);
@@ -24,6 +26,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   selectedDateRange,
   setSelectedDateRange
 }) => {
+  const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<string>('none');
   const [selectedProgress, setSelectedProgress] = useState<string>('none');
 
@@ -35,19 +38,25 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       return;
     }
 
-    if (allOrderData) {
+    if (allOrderData && selectedDateRange) {
       const startOfRange = selectedDateRange[0].startOf('day');
       const endOfRange = selectedDateRange[1].endOf('day');
 
-      const filteredOrders = allOrderData.filter(order => {
-        const orderDate = dayjs(order.order_date);
-        return orderDate.isAfter(startOfRange) && orderDate.isBefore(endOfRange);
-      });
+      let filtered = filterOrdersByDate(allOrderData, startOfRange, endOfRange);
 
-      setOrderData(filteredOrders);
-      setChartOrderData(filteredOrders);
+      if (selectedProgress !== 'none') {
+        filtered = filtered.filter(order => order.progress === Number(selectedProgress));
+      }
+
+      if (selectedRequest !== 'none') {
+        filtered = filtered.filter(order => order.request === Number(selectedRequest));
+      }
+
+      setFilteredOrders(filtered);
+      setOrderData(filtered);
+      setChartOrderData(filtered);
     }
-  }, [allOrderData, orderListError, selectedDateRange, setOrderData, setChartOrderData]);
+  }, [allOrderData, orderListError, selectedDateRange, selectedProgress, selectedRequest, setOrderData, setChartOrderData]);
 
   const { data: progressData, loading: progressLoading, error: progressError } = useProgress();
   const progressOptions = useMemo(() => [
@@ -75,7 +84,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
           <Space>
             月選択：
             <RangePicker
-              // locale={locale}
               picker="month"
               value={selectedDateRange}
               onChange={(dates) => {
@@ -101,6 +109,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               options={requestOptions}
               onChange={(value) => setSelectedRequest(value)}
             />
+            {/* <CSVDownloader data={filteredOrders} filename="filtered_orders.csv" /> */}
           </Space>
         </Card>
       </div>

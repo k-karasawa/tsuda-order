@@ -29,16 +29,14 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <RecoilRoot>
-          <ConfigProvider locale={jaJP}>
-
-      <SessionContextProvider
-        supabaseClient={supabase}
-        initialSession={pageProps.initialSession}
-      >
-        {getLayout(<Component {...pageProps} />)}
-      </SessionContextProvider>
+      <ConfigProvider locale={jaJP}>
+        <SessionContextProvider
+          supabaseClient={supabase}
+          initialSession={pageProps.initialSession}
+        >
+          {getLayout(<Component {...pageProps} />)}
+        </SessionContextProvider>
       </ConfigProvider>
-
     </RecoilRoot>
   );
 }
