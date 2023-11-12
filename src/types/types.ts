@@ -5,7 +5,7 @@ type BaseOrderListDataType = Database['public']['Tables']['order_list']['Row'];
 
 type ExtendedAttributes = {
   fullOrderCode: string;
-  progress_name?: string; // Add this line if 'progress_name' is an expected field
+  progress_name?: string;
 };
 
 export type OrderListDataType = BaseOrderListDataType & ExtendedAttributes;
@@ -29,3 +29,15 @@ export type RequestType = {
   sort: number;
 };
 
+export type FarmType = {
+  id: number;
+  name: string;
+  sort: number;
+  prefix: string;
+};
+
+export type CustomerType = {
+  id: number;
+  name: string;
+  sort: number;
+};

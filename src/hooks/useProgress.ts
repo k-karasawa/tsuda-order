@@ -1,4 +1,3 @@
-
 import useSWR from 'swr';
 import { supabase } from '../../utils/supabase';
 import type { ProgressType } from '../types/types';

@@ -30,10 +30,11 @@
 
 /* FilterCardで使用  */
 .selectcontent {
-	display: flex;
-	align-items: center;
-	height: 100%;
-	margin-top: 1.2rem;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin-top: 1.2rem;
+  flex-wrap: wrap;
 }
 
 .lowercards2 {
@@ -96,7 +97,10 @@
 }
 
 .filterItem {
-  flex: 1 1 auto;
-  min-width: 140px;
-  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* 子要素を中央に配置する */
+  flex: 1; /* 全てのfilterItemが同じ幅を取るようにする */
+  margin-right: 16px; /* 右側の余白を設定 */
 }
+
