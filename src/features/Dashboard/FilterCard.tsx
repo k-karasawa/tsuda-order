@@ -41,12 +41,22 @@ export const FilterCard: React.FC<FilterCardProps> = ({
     if (allOrderData && selectedDateRange) {
       const startOfRange = selectedDateRange[0].startOf('day');
       const endOfRange = selectedDateRange[1].endOf('day');
-      const filtered = filterOrdersByDate(allOrderData, startOfRange, endOfRange);
+
+      let filtered = filterOrdersByDate(allOrderData, startOfRange, endOfRange);
+
+      if (selectedProgress !== 'none') {
+        filtered = filtered.filter(order => order.progress === Number(selectedProgress));
+      }
+
+      if (selectedRequest !== 'none') {
+        filtered = filtered.filter(order => order.request === Number(selectedRequest));
+      }
+
       setFilteredOrders(filtered);
       setOrderData(filtered);
       setChartOrderData(filtered);
     }
-  }, [allOrderData, orderListError, selectedDateRange, setOrderData, setChartOrderData]);
+  }, [allOrderData, orderListError, selectedDateRange, selectedProgress, selectedRequest, setOrderData, setChartOrderData]);
 
   const { data: progressData, loading: progressLoading, error: progressError } = useProgress();
   const progressOptions = useMemo(() => [
@@ -99,7 +109,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               options={requestOptions}
               onChange={(value) => setSelectedRequest(value)}
             />
-            <CSVDownloader data={filteredOrders} filename="filtered_orders.csv" />
+            {/* <CSVDownloader data={filteredOrders} filename="filtered_orders.csv" /> */}
           </Space>
         </Card>
       </div>
