@@ -46,21 +46,44 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       const startOfRange = selectedDateRange[0].startOf('day');
       const endOfRange = selectedDateRange[1].endOf('day');
 
+      // 日付によるフィルタリング
       let filtered = filterOrdersByDate(allOrderData, startOfRange, endOfRange);
 
+      // ステータスによるフィルタリング
       if (selectedProgress !== 'none') {
         filtered = filtered.filter(order => order.progress === Number(selectedProgress));
       }
 
+      // 依頼内容によるフィルタリング
       if (selectedRequest !== 'none') {
         filtered = filtered.filter(order => order.request === Number(selectedRequest));
+      }
+
+      // 商社によるフィルタリング
+      if (selectedFarm !== 'none') {
+        filtered = filtered.filter(order => order.farm === Number(selectedFarm));
+      }
+
+      // 顧客によるフィルタリング
+      if (selectedCustomer !== 'none') {
+        filtered = filtered.filter(order => order.customer === Number(selectedCustomer));
       }
 
       setFilteredOrders(filtered);
       setOrderData(filtered);
       setChartOrderData(filtered);
     }
-  }, [allOrderData, orderListError, selectedDateRange, selectedProgress, selectedRequest, setOrderData, setChartOrderData]);
+  }, [
+    allOrderData,
+    orderListError,
+    selectedDateRange,
+    selectedProgress,
+    selectedRequest,
+    selectedFarm,
+    selectedCustomer,
+    setOrderData,
+    setChartOrderData
+  ]);
 
   const { data: progressData, loading: progressLoading, error: progressError } = useProgress();
   const progressOptions = useMemo(() => [
@@ -89,6 +112,15 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       label: item.name
     })) || [])
   ], [farmData]);
+
+  const { data: customerData, loading: customerLoading, error: customerError } = useCustomer();
+  const customerOptions = useMemo(() => [
+    { value: 'none', label: '選択なし' },
+    ...(customerData?.map((item) => ({
+      value: item.id.toString(),
+      label: item.name
+    })) || [])
+  ], [customerData]);
 
   return (
     <div className={styles.cardscontainer}>
@@ -142,7 +174,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               <Select
                 defaultValue="none"
                 style={{ width: 140 }}
-                options={farmOptions}
+                options={customerOptions}
                 onChange={(value) => setSelectedCustomer(value)}
               />
             </div>
