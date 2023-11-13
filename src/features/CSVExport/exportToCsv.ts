@@ -1,13 +1,19 @@
+import { ColumnMapping } from "./colmunMapping";
+
 export const exportToCsv = (data: any[], filename: string) => {
   let csvContent = "\uFEFF";
 
-  // ヘッダー行の追加（オプション、データの構造に応じて調整）
-  const headers = Object.keys(data[0]).join(',');
+  // ヘッダー行の追加
+  const headers = ColumnMapping
+    .map(column => column.label)
+    .join(',');
   csvContent += headers + '\r\n';
 
   // データ行の追加
   data.forEach(row => {
-    const rowContent = Object.values(row).join(',');
+    const rowContent = ColumnMapping
+      .map(column => row[column.key] || '')
+      .join(',');
     csvContent += rowContent + '\r\n';
   });
 
