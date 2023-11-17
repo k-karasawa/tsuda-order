@@ -21,7 +21,7 @@ export const OrderAssorting: React.FC<OrderAssortingProps> = ({ filterCondition 
       <OrderListContainer
         filter={(order: any) => order.request_name === filterCondition}
         customColumns={customColumnsForAssorting}
-        sortOrder="assorting"  // この行を追加
+        sortOrder="assorting"
       />
     </div>
   )
