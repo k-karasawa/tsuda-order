@@ -7,6 +7,7 @@ import { supabase } from '@/../utils/supabase';
 import dayjs from 'dayjs';
 import { useRouter } from "next/router";
 import { GenerateOrderNumber } from './GenerateOrderNumber';
+import { CustomInputNumber } from '@/components/CustomeInputNumber/CustomeInputNumber';
 
 const { TextArea } = Input;
 
@@ -297,7 +298,7 @@ export const AddOrderForm: React.FC = () => {
                 },
               ]}
             >
-              <Input placeholder='半角数字のみを入力してください' />
+              <CustomInputNumber />
             </Form.Item>
           </Col>
         </Row>
