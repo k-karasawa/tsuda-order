@@ -10,6 +10,7 @@
   import dayjs from 'dayjs';
   import { useRecoilValue } from 'recoil';
   import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
+  import { CustomInputNumber } from '@/components/CustomeInputNumber/CustomeInputNumber';
 
   dayjs.extend(customParseFormat);
   const { TextArea } = Input;
@@ -298,6 +299,7 @@
               <Form.Item
                 label="金額"
                 name="amount"
+                style={{ width: '100%' }} // この行を追加
                 rules={[
                   {
                     validator: (_, value) => {
@@ -310,7 +312,7 @@
                   }
                 ]}
               >
-                <Input placeholder="金額を入力" />
+                <CustomInputNumber />
               </Form.Item>
               </Col>
             </Row>
