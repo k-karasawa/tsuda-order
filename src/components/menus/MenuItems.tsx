@@ -34,6 +34,7 @@ export const items: MenuItem[] = [
     getItem('修理', '/order-repair', <SnippetsOutlined />),
     getItem('複製', '/order-duplicate', <SnippetsOutlined />),
     getItem('OH', '/order-oh', <SnippetsOutlined />),
+    getItem('富士フイルム', '/order-f', <SnippetsOutlined />),
     getItem('その他', '/order-other', <SnippetsOutlined />),
     getItem('調査', '/order-survey', <SnippetsOutlined />),
     getItem('販売', '/order-sale', <SnippetsOutlined />),
@@ -41,7 +42,6 @@ export const items: MenuItem[] = [
     getItem('工事', '/order-construction', <SnippetsOutlined />),
   ]),
   getItem('商社別一覧', '2', <FolderOpenOutlined />, [
-    getItem('富士フイルム', '/order-f', <SnippetsOutlined />),
     getItem('Tリバース Eng', '/order-t', <SnippetsOutlined />),
     getItem('Sリバース Eng', '/order-s', <SnippetsOutlined />),
     getItem('Mリバース Eng', '/order-m', <SnippetsOutlined />),
