@@ -8,6 +8,7 @@ interface Props {
   tableName: keyof TableMappingType;
   placeholder?: string;
   value?: string | number;
+  defaultValue?: string | number;
   onChange?: (value: string | number) => void;
 }
 
@@ -29,7 +30,7 @@ const tableMappings: TableMappingType = {
   farm: 'name',
 };
 
-export const SelectDataCreate: React.FC<Props> = ({ tableName, placeholder, value, onChange }) => {
+export const SelectDataCreate: React.FC<Props> = ({ tableName, placeholder, value, defaultValue, onChange }) => {
   const [data, setData] = useState<OptionType[]>([]);
 
   useEffect(() => {
@@ -39,6 +40,7 @@ export const SelectDataCreate: React.FC<Props> = ({ tableName, placeholder, valu
   return (
     <Select
       value={value}
+      defaultValue={defaultValue}
       onChange={onChange}
       placeholder={placeholder}
       options={data.map(item => ({ value: item.value, label: item.label }))}
