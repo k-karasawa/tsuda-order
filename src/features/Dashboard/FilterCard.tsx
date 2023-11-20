@@ -5,6 +5,8 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import { useProgress } from '@/hooks/useProgress';
 import { useRequest } from '@/hooks/useRequest';
+import { useFarm } from '@/hooks/useFarm';
+import { useCustomer } from '@/hooks/useCustomer';
 import { useOrderList } from '@/hooks/useOrderList';
 import { CSVDownloader } from '@/features/CSVExport/CSVExport';
 import { filterOrdersByDate } from './utils/filterOrders';
@@ -29,6 +31,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<string>('none');
   const [selectedProgress, setSelectedProgress] = useState<string>('none');
+  const [selectedFarm, setSelectedFarm] = useState<string>('none');
+  const [selectedCustomer, setSelectedCustomer] = useState<string>('none');
 
   const { data: allOrderData, error: orderListError } = useOrderList();
 
@@ -42,21 +46,44 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       const startOfRange = selectedDateRange[0].startOf('day');
       const endOfRange = selectedDateRange[1].endOf('day');
 
+      // 日付によるフィルタリング
       let filtered = filterOrdersByDate(allOrderData, startOfRange, endOfRange);
 
+      // ステータスによるフィルタリング
       if (selectedProgress !== 'none') {
         filtered = filtered.filter(order => order.progress === Number(selectedProgress));
       }
 
+      // 依頼内容によるフィルタリング
       if (selectedRequest !== 'none') {
         filtered = filtered.filter(order => order.request === Number(selectedRequest));
+      }
+
+      // 商社によるフィルタリング
+      if (selectedFarm !== 'none') {
+        filtered = filtered.filter(order => order.farm === Number(selectedFarm));
+      }
+
+      // 顧客によるフィルタリング
+      if (selectedCustomer !== 'none') {
+        filtered = filtered.filter(order => order.customer === Number(selectedCustomer));
       }
 
       setFilteredOrders(filtered);
       setOrderData(filtered);
       setChartOrderData(filtered);
     }
-  }, [allOrderData, orderListError, selectedDateRange, selectedProgress, selectedRequest, setOrderData, setChartOrderData]);
+  }, [
+    allOrderData,
+    orderListError,
+    selectedDateRange,
+    selectedProgress,
+    selectedRequest,
+    selectedFarm,
+    selectedCustomer,
+    setOrderData,
+    setChartOrderData
+  ]);
 
   const { data: progressData, loading: progressLoading, error: progressError } = useProgress();
   const progressOptions = useMemo(() => [
@@ -77,39 +104,83 @@ export const FilterCard: React.FC<FilterCardProps> = ({
     })).sort((a, b) => a.sort - b.sort).map(({ value, label }) => ({ value, label })) || [])
   ], [requestData]);
 
+  const { data: farmData, loading: farmLoading, error: farmError } = useFarm();
+  const farmOptions = useMemo(() => [
+    { value: 'none', label: '選択なし' },
+    ...(farmData?.map((item) => ({
+      value: item.id.toString(),
+      label: item.name
+    })) || [])
+  ], [farmData]);
+
+  const { data: customerData, loading: customerLoading, error: customerError } = useCustomer();
+  const customerOptions = useMemo(() => [
+    { value: 'none', label: '選択なし' },
+    ...(customerData?.map((item) => ({
+      value: item.id.toString(),
+      label: item.name
+    })) || [])
+  ], [customerData]);
+
   return (
     <div className={styles.cardscontainer}>
       <div className={`${styles.statecardwrapper} ${styles.fullwidthcard}`}>
-        <Card className={styles.selectcontent} style={{ height: 60 }}>
-          <Space>
-            月選択：
-            <RangePicker
-              picker="month"
-              value={selectedDateRange}
-              onChange={(dates) => {
-                if (dates && dates[0] && dates[1]) {
-                  const startDate = dates[0].startOf('month');
-                  const endDate = dates[1].endOf('month');
-                  setSelectedDateRange([startDate, endDate]);
-                }
-              }}
-            />
-            ステータス：
-            <Select
-              listHeight={500}
-              defaultValue="none"
-              style={{ width: 120 }}
-              options={progressOptions}
-              onChange={(value) => setSelectedProgress(value)}
-            />
-            依頼内容：
-            <Select
-              defaultValue="none"
-              style={{ width: 120 }}
-              options={requestOptions}
-              onChange={(value) => setSelectedRequest(value)}
-            />
-            {/* <CSVDownloader data={filteredOrders} filename="filtered_orders.csv" /> */}
+        <Card className={styles.selectcontent}>
+          <Space direction="horizontal" size="middle" style={{ width: '100%' }}>
+            <div className={styles.filterItem}>
+              <div>月選択：</div>
+              <RangePicker
+                picker="month"
+                value={selectedDateRange}
+                onChange={(dates) => {
+                  if (dates && dates[0] && dates[1]) {
+                    const startDate = dates[0].startOf('month');
+                    const endDate = dates[1].endOf('month');
+                    setSelectedDateRange([startDate, endDate]);
+                  }
+                }}
+              />
+            </div>
+            <div className={styles.filterItem}>
+              <div>ステータス：</div>
+              <Select
+                listHeight={500}
+                defaultValue="none"
+                style={{ width: 140 }}
+                options={progressOptions}
+                onChange={(value) => setSelectedProgress(value)}
+              />
+            </div>
+            <div className={styles.filterItem}>
+              <div>依頼内容：</div>
+              <Select
+                defaultValue="none"
+                style={{ width: 140 }}
+                options={requestOptions}
+                onChange={(value) => setSelectedRequest(value)}
+              />
+            </div>
+            <div className={styles.filterItem}>
+              <div>商社：</div>
+              <Select
+                defaultValue="none"
+                style={{ width: 140 }}
+                options={farmOptions}
+                onChange={(value) => setSelectedFarm(value)}
+              />
+            </div>
+            <div className={styles.filterItem}>
+              <div>顧客：</div>
+              <Select
+                defaultValue="none"
+                style={{ width: 140 }}
+                options={customerOptions}
+                onChange={(value) => setSelectedCustomer(value)}
+              />
+            </div>
+            <div className={styles.filterItem} style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
+              <CSVDownloader data={filteredOrders} filename="filtered_orders.csv" />
+            </div>
           </Space>
         </Card>
       </div>
