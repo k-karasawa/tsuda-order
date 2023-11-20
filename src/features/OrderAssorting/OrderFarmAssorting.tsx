@@ -18,7 +18,7 @@ export const OrderFarmAssorting: React.FC<OrderAssortingProps> = ({ filterCondit
 
   return (
     <div className={styles.container}>
-      <OrderListContainer filter={(order: any) => order.farm_name === filterCondition} customColumns={customColumnsForAssorting} />
+      <OrderListContainer filter={(order: any) => order.farm_name === filterCondition} />
     </div>
   )
 }
