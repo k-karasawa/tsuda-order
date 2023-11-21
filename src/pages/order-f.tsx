@@ -1,11 +1,11 @@
 import React from "react";
 import { useRequireLogin } from "../components/Auth/useRequireLogin";
-import { OrderFarmAssorting } from "@/features/OrderAssorting/OrderFarmAssorting";
+import { OrderAssortingF } from "@/features/OrderAssorting/OrderAssortingF";
 
 const OrderFarmF = () => {
   useRequireLogin();
   return (
-    <OrderFarmAssorting filterCondition="富士フイルム" />
+    <OrderAssortingF filterCondition="富士フイルム" />
   )
 }
 
