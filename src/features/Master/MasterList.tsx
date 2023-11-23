@@ -1,6 +1,5 @@
 import React from 'react';
-import { Tabs } from 'antd';
-import type { TabsProps } from 'antd';
+import { Tabs, TabsProps } from 'antd';
 import { CustomerDepartmentManage } from './CustomerDepartmentManage/CustomerDepartmentManage';
 import { CustomerManage } from './CustomerManage/CustomerManage';
 import { FarmManage } from './FarmManage/FarmManage';

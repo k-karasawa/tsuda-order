@@ -3,7 +3,6 @@ import { OrderListContainer } from "@/containers/OrderListContainer";
 import styles from './styles.module.css';
 import { useRecoilState } from 'recoil';
 import { XScrollState } from '@/recoil/atoms';
-import { customColumnsForAssorting } from './AssortingColumns';
 
 type OrderAssortingProps = {
   filterCondition: string;
@@ -18,7 +17,10 @@ export const OrderFarmAssorting: React.FC<OrderAssortingProps> = ({ filterCondit
 
   return (
     <div className={styles.container}>
-      <OrderListContainer filter={(order: any) => order.farm_name === filterCondition} />
+      <OrderListContainer
+        filter={(order: any) => order.farm_name === filterCondition}
+        showDownloadButton={true}
+        />
     </div>
   )
 }
