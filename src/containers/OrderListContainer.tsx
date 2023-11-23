@@ -44,5 +44,6 @@ export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter, 
     data={sortedData}
     refetchOrderList={refetchOrderList}
     columns={customColumns}
+    showDownloadButton={showDownloadButton}
   />;
 };
