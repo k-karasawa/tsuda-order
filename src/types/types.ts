@@ -15,6 +15,7 @@ export interface OrderListPresentationProps {
   refetchOrderList: () => void;
   request_name?: string;
   columns?: ColumnsType<OrderListDataType>;
+  showDownloadButton?: boolean;
 }
 
 export type ProgressType = {
