@@ -303,9 +303,19 @@ export const AddOrderForm: React.FC = () => {
           </Col>
         </Row>
 
-        <Form.Item label="備考" name="comment">
-            <TextArea rows={4} placeholder="備考を入力" />
-        </Form.Item>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item label="現場備考" name="comment">
+              <TextArea rows={4} placeholder="備考を入力" />
+            </Form.Item>
+          </Col>
+
+          <Col span={12}>
+            <Form.Item label="営業備考" name="remark">
+              <TextArea rows={4} placeholder="備考を入力" />
+            </Form.Item>
+          </Col>
+        </Row>
       </Form>
       <GenerateOrderNumber
         farmId={farmId}
