@@ -13,6 +13,7 @@ import Link from 'next/link';
 import { useRecoilState } from 'recoil';
 import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
 import { exportToCsv } from '@/features/CSVExport/exportToCsv';
+import { selectedColumns } from '@/features/CSVExport/selectedColumns';
 import dayjs from 'dayjs';
 
 export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data, columns, showDownloadButton, filterCondition }) => {
@@ -38,7 +39,7 @@ export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ da
               <FloatButton
                 icon={<DownloadOutlined />}
                 tooltip={<div>CSVダウンロード</div>}
-                onClick={() => exportToCsv(data, `${dayjs().format('YYYYMMDD')}-${filterCondition}.csv`)}
+                onClick={() => exportToCsv(data, `${dayjs().format('YYYYMMDD')}-データ.csv`, selectedColumns)}
               />
             )}
             <Link href="/add-order">
