@@ -179,7 +179,10 @@ export const FilterCard: React.FC<FilterCardProps> = ({
               />
             </div>
             <div className={styles.filterItem} style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-              <CSVDownloader data={filteredOrders} filename="filtered_orders.csv" />
+            <CSVDownloader
+              data={filteredOrders}
+              filename={`${dayjs().format('YYYYMMDD')}-ダッシュボード集計.csv`}
+            />
             </div>
           </Space>
         </Card>

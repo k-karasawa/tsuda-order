@@ -31,4 +31,5 @@ export const ColumnMapping = [
   { key: 'order_form_code', label: '注文書No' },
   { key: 'amount', label: '金額' },
   { key: 'created_at', label: '作成日' },
+  // { key: 'remark, label: 営業備考}
 ];

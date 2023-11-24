@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { FloatButton } from 'antd';
-import { FileAddOutlined } from '@ant-design/icons';
+import { FileAddOutlined, DownloadOutlined } from '@ant-design/icons';
 import { columns as originalColumns } from '@/data/columns';
 import { createDynamicFilters } from '@/hooks/filterUtils';
 import { generateColumns } from '@/hooks/columnUtils';
@@ -12,8 +12,11 @@ import { useOrderList } from '@/hooks/useOrderList';
 import Link from 'next/link';
 import { useRecoilState } from 'recoil';
 import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
+import { exportToCsv } from '@/features/CSVExport/exportToCsv';
+import { selectedColumns } from '@/features/CSVExport/selectedColumns';
+import dayjs from 'dayjs';
 
-export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data, columns }) => {
+export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data, columns, showDownloadButton, filterCondition }) => {
   const { revalidate } = useOrderList();
   const [selectedOrder, setSelectedOrder] = useRecoilState(selectedOrderAtom);
   const dynamicFilters = createDynamicFilters(data, filterableColumns);
@@ -31,14 +34,23 @@ export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ da
     <OrderEditDrawer onUpdated={revalidate}>
       {showDrawer => (
         <>
-          <Link href="/add-order">
-            <FloatButton
-              icon={<FileAddOutlined />}
-              tooltip={<div>案件登録</div>}
-              type="primary"
-              style={{ right: 20 }}
-            />
-          </Link>
+          <FloatButton.Group shape="circle" style={{ right: 24 }}>
+            {showDownloadButton && (
+              <FloatButton
+                icon={<DownloadOutlined />}
+                tooltip={<div>CSVダウンロード</div>}
+                onClick={() => exportToCsv(data, `${dayjs().format('YYYYMMDD')}-データ.csv`, selectedColumns)}
+              />
+            )}
+            <Link href="/add-order">
+              <FloatButton
+                icon={<FileAddOutlined />}
+                tooltip={<div>案件登録</div>}
+                type="primary"
+              />
+            </Link>
+          </FloatButton.Group>
+
           <OrderTabs
             data={data}
             columns={usedColumns}

@@ -19,6 +19,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       (event, session) => {
         if (event === "SIGNED_OUT") {
           router.push("/auth");
+        } else if (event === "SIGNED_IN" && router.pathname === "/auth") {
+          router.push("/");
         }
       }
     );
