@@ -39,7 +39,7 @@ export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ da
               <FloatButton
                 icon={<DownloadOutlined />}
                 tooltip={<div>CSVダウンロード</div>}
-                onClick={() => exportToCsv(data, `${dayjs().format('YYYYMMDD')}-データ.csv`, selectedColumns)}
+                onClick={() => exportToCsv(data, `${dayjs().format('YYYYMMDD')}-${filterCondition}.csv`, selectedColumns)}
               />
             )}
             <Link href="/add-order">
