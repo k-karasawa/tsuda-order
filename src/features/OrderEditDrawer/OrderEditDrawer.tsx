@@ -299,7 +299,7 @@
               <Form.Item
                 label="金額"
                 name="amount"
-                style={{ width: '100%' }} // この行を追加
+                style={{ width: '100%' }}
                 rules={[
                   {
                     validator: (_, value) => {
@@ -317,10 +317,15 @@
               </Col>
             </Row>
 
-            <Row gutter={16}>
-              <Col span={24}>
+            <Row gutter={24}>
+              <Col span={12}>
                 <Form.Item label="備考" name="comment">
-                  <TextArea rows={3} placeholder="備考を入力" />
+                  <TextArea rows={4} placeholder="備考を入力" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="営業備考" name="remark">
+                  <TextArea rows={4} placeholder="備考を入力" />
                 </Form.Item>
               </Col>
             </Row>
