@@ -26,7 +26,7 @@ export const columns: ColumnsType<OrderListDataType> = [
     title: '受注番号',
     dataIndex: 'fullOrderCode',
     key: 'fullOrderCode',
-    width: 120,
+    width: 100,
     filterDropdown: CustomFilterDropdown,
     filterIcon,
     fixed: 'left',
@@ -179,6 +179,13 @@ export const columns: ColumnsType<OrderListDataType> = [
     sorter: (a, b) => (a.accept_date || '').localeCompare(b.accept_date || ''),
   },
   {
+    title: '備考',
+    dataIndex: 'comment',
+    width: 200,
+    filterDropdown: CustomFilterDropdown,
+    filterIcon: filterIcon
+  },
+  {
     title: '見積No,',
     dataIndex: 'estimate_code',
     width: 100,
@@ -199,8 +206,8 @@ export const columns: ColumnsType<OrderListDataType> = [
     render: (amount: number | null) => amount !== null ? amount.toLocaleString() : '-'
   },
   {
-    title: '備考',
-    dataIndex: 'comment',
+    title: '営業用備考',
+    dataIndex: 'remark',
     width: 200,
     filterDropdown: CustomFilterDropdown,
     filterIcon: filterIcon
