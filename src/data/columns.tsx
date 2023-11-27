@@ -81,7 +81,8 @@ export const columns: ColumnsType<OrderListDataType> = [
     dataIndex: 'customer_person',
     width: 100,
     filterDropdown: CustomFilterDropdown,
-    filterIcon: filterIcon
+    filterIcon: filterIcon,
+    render: (text: string) => `${text}様`
   },
   {
     title: '商社',
