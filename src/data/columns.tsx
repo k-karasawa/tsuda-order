@@ -203,7 +203,8 @@ export const columns: ColumnsType<OrderListDataType> = [
     title: '金額',
     dataIndex: 'amount',
     width: 100,
-    render: (amount: number | null) => amount !== null ? amount.toLocaleString() : '-'
+    render: (amount: number | null) => amount !== null ? amount.toLocaleString() : '-',
+    align: 'right'
   },
   {
     title: '営業用備考',

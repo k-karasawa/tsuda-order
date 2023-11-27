@@ -97,7 +97,7 @@ export const AddOrderForm: React.FC = () => {
         onFinish={handleSubmit}
         onValuesChange={handleValuesChange}
         ref={formRef}
-        initialValues={{ quantity: 1, priority: 1 }}
+        initialValues={{ quantity: 1, priority: 2 }}
       >
         <Row gutter={16}>
           <Col span={7}>
@@ -123,7 +123,7 @@ export const AddOrderForm: React.FC = () => {
               <SelectDataCreate
                 tableName="priority"
                 placeholder="優先度を選択"
-                defaultValue="普通に対応するID"
+                defaultValue="2"
               />
             </Form.Item>
           </Col>
