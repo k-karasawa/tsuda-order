@@ -97,7 +97,7 @@ export const AddOrderForm: React.FC = () => {
         onFinish={handleSubmit}
         onValuesChange={handleValuesChange}
         ref={formRef}
-        initialValues={{ quantity: 1, priority: 2 }}
+        initialValues={{ quantity: 1, priority: 1 }}
       >
         <Row gutter={16}>
           <Col span={7}>
@@ -123,7 +123,7 @@ export const AddOrderForm: React.FC = () => {
               <SelectDataCreate
                 tableName="priority"
                 placeholder="優先度を選択"
-                defaultValue="2"
+                defaultValue="普通に対応するID"
               />
             </Form.Item>
           </Col>
@@ -143,30 +143,30 @@ export const AddOrderForm: React.FC = () => {
           </Col>
           <Col span={7}>
             <Form.Item label="拠点" name="customer_location">
-              <Input />
+                <Input />
             </Form.Item>
           </Col>
           <Col span={7}>
-            <Form.Item name="customer_department" label="部署">
-              <SelectDataCreate
-                tableName="customer_department"
-                placeholder="部署を選択"
-              />
-            </Form.Item>
+              <Form.Item name="customer_department" label="部署">
+                <SelectDataCreate
+                  tableName="customer_department"
+                  placeholder="部署を選択"
+                />
+              </Form.Item>
           </Col>
           <Col span={7}>
-            <Form.Item label="グループ" name="customer_group">
-              <Input />
-            </Form.Item>
+              <Form.Item label="グループ" name="customer_group">
+                  <Input />
+              </Form.Item>
           </Col>
           <Col span={7}>
-            <Form.Item label="顧客担当者" name="customer_person">
-              <Input addonAfter="様" />
-            </Form.Item>
+              <Form.Item label="顧客担当者" name="customer_person">
+                  <Input />
+              </Form.Item>
           </Col>
         </Row>
         <Divider orientation="right" plain>
-          製品情報
+            製品情報
         </Divider>
 
         <Row gutter={16}>
@@ -200,7 +200,7 @@ export const AddOrderForm: React.FC = () => {
           </Col>
         </Row>
         <Divider orientation="right" plain>
-          日付情報
+            日付情報
         </Divider>
 
         <Row gutter={16}>

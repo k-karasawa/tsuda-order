@@ -81,8 +81,7 @@ export const columns: ColumnsType<OrderListDataType> = [
     dataIndex: 'customer_person',
     width: 100,
     filterDropdown: CustomFilterDropdown,
-    filterIcon: filterIcon,
-    render: (text: string) => `${text}様`
+    filterIcon: filterIcon
   },
   {
     title: '商社',
@@ -204,8 +203,7 @@ export const columns: ColumnsType<OrderListDataType> = [
     title: '金額',
     dataIndex: 'amount',
     width: 100,
-    render: (amount: number | null) => amount !== null ? amount.toLocaleString() : '-',
-    align: 'right'
+    render: (amount: number | null) => amount !== null ? amount.toLocaleString() : '-'
   },
   {
     title: '営業用備考',

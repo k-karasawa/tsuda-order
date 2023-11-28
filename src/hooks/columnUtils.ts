@@ -13,8 +13,8 @@ export const generateColumns = (
       ellipsis: true
     };
 
-    // 進捗の列とattentionの列と担当者の列でない場合のみ、renderTooltip を適用
-    if (col.dataIndex !== 'progress_name' && col.dataIndex !== 'attention' && col.dataIndex !== 'amount' && col.dataIndex !== 'customer_person') {
+    // 進捗の列とattentionの列でない場合のみ、renderTooltip を適用
+    if (col.dataIndex !== 'progress_name' && col.dataIndex !== 'attention' && col.dataIndex !== 'amount') {
       baseCol = {
         ...baseCol,
         render: (text: string, record: OrderListDataType, index: number) => renderTooltip(text, record, index, col)

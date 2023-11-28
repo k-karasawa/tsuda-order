@@ -14,13 +14,7 @@ export const exportToCsv = (data: any[], filename: string, selectedColumns?: str
   data.forEach(row => {
     const rowContent = ColumnMapping
       .filter(column => !selectedColumns || selectedColumns.includes(column.key))
-      .map(column => {
-        // customer_personの場合、"様"を追加
-        if (column.key === 'customer_person' && row[column.key]) {
-          return row[column.key] + '様';
-        }
-        return row[column.key] || '';
-      })
+      .map(column => row[column.key] || '')
       .join(',');
     csvContent += rowContent + '\r\n';
   });

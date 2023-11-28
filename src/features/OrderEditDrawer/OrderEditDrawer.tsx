@@ -168,7 +168,7 @@
               </Col>
               <Col span={8}>
                 <Form.Item label="担当者" name="customer_person">
-                  <Input placeholder="担当者を入力" addonAfter="様" />
+                  <Input placeholder="担当者を入力" />
                 </Form.Item>
               </Col>
             </Row>
