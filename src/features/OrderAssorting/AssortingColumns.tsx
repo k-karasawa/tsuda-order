@@ -28,8 +28,9 @@ export const customColumnsForAssorting = [
   columns[4], // 進捗
   columns[19], // 希望納期
   {
-    ...columns[30], // 備考
-    render: ellipsisRender
+    ...columns[30], // 金額
+    render: (amount: number | null) => amount !== null ? amount.toLocaleString() : '-',
+    align: 'right'
   },
   columns[3], // 優先度
   {
