@@ -30,7 +30,7 @@ export const customColumnsForAssorting = [
   {
     ...columns[30], // 金額
     render: (amount: number | null) => amount !== null ? amount.toLocaleString() : '-',
-    align: 'right'
+    align: 'right' as const
   },
   columns[3], // 優先度
   {
