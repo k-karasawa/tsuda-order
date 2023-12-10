@@ -53,7 +53,6 @@ export const AddOrderForm: React.FC = () => {
 
     sanitizedData.order_code = orderCode;
     sanitizedData.prefix = orderPrefix;
-    sanitizedData.progress = '0';
 
     const { data, error } = await supabase
       .from('order_list')
@@ -97,10 +96,10 @@ export const AddOrderForm: React.FC = () => {
         onFinish={handleSubmit}
         onValuesChange={handleValuesChange}
         ref={formRef}
-        initialValues={{ quantity: 1, priority: 2 }}
+        initialValues={{ quantity: 1, priority: 2, progress: 0 }}
       >
         <Row gutter={16}>
-          <Col span={7}>
+          <Col span={5}>
             <Form.Item
               label="依頼内容"
               name="request"
@@ -109,7 +108,7 @@ export const AddOrderForm: React.FC = () => {
               <SelectDataCreate tableName="request" placeholder="依頼内容を選択"/>
             </Form.Item>
           </Col>
-          <Col span={7}>
+          <Col span={5}>
             <Form.Item label="商社" name="farm" required>
               <SelectDataCreate
                   tableName="farm"
@@ -118,12 +117,19 @@ export const AddOrderForm: React.FC = () => {
               />
             </Form.Item>
           </Col>
-          <Col span={7}>
+          <Col span={5}>
             <Form.Item name="priority" label="優先度" required >
               <SelectDataCreate
                 tableName="priority"
                 placeholder="優先度を選択"
-                defaultValue="2"
+              />
+            </Form.Item>
+          </Col>
+          <Col span={5}>
+            <Form.Item name="progress" label="進捗" required >
+              <SelectDataCreate
+                tableName="progress"
+                placeholder="進捗を選択"
               />
             </Form.Item>
           </Col>
