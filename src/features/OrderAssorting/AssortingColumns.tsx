@@ -14,11 +14,10 @@ export const customColumnsForAssorting = [
   {
     ...columns[6], // 顧客
     render: ellipsisRender,
-    width: 120
   },
   {
     ...columns[7], // 拠点
-    windth: 80
+    width: 70
   },
   {
     ...columns[12], // 品番
@@ -27,6 +26,8 @@ export const customColumnsForAssorting = [
   },
   columns[4], // 進捗
   columns[19], // 希望納期
+  columns[27],//備考
+  columns[31],//営業用備考
   {
     ...columns[30], // 金額, 方修正
     render: (amount: number | null) => amount !== null ? amount.toLocaleString() : '-',

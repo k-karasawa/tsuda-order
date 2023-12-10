@@ -44,6 +44,12 @@ export const SelectDataCreate: React.FC<Props> = ({ tableName, placeholder, valu
       onChange={onChange}
       placeholder={placeholder}
       options={data.map(item => ({ value: item.value, label: item.label }))}
+      listHeight={400}
+      dropdownRender={menu => (
+        <div style={{ maxHeight: '400px', overflow: 'auto' }}>
+          {menu}
+        </div>
+      )}
     />
   );
 };
