@@ -1,14 +1,16 @@
-import React, { useState, useRef } from 'react';
-import { Form, Input, DatePicker, Row, Col, Divider, FloatButton, message, Modal } from 'antd';
-import { FileAddOutlined } from '@ant-design/icons';
-import styles from './styles/RegistrationForm.module.css';
-import { SelectDataCreate } from '../../components/SelectDataCreate/SelectDataCreate';
-import { supabase } from '@/../utils/supabase';
-import dayjs from 'dayjs';
-import { useRouter } from "next/router";
-import { GenerateOrderNumber } from './GenerateOrderNumber';
-
-const { TextArea } = Input;
+import React, { useState, useRef } from 'react'
+import { Form, Row, Col, Divider, FloatButton, message, Modal, Button } from 'antd'
+import { FileAddOutlined } from '@ant-design/icons'
+import styles from './styles/RegistrationForm.module.css'
+import { SelectDataCreate } from '../../components/SelectDataCreate/SelectDataCreate'
+import { supabase } from '@/../utils/supabase'
+import dayjs from 'dayjs'
+import { useRouter } from "next/router"
+import { GenerateOrderNumber } from './GenerateOrderNumber'
+import { CustomerInput } from './CustomerInput'
+import { ProductInput } from './ProductInput'
+import { DateInput } from './DateInput'
+import { OrderInput } from './OrderInput'
 
 type FormData = {
   [key: string]: string | number | dayjs.Dayjs | null;
@@ -21,6 +23,7 @@ export const AddOrderForm: React.FC = () => {
   const [formData, setFormData] = useState<FormData>({});
   const formRef = useRef<any>(null);
   const router = useRouter();
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const handleValuesChange = (changedValues: any, allValues: any) => {
     const updatedValues = {...allValues};
@@ -39,6 +42,25 @@ export const AddOrderForm: React.FC = () => {
         return dateObj.format('YYYY-MM-DD');
     }
     return dateObj;
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+    setOrderCode((prevOrderCode) => (parseInt(prevOrderCode) + 1).toString());
+  };
+
+  const handleClearAndContinue = () => {
+    formRef.current.resetFields();
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    router.push('/order-list');
+    setIsModalVisible(false);
   };
 
   const handleSubmit = async () => {
@@ -61,18 +83,7 @@ export const AddOrderForm: React.FC = () => {
     if (error) {
       message.error('受注登録が失敗しました。' + (error.message || '詳細不明のエラー'));
     } else {
-      formRef.current.resetFields();
-      Modal.confirm({
-        title: `『${orderPrefix}${orderCode}』として新規受注登録が完了しました。`,
-        content: '続けて受注を登録しますか？',
-        okText: '続ける',
-        cancelText: '終了する',
-        onOk() {
-        },
-        onCancel() {
-          router.push('/order-list');
-        }
-      });
+      showModal();
     }
   };
 
@@ -84,11 +95,11 @@ export const AddOrderForm: React.FC = () => {
   return (
     <>
       <FloatButton
-          icon={<FileAddOutlined />}
-          tooltip={<div>追加</div>}
-          type="primary"
-          onClick={handleSubmit}
-        />
+        icon={<FileAddOutlined />}
+        tooltip={<div>追加</div>}
+        type="primary"
+        onClick={handleSubmit}
+      />
 
       <Form
         layout="vertical"
@@ -134,200 +145,48 @@ export const AddOrderForm: React.FC = () => {
             </Form.Item>
           </Col>
         </Row>
-        <Divider orientation="right" plain>
-          顧客情報
-        </Divider>
 
-        <Row gutter={16}>
-          <Col span={7}>
-            <Form.Item label="顧客" name="customer" required >
-              <SelectDataCreate
-                tableName="customer"
-                placeholder="顧客を選択"
-              />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item label="拠点" name="customer_location">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item name="customer_department" label="部署">
-              <SelectDataCreate
-                tableName="customer_department"
-                placeholder="部署を選択"
-              />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item label="グループ" name="customer_group">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item label="顧客担当者" name="customer_person">
-              <Input addonAfter="様" />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Divider orientation="right" plain>
-          製品情報
-        </Divider>
+        <Divider orientation="right" plain>顧客情報</Divider>
 
-        <Row gutter={16}>
-          <Col span={7}>
-            <Form.Item label="品番" name="item_code">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item label="品名" name="item_name" >
-              <Input />
-            </Form.Item>
-          </Col>
-        </Row>
+        <CustomerInput />
 
-        <Row gutter={16}>
-          <Col span={7}>
-            <Form.Item label="ロット/シリアル" name="lot">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item label="ソフトVer," name="soft">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item label="台数" name="quantity">
-              <Input type='number' />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Divider orientation="right" plain>
-          日付情報
-        </Divider>
+        <Divider orientation="right" plain>製品情報</Divider>
 
-        <Row gutter={16}>
-          <Col span={6}>
-            <Form.Item label="見積日" name="estimate_date">
-              <DatePicker
-                style={{ width: '90%' }}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="受注日" name="order_date">
-              <DatePicker
-                style={{ width: '90%' }}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="希望納期" name="desired_delivery_date">
-              <DatePicker
-                style={{ width: '90%' }}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="出荷日" name="shipment_date">
-              <DatePicker
-                style={{ width: '90%' }}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
+        <ProductInput />
 
-        <Row gutter={16}>
-          <Col span={6}>
-            <Form.Item label="現品受領日" name="item_receive_date">
-              <DatePicker
-                style={{ width: '90%' }}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="現品返却日" name="item_return_date">
-              <DatePicker
-                style={{ width: '90%' }}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="資料送付日" name="send_document_date">
-              <DatePicker
-                style={{ width: '90%' }}
-              />
-            </Form.Item>
-          </Col>
-          <Col span={6}>
-            <Form.Item label="資料受領日" name="receive_document_date">
-              <DatePicker
-                style={{ width: '90%' }}
-              />
-            </Form.Item>
-          </Col>
-        </Row>
-        <Divider orientation="right" plain>
-            注文情報
-        </Divider>
+        <Divider orientation="right" plain>日付情報</Divider>
 
-        <Row gutter={16}>
-          <Col span={7}>
-            <Form.Item label="注文番号" name="customer_management_code">
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item label="見積No" name="estimate_code">
-              <Input placeholder="見積Noを入力" />
-            </Form.Item>
-          </Col>
-        </Row>
+        <DateInput form={formRef.current} />
 
-        <Row gutter={16}>
-          <Col span={7}>
-            <Form.Item label="注文書No" name="order_form_code">
-              <Input placeholder="注文書Noを入力" />
-            </Form.Item>
-          </Col>
-          <Col span={7}>
-            <Form.Item
-              label="金額"
-              name="amount"
-              rules={[
-                {
-                  pattern: /^[0-9]*$/,
-                  message: '数字のみを入力してください。',
-                },
-              ]}
-            >
-              <Input placeholder='半角数字のみを入力してください' />
-            </Form.Item>
-          </Col>
-        </Row>
+        <Divider orientation="right" plain>注文情報</Divider>
 
-        <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item label="現場備考" name="comment">
-              <TextArea rows={4} placeholder="備考を入力" />
-            </Form.Item>
-          </Col>
-
-          <Col span={12}>
-            <Form.Item label="営業備考" name="remark">
-              <TextArea rows={4} placeholder="備考を入力" />
-            </Form.Item>
-          </Col>
-        </Row>
+        <OrderInput formRef={formRef} />
       </Form>
+
       <GenerateOrderNumber
         farmId={farmId}
         setOrderCode={setOrderCode}
         setOrderPrefix={setOrderPrefix}
       />
+      <Modal
+        title={`『${orderPrefix}${orderCode}』として新規受注登録が完了しました。`}
+        open={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="continue" type="primary" onClick={handleOk}>
+            同じ情報で続ける
+          </Button>,
+          <Button key="clear" onClick={handleClearAndContinue}>
+            クリアして続ける
+          </Button>,
+          <Button key="cancel" onClick={handleCancel}>
+            終了する
+          </Button>,
+        ]}
+      >
+        同じ情報で続けて案件を登録しますか？
+      </Modal>
     </>
   );
 };
