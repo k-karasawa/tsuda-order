@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, Divider } from "antd";
 import styles from "./styles/Dashboard.module.css";
 import { AreaChartPage } from "./AreaChart";
 import { PieCard } from './PieCard';
@@ -10,14 +10,12 @@ interface ChartCardProps {
   selectedDateRange: [dayjs.Dayjs, dayjs.Dayjs];
 }
 
-interface AreaChartPageProps {
-  selectedDateRange: [dayjs.Dayjs, dayjs.Dayjs];
-}
-
 export const ChartCard: React.FC<ChartCardProps> = ({ orderData, selectedDateRange }) => {
   return (
     <div className={styles.cardscontainer}>
-      <h2 className={styles.chartTitle}>全体状況（現在空白は除外）</h2>
+      <Divider orientation="left" orientationMargin={4} >
+        全体状況
+      </Divider>
       <div className={styles.lowercards2}>
         <div className={styles.statecardwrapper2}>
           <Card style={{ height: 360, width: '100%', paddingBottom: '14px' }}>

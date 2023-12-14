@@ -28,7 +28,7 @@ export const Dashboard: React.FC = () => {
         setSelectedDateRange={setSelectedDateRange}
       />
       <StateCard orderData={orderData} />
-      <AcceptCard orderData={acceptOrderData} />
+      <AcceptCard orderData={acceptOrderData} totalOrders={orderData.length} />
       <ChartCard orderData={chartOrderData} selectedDateRange={selectedDateRange} />
     </div>
   );

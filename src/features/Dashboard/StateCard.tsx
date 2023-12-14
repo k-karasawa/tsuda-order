@@ -1,4 +1,4 @@
-import { Card } from 'antd';
+import { Card, Divider } from 'antd';
 import React from 'react';
 import styles from './styles/Dashboard.module.css';
 import dayjs from 'dayjs';
@@ -24,10 +24,13 @@ export const StateCard: React.FC<StateCardProps> = ({ orderData }) => {
 
   return (
     <div className={styles.cardscontainer}>
+      <Divider orientation="left" orientationMargin={4} >
+        受注状況
+      </Divider>
       <div className={styles.lowercards}>
         <div className={styles.statecardwrapper}>
           <Card style={{ height: 120, position: 'relative' }}>
-            <p>受注</p>
+            <p className={styles.cardTitle}>受注</p>
             <span className={styles.bigText}>
               {orderData.length}
               <span className={styles.smallText}>件</span>
@@ -37,7 +40,7 @@ export const StateCard: React.FC<StateCardProps> = ({ orderData }) => {
 
         <div className={styles.statecardwrapper}>
           <Card style={{ height: 120, position: 'relative' }}>
-            <p>受注金額</p>
+            <p className={styles.cardTitle}>受注金額</p>
             <span className={styles.bigText}>
               ¥{totalSales.toLocaleString()}
             </span>
@@ -46,7 +49,7 @@ export const StateCard: React.FC<StateCardProps> = ({ orderData }) => {
 
         <div className={styles.statecardwrapper}>
           <Card style={{ height: 120, position: 'relative' }}>
-            <p>最優先</p>
+            <p className={styles.cardTitle}>最優先</p>
             <span className={styles.bigText}>
               {highestPriorityCount}
               <span className={styles.smallText}>件</span>
@@ -56,7 +59,7 @@ export const StateCard: React.FC<StateCardProps> = ({ orderData }) => {
 
         <div className={styles.statecardwrapper}>
           <Card style={{ height: 120, position: 'relative' }}>
-            <p>納期遅れ</p>
+            <p className={styles.cardTitle}>納期遅れ</p>
             <span className={styles.bigText}>
               {delayedOrderCount}
               <span className={styles.smallText}>件</span>
