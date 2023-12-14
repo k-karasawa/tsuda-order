@@ -11,6 +11,7 @@
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+  margin-bottom: 20px;
 }
 
 /* StateCardとFilterCardで使用 */
@@ -99,8 +100,20 @@
 .filterItem {
   display: flex;
   flex-direction: column;
-  justify-content: center; /* 子要素を中央に配置する */
-  flex: 1; /* 全てのfilterItemが同じ幅を取るようにする */
-  margin-right: 16px; /* 右側の余白を設定 */
+  justify-content: center;
+  flex: 1;
+  margin-right: 16px;
 }
 
+.title {
+  text-align: left;
+  width: 100%;
+  color: #444444;
+  padding-bottom: 4px;
+  margin-bottom: 4px;
+}
+
+.cardTitle {
+  position: absolute;
+  top: 16px;
+}

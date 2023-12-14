@@ -9,7 +9,7 @@ import { useFarm } from '@/hooks/useFarm';
 import { useCustomer } from '@/hooks/useCustomer';
 import { useOrderList } from '@/hooks/useOrderList';
 import { CSVDownloader } from '@/features/CSVExport/CSVExport';
-import { filterOrdersByDate } from './utils/filterOrders';
+import { filterOrdersByDate, filterOrdersByAcceptDate } from './utils/filterOrders';
 import 'dayjs/locale/ja';
 
 dayjs.extend(isBetween);
@@ -17,6 +17,7 @@ const { RangePicker } = DatePicker;
 
 interface FilterCardProps {
   setOrderData: React.Dispatch<React.SetStateAction<any[]>>;
+  setAcceptOrderData: React.Dispatch<React.SetStateAction<any[]>>;
   setChartOrderData: React.Dispatch<React.SetStateAction<any[]>>;
   selectedDateRange: [dayjs.Dayjs, dayjs.Dayjs];
   setSelectedDateRange: React.Dispatch<React.SetStateAction<[dayjs.Dayjs, dayjs.Dayjs]>>;
@@ -24,6 +25,7 @@ interface FilterCardProps {
 
 export const FilterCard: React.FC<FilterCardProps> = ({
   setOrderData,
+  setAcceptOrderData,
   setChartOrderData,
   selectedDateRange,
   setSelectedDateRange
@@ -36,6 +38,32 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
   const { data: allOrderData, error: orderListError } = useOrderList();
 
+  const filterOrders = (orders: any[], selectedProgress: string, selectedRequest: string, selectedFarm: string, selectedCustomer: string) => {
+    let filtered = orders;
+
+    // ステータスによるフィルタリング
+    if (selectedProgress !== 'none') {
+      filtered = filtered.filter(order => order.progress === Number(selectedProgress));
+    }
+
+    // 依頼内容によるフィルタリング
+    if (selectedRequest !== 'none') {
+      filtered = filtered.filter(order => order.request === Number(selectedRequest));
+    }
+
+    // 商社によるフィルタリング
+    if (selectedFarm !== 'none') {
+      filtered = filtered.filter(order => order.farm === Number(selectedFarm));
+    }
+
+    // 顧客によるフィルタリング
+    if (selectedCustomer !== 'none') {
+      filtered = filtered.filter(order => order.customer === Number(selectedCustomer));
+    }
+
+    return filtered;
+  };
+
   useEffect(() => {
     if (orderListError) {
       console.error('Error fetching order data:', orderListError);
@@ -46,32 +74,20 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       const startOfRange = selectedDateRange[0].startOf('day');
       const endOfRange = selectedDateRange[1].endOf('day');
 
-      // 日付によるフィルタリング
-      let filtered = filterOrdersByDate(allOrderData, startOfRange, endOfRange);
+      // 日付によるorder_dateのフィルタリング
+      let orderFiltered = filterOrdersByDate(allOrderData, startOfRange, endOfRange);
 
-      // ステータスによるフィルタリング
-      if (selectedProgress !== 'none') {
-        filtered = filtered.filter(order => order.progress === Number(selectedProgress));
-      }
+      // 日付によるaccept_dateのフィルタリング
+      let acceptFiltered = filterOrdersByAcceptDate(allOrderData, startOfRange, endOfRange);
 
-      // 依頼内容によるフィルタリング
-      if (selectedRequest !== 'none') {
-        filtered = filtered.filter(order => order.request === Number(selectedRequest));
-      }
+      // 共通のフィルタリングを適用
+      orderFiltered = filterOrders(orderFiltered, selectedProgress, selectedRequest, selectedFarm, selectedCustomer);
+      acceptFiltered = filterOrders(acceptFiltered, selectedProgress, selectedRequest, selectedFarm, selectedCustomer);
 
-      // 商社によるフィルタリング
-      if (selectedFarm !== 'none') {
-        filtered = filtered.filter(order => order.farm === Number(selectedFarm));
-      }
-
-      // 顧客によるフィルタリング
-      if (selectedCustomer !== 'none') {
-        filtered = filtered.filter(order => order.customer === Number(selectedCustomer));
-      }
-
-      setFilteredOrders(filtered);
-      setOrderData(filtered);
-      setChartOrderData(filtered);
+      setFilteredOrders(orderFiltered);
+      setOrderData(orderFiltered);
+      setChartOrderData(orderFiltered);
+      setAcceptOrderData(acceptFiltered);
     }
   }, [
     allOrderData,
@@ -82,7 +98,8 @@ export const FilterCard: React.FC<FilterCardProps> = ({
     selectedFarm,
     selectedCustomer,
     setOrderData,
-    setChartOrderData
+    setChartOrderData,
+    setAcceptOrderData
   ]);
 
   const { data: progressData, loading: progressLoading, error: progressError } = useProgress();
