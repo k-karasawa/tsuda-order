@@ -15,13 +15,13 @@ export const columns: ColumnsType<OrderListDataType> = [
       </div>
     ),
   },
-  {
-    title: 'ID',
-    dataIndex: 'id',
-    width: 100,
-    sorter: (a, b) => a.id - b.id,
-    fixed: 'left',
-  },
+  // 開発時確認用のためにこのコードを残しておく
+  //   title: 'ID',
+  //   dataIndex: 'id',
+  //   width: 100,
+  //   sorter: (a, b) => a.id - b.id,
+  //   fixed: 'left',
+  // },
   {
     title: '受注番号',
     dataIndex: 'fullOrderCode',
@@ -92,7 +92,7 @@ export const columns: ColumnsType<OrderListDataType> = [
   {
     title: '品番',
     dataIndex: 'item_code',
-    width: 100,
+    width: 250,
     filterDropdown: CustomFilterDropdown,
     filterIcon: filterIcon
 
