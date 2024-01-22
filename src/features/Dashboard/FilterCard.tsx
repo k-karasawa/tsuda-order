@@ -35,7 +35,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const [selectedProgress, setSelectedProgress] = useState<string>('none');
   const [selectedFarm, setSelectedFarm] = useState<string>('none');
   const [selectedCustomer, setSelectedCustomer] = useState<string>('none');
-
+  const [acceptFiltered, setAcceptFiltered] = useState<any[]>([]);
   const { data: allOrderData, error: orderListError } = useOrderList();
 
   const filterOrders = (orders: any[], selectedProgress: string, selectedRequest: string, selectedFarm: string, selectedCustomer: string) => {
@@ -88,6 +88,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       setOrderData(orderFiltered);
       setChartOrderData(orderFiltered);
       setAcceptOrderData(acceptFiltered);
+      setAcceptFiltered(acceptFiltered);
     }
   }, [
     allOrderData,
@@ -147,12 +148,12 @@ export const FilterCard: React.FC<FilterCardProps> = ({
             <div className={styles.filterItem}>
               <div>月選択：</div>
               <RangePicker
-                picker="month"
+                picker="date"
                 value={selectedDateRange}
                 onChange={(dates) => {
                   if (dates && dates[0] && dates[1]) {
-                    const startDate = dates[0].startOf('month');
-                    const endDate = dates[1].endOf('month');
+                    const startDate = dates[0];
+                    const endDate = dates[1];
                     setSelectedDateRange([startDate, endDate]);
                   }
                 }}
@@ -195,11 +196,17 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                 onChange={(value) => setSelectedCustomer(value)}
               />
             </div>
-            <div className={styles.filterItem} style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-            <CSVDownloader
-              data={filteredOrders}
-              filename={`${dayjs().format('YYYYMMDD')}-ダッシュボード集計.csv`}
-            />
+            <div className={styles.filterItem} style={{ display: 'flex', alignItems: 'center', height: '100%', gap: 8 }}>
+              <CSVDownloader
+                data={filteredOrders}
+                filename={`${dayjs().format('YYYYMMDD')}-受注日_集計.csv`}
+                buttonLabel="受注日"
+              />
+              <CSVDownloader
+                data={acceptFiltered}
+                filename={`${dayjs().format('YYYYMMDD')}-検収日_集計.csv`}
+                buttonLabel="検収日"
+              />
             </div>
           </Space>
         </Card>
