@@ -13,10 +13,12 @@ export const exportToCsv = (data: any[], filename: string, selectedColumns?: str
     const rowContent = ColumnMapping
       .filter(column => !selectedColumns || selectedColumns.includes(column.key))
       .map(column => {
-        if (column.key === 'customer_person' && row[column.key]) {
-          return row[column.key] + '様';
+        let cell = row[column.key] || '';
+        if (column.key === 'customer_person' && cell) {
+          cell += '様';
         }
-        return row[column.key] || '';
+        // カラムの　,　と　"　をエスケープ
+        return `"${String(cell).replace(/"/g, '""')}"`;
       })
       .join(',');
     csvContent += rowContent + '\r\n';
