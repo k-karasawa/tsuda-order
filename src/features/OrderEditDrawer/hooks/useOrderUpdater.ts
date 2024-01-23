@@ -27,8 +27,26 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
       let newAcceptDate = dates.accept_date;
       let newShipmentDate = dates.shipment_date;
       let newSendDocumentDate = dates.send_document_date;
-      let shipmentDateUpdated = false;
-      let sendDocumentDateUpdated = false;
+      let newEstimateDate = dates.estimate_date;
+      let newDesiredDeliveryDate = dates.desired_delivery_date;
+
+      if (values.progress === 3) {
+        if (!newDesiredDeliveryDate || !values.order_form_code) {
+          message.error("希望納期 または 注文書Noが入っていません。");
+          return;
+        }
+      }
+
+      if (values.progress === 4) {
+        if (!values.estimate_code || !values.amount) {
+          message.error("見積No, または 金額が入っていません。");
+          return;
+        } else if (!newEstimateDate) {
+          newEstimateDate = dayjs().format("YYYY-MM-DD");
+          form.setFieldsValue({ estimate_date: newEstimateDate });
+          message.info("見積日に本日の日付を自動登録しました。");
+        }
+      }
 
       if (values.progress === 7 && !newAcceptDate) {
         newAcceptDate = dayjs().format("YYYY-MM-DD");
@@ -41,27 +59,21 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
         if (!newShipmentDate) {
           newShipmentDate = today;
           form.setFieldsValue({ shipment_date: newShipmentDate });
-          shipmentDateUpdated = true;
         }
         if (!newSendDocumentDate) {
           newSendDocumentDate = today;
           form.setFieldsValue({ send_document_date: newSendDocumentDate });
-          sendDocumentDateUpdated = true;
         }
-        if (shipmentDateUpdated && sendDocumentDateUpdated) {
+        if (!newShipmentDate || !newSendDocumentDate) {
           message.info("出荷日と資料送付日に本日の日付を自動登録しました。");
-        } else if (shipmentDateUpdated) {
-          message.info("出荷日に本日の日付を自動登録しました。");
-        } else if (sendDocumentDateUpdated) {
-          message.info("資料送付日に本日の日付を自動登録しました。");
         }
       }
 
       const mergedData = {
         ...values,
-        estimate_date: dates.estimate_date,
+        estimate_date: newEstimateDate,
         order_date: dates.order_date,
-        desired_delivery_date: dates.desired_delivery_date,
+        desired_delivery_date: newDesiredDeliveryDate,
         shipment_date: newShipmentDate,
         item_receive_date: dates.item_receive_date,
         item_return_date: dates.item_return_date,
