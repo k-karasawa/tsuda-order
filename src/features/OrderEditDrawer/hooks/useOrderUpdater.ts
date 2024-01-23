@@ -3,6 +3,7 @@ import { Form, message } from 'antd';
 import { updateOrder } from '../orderService';
 import { OrderListDataType } from '@/types/types';
 import { DatesType } from '../types/types';
+import dayjs from 'dayjs';
 
 export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => void, selectedOrder?: OrderListDataType) => {
   const [form] = Form.useForm();
@@ -20,19 +21,40 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
 
   const [isAttention, setIsAttention] = useState(false);
 
-  const onFormValuesChange = (changedValues: any, allValues: any) => {
-    if ('progress' in changedValues) {
-      console.log('Progress changed to:', changedValues.progress);
-    }
-  };
-
   const handleUpdate = async () => {
     try {
       const values = form.getFieldsValue();
+      let newAcceptDate = dates.accept_date;
+      let newShipmentDate = dates.shipment_date;
+      let newSendDocumentDate = dates.send_document_date;
+      let shipmentDateUpdated = false;
+      let sendDocumentDateUpdated = false;
 
-      if (values.progress === 7) {
-        message.error("進捗が '7' のため、更新処理を停止します。");
-        return;
+      if (values.progress === 7 && !newAcceptDate) {
+        newAcceptDate = dayjs().format("YYYY-MM-DD");
+        form.setFieldsValue({ accept_date: newAcceptDate });
+        message.info("検収日に本日の日付を自動登録しました。");
+      }
+
+      if (values.progress === 5) {
+        const today = dayjs().format("YYYY-MM-DD");
+        if (!newShipmentDate) {
+          newShipmentDate = today;
+          form.setFieldsValue({ shipment_date: newShipmentDate });
+          shipmentDateUpdated = true;
+        }
+        if (!newSendDocumentDate) {
+          newSendDocumentDate = today;
+          form.setFieldsValue({ send_document_date: newSendDocumentDate });
+          sendDocumentDateUpdated = true;
+        }
+        if (shipmentDateUpdated && sendDocumentDateUpdated) {
+          message.info("出荷日と資料送付日に本日の日付を自動登録しました。");
+        } else if (shipmentDateUpdated) {
+          message.info("出荷日に本日の日付を自動登録しました。");
+        } else if (sendDocumentDateUpdated) {
+          message.info("資料送付日に本日の日付を自動登録しました。");
+        }
       }
 
       const mergedData = {
@@ -40,12 +62,12 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
         estimate_date: dates.estimate_date,
         order_date: dates.order_date,
         desired_delivery_date: dates.desired_delivery_date,
-        shipment_date: dates.shipment_date,
+        shipment_date: newShipmentDate,
         item_receive_date: dates.item_receive_date,
         item_return_date: dates.item_return_date,
-        send_document_date: dates.send_document_date,
+        send_document_date: newSendDocumentDate,
         receive_document_date: dates.receive_document_date,
-        accept_date: dates.accept_date,
+        accept_date: newAcceptDate,
         attention: isAttention,
       };
 
@@ -60,11 +82,9 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
           refetchOrderList();
         }
       } else {
-        console.error("No selected order or order ID missing");
         message.error("注文が選択されていないか、IDが不足しています。");
       }
     } catch (err) {
-      console.error("Unhandled error:", err);
       message.error("未知のエラーが発生しました。");
     }
   };
@@ -72,7 +92,6 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
   form.setFieldsValue(selectedOrder);
   form.setFieldsValue(dates);
   form.setFieldsValue({ attention: isAttention });
-  form.setFieldsValue({ onValuesChange: onFormValuesChange });
 
   return {
     form,
