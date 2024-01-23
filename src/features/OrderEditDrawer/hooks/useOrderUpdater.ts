@@ -27,6 +27,7 @@ const validateProgress = (progress: number, values: any, dates: DatesType, form:
         message.error('希望納期 または 注文書Noが入っていません。');
         return false;
       }
+      dates.order_date = updateDateIfEmpty(dates.order_date, '受注日', form);
       break;
     case PROGRESS_ESTIMATE:
       if (!values.estimate_code || !values.amount) {
