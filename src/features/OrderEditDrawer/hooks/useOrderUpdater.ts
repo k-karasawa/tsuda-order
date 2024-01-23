@@ -20,9 +20,20 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
 
   const [isAttention, setIsAttention] = useState(false);
 
+  const onFormValuesChange = (changedValues: any, allValues: any) => {
+    if ('progress' in changedValues) {
+      console.log('Progress changed to:', changedValues.progress);
+    }
+  };
+
   const handleUpdate = async () => {
     try {
       const values = form.getFieldsValue();
+
+      if (values.progress === 7) {
+        message.error("進捗が '7' のため、更新処理を停止します。");
+        return;
+      }
 
       const mergedData = {
         ...values,
@@ -57,6 +68,11 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
       message.error("未知のエラーが発生しました。");
     }
   };
+
+  form.setFieldsValue(selectedOrder);
+  form.setFieldsValue(dates);
+  form.setFieldsValue({ attention: isAttention });
+  form.setFieldsValue({ onValuesChange: onFormValuesChange });
 
   return {
     form,

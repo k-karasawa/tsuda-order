@@ -97,7 +97,12 @@
             />
           </FloatButton.Group>
 
-          <Form layout="vertical" form={form} initialValues={selectedOrder}>
+          <Form
+            layout="vertical"
+            form={form}
+            initialValues={selectedOrder}
+            onValuesChange={form.getFieldValue('onValuesChange')}
+          >
             <Row gutter={16}>
               <Col span={8}>
                 <Form.Item label="進捗" name="progress">
