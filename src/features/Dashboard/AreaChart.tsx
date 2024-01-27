@@ -33,7 +33,7 @@ export const AreaChartPage: React.FC<AreaChartPageProps> = ({ selectedDateRange 
       const groupedByOrderDate: GroupedData = orderData.reduce((acc: GroupedData, curr: OrderListDataType) => {
         if (curr.order_date) {
           const month = dayjs(curr.order_date).format('YYYY-MM');
-          acc[month] = (acc[month] || 0) + parseFloat(curr.amount || '0');
+          acc[month] = (acc[month] || 0) + parseFloat(curr.amount ? curr.amount.toString() : '0');
         }
         return acc;
       }, {});
@@ -41,7 +41,7 @@ export const AreaChartPage: React.FC<AreaChartPageProps> = ({ selectedDateRange 
       const groupedByAcceptDate: GroupedData = orderData.reduce((acc: GroupedData, curr: OrderListDataType) => {
         if (curr.accept_date) {
           const month = dayjs(curr.accept_date).format('YYYY-MM');
-          acc[month] = (acc[month] || 0) + parseFloat(curr.amount || '0');
+          acc[month] = (acc[month] || 0) + parseFloat(curr.amount ? curr.amount.toString() : '0');
         }
         return acc;
       }, {});
@@ -49,7 +49,7 @@ export const AreaChartPage: React.FC<AreaChartPageProps> = ({ selectedDateRange 
       const salesByCompleted: GroupedData = completedRecords.reduce((acc: GroupedData, curr: OrderListDataType) => {
         if (curr.order_date) {
           const month = dayjs(curr.order_date).format('YYYY-MM');
-          acc[month] = (acc[month] || 0) + parseFloat(curr.amount || '0');
+          acc[month] = (acc[month] || 0) + parseFloat(curr.amount ? curr.amount.toString() : '0');
         }
         return acc;
       }, {});

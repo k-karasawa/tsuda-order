@@ -18,6 +18,8 @@ async function sendChatworkMessage(message: string) {
   });
 
   if (!response.ok) {
+    const errorBody = await response.text();
+    console.error(`Chatwork API error response: ${errorBody}`);
     throw new Error(`Chatwork message send failed: ${response.status}`);
   }
 
