@@ -56,6 +56,7 @@ export interface Database {
           {
             foreignKeyName: "customer_department_customer_id_fkey"
             columns: ["customer_id"]
+            isOneToOne: false
             referencedRelation: "customer"
             referencedColumns: ["id"]
           }
@@ -114,12 +115,14 @@ export interface Database {
           {
             foreignKeyName: "item_return_return_orderlist_id_fkey"
             columns: ["return_orderlist_id"]
+            isOneToOne: false
             referencedRelation: "order_list"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "item_return_return_orderlist_id_fkey"
             columns: ["return_orderlist_id"]
+            isOneToOne: false
             referencedRelation: "order_list_extended"
             referencedColumns: ["id"]
           }
@@ -128,7 +131,7 @@ export interface Database {
       order_list: {
         Row: {
           accept_date: string | null
-          amount: string | null
+          amount: number | null
           attention: boolean
           comment: string | null
           created_at: string
@@ -156,14 +159,16 @@ export interface Database {
           progress: number
           quantity: number | null
           receive_document_date: string | null
+          remark: string | null
           request: number
           send_document_date: string | null
           shipment_date: string | null
           soft: string | null
+          status_updated_at: string | null
         }
         Insert: {
           accept_date?: string | null
-          amount?: string | null
+          amount?: number | null
           attention?: boolean
           comment?: string | null
           created_at?: string
@@ -191,14 +196,16 @@ export interface Database {
           progress: number
           quantity?: number | null
           receive_document_date?: string | null
+          remark?: string | null
           request: number
           send_document_date?: string | null
           shipment_date?: string | null
           soft?: string | null
+          status_updated_at?: string | null
         }
         Update: {
           accept_date?: string | null
-          amount?: string | null
+          amount?: number | null
           attention?: boolean
           comment?: string | null
           created_at?: string
@@ -226,45 +233,53 @@ export interface Database {
           progress?: number
           quantity?: number | null
           receive_document_date?: string | null
+          remark?: string | null
           request?: number
           send_document_date?: string | null
           shipment_date?: string | null
           soft?: string | null
+          status_updated_at?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "order_list_customer_department_fkey"
             columns: ["customer_department"]
+            isOneToOne: false
             referencedRelation: "customer_department"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_list_customer_fkey"
             columns: ["customer"]
+            isOneToOne: false
             referencedRelation: "customer"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_list_farm_fkey"
             columns: ["farm"]
+            isOneToOne: false
             referencedRelation: "farm"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_list_priority_fkey"
             columns: ["priority"]
+            isOneToOne: false
             referencedRelation: "priority"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_list_progress_fkey"
             columns: ["progress"]
+            isOneToOne: false
             referencedRelation: "progress"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_list_request_fkey"
             columns: ["request"]
+            isOneToOne: false
             referencedRelation: "request"
             referencedColumns: ["id"]
           }
@@ -341,7 +356,7 @@ export interface Database {
       order_list_extended: {
         Row: {
           accept_date: string | null
-          amount: string | null
+          amount: number | null
           attention: boolean | null
           comment: string | null
           created_at: string | null
@@ -374,6 +389,7 @@ export interface Database {
           progress_name: string | null
           quantity: number | null
           receive_document_date: string | null
+          remark: string | null
           request: number | null
           request_name: string | null
           send_document_date: string | null
@@ -384,36 +400,42 @@ export interface Database {
           {
             foreignKeyName: "order_list_customer_department_fkey"
             columns: ["customer_department"]
+            isOneToOne: false
             referencedRelation: "customer_department"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_list_customer_fkey"
             columns: ["customer"]
+            isOneToOne: false
             referencedRelation: "customer"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_list_farm_fkey"
             columns: ["farm"]
+            isOneToOne: false
             referencedRelation: "farm"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_list_priority_fkey"
             columns: ["priority"]
+            isOneToOne: false
             referencedRelation: "priority"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_list_progress_fkey"
             columns: ["progress"]
+            isOneToOne: false
             referencedRelation: "progress"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "order_list_request_fkey"
             columns: ["request"]
+            isOneToOne: false
             referencedRelation: "request"
             referencedColumns: ["id"]
           }
@@ -431,3 +453,83 @@ export interface Database {
     }
   }
 }
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (Database["public"]["Tables"] & Database["public"]["Views"])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+        Database[PublicTableNameOrOptions["schema"]]["Views"])
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
+      Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"] &
+      Database["public"]["Views"])
+  ? (Database["public"]["Tables"] &
+      Database["public"]["Views"])[PublicTableNameOrOptions] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : never
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : never
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends
+    | keyof Database["public"]["Tables"]
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions["schema"]]["Tables"]
+    : never = never
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof Database["public"]["Tables"]
+  ? Database["public"]["Tables"][PublicTableNameOrOptions] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : never
+
+export type Enums<
+  PublicEnumNameOrOptions extends
+    | keyof Database["public"]["Enums"]
+    | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions["schema"]]["Enums"]
+    : never = never
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : PublicEnumNameOrOptions extends keyof Database["public"]["Enums"]
+  ? Database["public"]["Enums"][PublicEnumNameOrOptions]
+  : never

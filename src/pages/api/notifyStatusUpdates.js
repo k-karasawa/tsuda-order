@@ -25,7 +25,7 @@ export default async function notifyStatusUpdates(req, res) {
       .select('prefix, order_code, progress')
       .not('status_updated_at', 'is', null)
       .lte('status_updated_at', oneMonthAgo.toISOString())
-      .not('progress', 'in', '(6,7)'); // 修正箇所: 配列ではなく文字列で範囲を指定
+      .not('progress', 'in', '(6,7)');
       if (orderError) throw orderError;
 
     // progressごとにグループ化し、sort順に並び替えてステータス名で表示

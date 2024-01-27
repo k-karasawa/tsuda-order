@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Form, message } from 'antd';
 import { updateOrder } from '../orderService';
 import { OrderListDataType } from '@/types/types';
@@ -64,6 +64,13 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
     receive_document_date: null,
   });
   const [isAttention, setIsAttention] = useState(false);
+  const [initialProgress, setInitialProgress] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (selectedOrder) {
+      setInitialProgress(selectedOrder.progress);
+    }
+  }, [selectedOrder]);
 
   const handleUpdate = async () => {
     const values = form.getFieldsValue();
@@ -71,10 +78,13 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
       return;
     }
 
+    const statusUpdatedDate = values.progress !== initialProgress ? dayjs().format('YYYY-MM-DD') : selectedOrder?.status_updated_at;
+
     const mergedData = {
       ...values,
       ...dates,
       attention: isAttention,
+      status_updated_at: statusUpdatedDate,
     };
 
     if (selectedOrder && selectedOrder.id) {
@@ -105,5 +115,7 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
     setDates,
     handleUpdate,
     setIsAttention,
+    initialProgress,
+    setInitialProgress,
   };
 };
