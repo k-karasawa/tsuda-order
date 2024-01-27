@@ -3,23 +3,19 @@ import { sendChatworkMessage } from '../../../utils/chatwork';
 
 export default async function notifyStatusUpdates(req, res) {
   try {
-    // 1ヶ月前の日付を取得
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
 
-    // progressテーブルからステータス名とsort順を取得
     const { data: progressData, error: progressError } = await supabase
       .from('progress')
       .select('id, progress, sort');
     if (progressError) throw progressError;
 
-    // ステータス名とsort順をマッピングするためのオブジェクトを作成
     const progressMap = progressData.reduce((acc, { id, progress, sort }) => {
       acc[id] = { name: progress, sort };
       return acc;
     }, {});
 
-    // ステータス変更日が1ヶ月以上前で、progressが7と6でなく、status_updated_atがnullでない受注を検索
     const { data: orderData, error: orderError } = await supabase
       .from('order_list')
       .select('prefix, order_code, progress')
@@ -28,7 +24,6 @@ export default async function notifyStatusUpdates(req, res) {
       .not('progress', 'in', '(6,7)');
       if (orderError) throw orderError;
 
-    // progressごとにグループ化し、sort順に並び替えてステータス名で表示
     const groupedByProgress = orderData.reduce((acc, { progress, prefix, order_code }) => {
       const statusInfo = progressMap[progress] || { name: `Unknown Status (${progress})`, sort: Number.MAX_VALUE };
       const statusName = statusInfo.name;
@@ -39,7 +34,6 @@ export default async function notifyStatusUpdates(req, res) {
       return acc;
     }, {});
 
-    // sort順に並び替え
     const sortedGroupedProgress = Object.keys(groupedByProgress)
       .sort((a, b) => groupedByProgress[a].sort - groupedByProgress[b].sort)
       .reduce((acc, key) => {
@@ -47,13 +41,11 @@ export default async function notifyStatusUpdates(req, res) {
         return acc;
       }, {});
 
-    // 通知メッセージを作成
     let message = '';
     Object.keys(sortedGroupedProgress).forEach(statusName => {
       message += `----【 ${statusName} 】----\n${sortedGroupedProgress[statusName].join('\n')}\n\n`;
     });
 
-    // Chatworkにメッセージを送信
     if (message) {
       await sendChatworkMessage(message);
     } else {
