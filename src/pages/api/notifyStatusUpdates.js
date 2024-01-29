@@ -41,15 +41,15 @@ export default async function notifyStatusUpdates(req, res) {
         return acc;
       }, {});
 
-    let message = '';
+    let message = '進捗が滞っている案件があります\n\n';
     Object.keys(sortedGroupedProgress).forEach(statusName => {
       message += `----【 ${statusName} 】----\n${sortedGroupedProgress[statusName].join('\n')}\n\n`;
     });
 
-    if (message) {
+    if (message.trim() !== '進捗が滞っている案件があります') {
       await sendChatworkMessage(message);
     } else {
-      await sendChatworkMessage('進捗が止まっている案件はありません。');
+      await sendChatworkMessage('今週は進捗が滞っている案件はありませんでした');
     }
 
     return res.status(200).json({ message: 'Status updates notification sent successfully.' });
