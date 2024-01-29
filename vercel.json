@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/notifyStatusUpdates",
-      "schedule": "0 23 * * 6"
+      "schedule": "0 23 * * 0"
     }
   ]
 }
