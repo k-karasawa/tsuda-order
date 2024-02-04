@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, Input, Row, Col } from 'antd';
+import { InputNumber } from '@/components/InputNumber';
 
 const { TextArea } = Input;
 
@@ -8,6 +9,10 @@ type OrderInfoProps = {
 };
 
 export const OrderInput: React.FC<OrderInfoProps> = ({ formRef }) => {
+  const handleInvalidNumber = (value: string) => {
+    console.error(`Invalid number input: ${value}`);
+  };
+
   return (
     <div>
       <Row gutter={16}>
@@ -30,17 +35,12 @@ export const OrderInput: React.FC<OrderInfoProps> = ({ formRef }) => {
           </Form.Item>
         </Col>
         <Col span={7}>
-          <Form.Item
-            label="金額"
-            name="amount"
-            rules={[
-              {
-                pattern: /^[0-9]*$/,
-                message: '数字のみを入力してください。',
-              },
-            ]}
-          >
-            <Input placeholder='半角数字のみを入力してください' />
+          <Form.Item label="金額" name="amount">
+            <InputNumber
+              value={0}
+              onChange={(value) => formRef.current?.setFieldsValue({ amount: value })}
+              onInvalidNumber={handleInvalidNumber}
+            />
           </Form.Item>
         </Col>
       </Row>

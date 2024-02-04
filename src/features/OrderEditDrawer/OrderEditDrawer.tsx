@@ -11,6 +11,7 @@
   import { useRecoilValue } from 'recoil';
   import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
   import { CustomInputNumber } from '@/components/CustomeInputNumber/CustomeInputNumber';
+  import { InputNumber } from '@/components/InputNumber';
 
   dayjs.extend(customParseFormat);
   const { TextArea } = Input;
@@ -61,6 +62,9 @@
         form.setFieldsValue(selectedOrder);
       }
     }, [form, selectedOrder]);
+
+    const handleInvalidNumber = (value: string) => {
+    };
 
     return (
       <>
@@ -301,23 +305,27 @@
                 />
               </Col>
               <Col span={12}>
-              <Form.Item
-                label="金額"
-                name="amount"
-                style={{ width: '100%' }}
-                rules={[
-                  {
-                    validator: (_, value) => {
-                      const { validateStatus, errorMsg } = validateNumberInput(value);
-                      if (validateStatus === 'error') {
-                        return Promise.reject(errorMsg);
+                <Form.Item
+                  label="金額"
+                  name="amount"
+                  style={{ width: '100%' }}
+                  rules={[
+                    {
+                      validator: (_, value) => {
+                        const { validateStatus, errorMsg } = validateNumberInput(value);
+                        if (validateStatus === 'error') {
+                          return Promise.reject(errorMsg);
+                        }
+                        return Promise.resolve();
                       }
-                      return Promise.resolve();
                     }
-                  }
-                ]}
-              >
-                <CustomInputNumber />
+                  ]}
+                >
+                <InputNumber
+                    value={selectedOrder?.amount || 0}
+                    onChange={(value) => form.setFieldsValue({ amount: value })}
+                    onInvalidNumber={handleInvalidNumber}
+                  />
               </Form.Item>
               </Col>
             </Row>
