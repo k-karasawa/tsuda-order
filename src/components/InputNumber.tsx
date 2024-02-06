@@ -15,7 +15,7 @@ export const InputNumber: React.FC<Props> = ({ value, onChange, onInvalidNumber 
   }, [value]);
 
   const formatNumberToLocaleString = (num: number) => {
-    if (num === undefined || isNaN(num)) {
+    if (num === undefined || num === null || isNaN(num)) {
       num = 0;
     }
     return num.toLocaleString();
