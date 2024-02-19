@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../../../utils/supabase';
-
+import { useSupabaseClient } from '@/hooks';
 export const useFarms = () => {
   const [farms, setFarms] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const supabase = useSupabaseClient();
 
   const fetchFarms = async () => {
     setLoading(true);
@@ -16,6 +16,7 @@ export const useFarms = () => {
 
   useEffect(() => {
     fetchFarms();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAddOrEditFarm = async (name: string, sort: number | null, prefix: string, currentFarm: any) => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Table, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { supabase } from '../../../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import { useFarms } from './useFarms';
 import { FarmModal } from './FarmModal';
 import { FarmColumns } from './FarmColumns';
@@ -10,9 +10,10 @@ export const FarmManage: React.FC = () => {
   const { farms, loading, fetchFarms } = useFarms();
   const [visible, setVisible] = useState(false);
   const [currentFarm, setCurrentFarm] = useState<any>(null);
-
   const [name, setName] = useState<string>('');
   const [sort, setSort] = useState<number | null>(null);
+  const supabase = useSupabaseClient();
+
   const [prefix, setPrefix] = useState<string>('');
 
   const handleAddOrEditFarm = async () => {

@@ -1,5 +1,10 @@
-import { supabase } from '../../../utils/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.SUPABASE_URL as string;
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY as string;
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 const lookupTablesAPI = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== 'GET') {
@@ -34,4 +39,3 @@ const lookupTablesAPI = async (req: NextApiRequest, res: NextApiResponse) => {
 };
 
 export default lookupTablesAPI;
-

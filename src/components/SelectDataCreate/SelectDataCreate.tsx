@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Select } from 'antd';
-import { supabase } from '../../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 
 const { Option } = Select;
 
@@ -32,10 +32,31 @@ const tableMappings: TableMappingType = {
 
 export const SelectDataCreate: React.FC<Props> = ({ tableName, placeholder, value, defaultValue, onChange }) => {
   const [data, setData] = useState<OptionType[]>([]);
+  const supabase = useSupabaseClient();
 
   useEffect(() => {
-    fetchTableData(tableName).then(setData);
-  }, [tableName]);
+    const fetchTableData = async () => {
+      const labelField = tableMappings[tableName];
+      const { data, error } = await supabase
+        .from(tableName)
+        .select(`id, ${labelField}`)
+        .order('sort', { ascending: true });
+
+      if (error) {
+        console.error("Error fetching data from Supabase:", error);
+        return [];
+      }
+
+      const options = data.map((item: any) => ({
+        value: item.id,
+        label: item[labelField]
+      }));
+
+      setData(options);
+    };
+
+    fetchTableData();
+  }, [tableName, supabase]);
 
   return (
     <Select
@@ -52,26 +73,4 @@ export const SelectDataCreate: React.FC<Props> = ({ tableName, placeholder, valu
       )}
     />
   );
-};
-
-const fetchTableData = async (tableName: keyof TableMappingType): Promise<OptionType[]> => {
-  const labelField = tableMappings[tableName];
-  const { data, error } = await supabase
-    .from(tableName)
-    .select(`id, ${labelField}`)
-    .order('sort', { ascending: true });
-
-  return handleDataAndError(data, error, labelField);
-};
-
-const handleDataAndError = (data: any, error: any, labelField: string) => {
-  if (error) {
-    console.error("Error fetching data from Supabase:", error);
-    return [];
-  }
-
-  return data.map((item: any) => ({
-    value: item.id,
-    label: item[labelField]
-  }));
 };

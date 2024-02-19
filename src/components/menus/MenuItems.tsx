@@ -1,4 +1,3 @@
-import React from 'react';
 import { MenuItem } from './types';
 import {
   FileTextOutlined,
@@ -8,7 +7,6 @@ import {
   BarChartOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
-import { signOut } from '@/components/Auth/signout';
 
 export function getItem(
   label: React.ReactNode,
@@ -50,5 +48,5 @@ export const items: MenuItem[] = [
   getItem('設定管理', '3', <SettingOutlined />, [
     getItem('マスター管理', '/master'),
   ]),
-  getItem('サインアウト', 'SIGN_OUT', <LogoutOutlined />, undefined, signOut),
-]
+  getItem('サインアウト', 'sign-out', <LogoutOutlined />),
+];

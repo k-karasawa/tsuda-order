@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Table, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { supabase } from '../../../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import { useProgresses } from './useProgresses';
 import { ProgressModal } from './ProgressModal';
 import { ProgressColumns } from './ProgressColumns';
@@ -12,6 +12,8 @@ export const ProgressManage: React.FC = () => {
   const [currentProgress, setCurrentProgress] = useState<any>(null);
   const [progress, setProgress] = useState<string>('');
   const [sort, setSort] = useState<number | null>(null);
+  const supabase = useSupabaseClient();
+
   const [color, setColor] = useState<string>('');
 
   const handleAddOrEditProgress = async () => {

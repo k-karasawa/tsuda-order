@@ -1,17 +1,26 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 import { items } from './MenuItems';
 import { useRouter } from 'next/router';
-import { signOut } from '@/components/Auth/signout';
-
+import { useSupabaseClient } from '@/hooks';
 const { Header, Content, Sider } = Layout;
 
 export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({children, pagetitle}) => {
   const router = useRouter();
+  const supabase = useSupabaseClient();
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      router.push('/auth');
+    } else {
+      console.error('サインアウトに失敗しました。', error.message);
+    }
+  };
 
   const handleMenuClick = ({ key }: { key: string }) => {
     if (key === "SIGN_OUT") {
@@ -56,7 +65,7 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
 
         <Layout>
           <Header style={{ background: colorBgContainer, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {pagetitle? pagetitle: getPageTitle(router.pathname)}
+            {pagetitle ? pagetitle : getPageTitle(router.pathname)}
           </Header>
           <Content style={{ marginTop: '1.2rem' }}>
             <Breadcrumb>

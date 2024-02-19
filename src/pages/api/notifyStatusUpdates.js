@@ -1,4 +1,4 @@
-import { supabase } from '../../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import { sendChatworkMessage } from '../../../utils/chatwork';
 
 export default async function notifyStatusUpdates(req, res) {

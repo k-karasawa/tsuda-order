@@ -1,18 +1,25 @@
 import useSWR from 'swr'
-import { supabase } from '../../utils/supabase'
+import { useSupabaseClient } from '@/hooks'
 import type { FarmType } from '../types/types'
 
-const fetchFarm = async (): Promise<FarmType[]> => {
-  const response = await supabase.from('farm').select('id, name, sort, prefix').order('sort', { ascending: true })
+export const useFarm = () => {
+  const supabase = useSupabaseClient();
 
-  if (response.error) {
-    throw response.error
+  const fetchFarm = async (): Promise<FarmType[]> => {
+    const response = await supabase.from('farm').select('id, name, sort, prefix').order('sort', { ascending: true })
+
+    if (response.error) {
+      throw response.error
+    }
+
+    // prefix が null の場合、空文字列 "" を設定
+    return response.data.map(item => ({
+      ...item,
+      sort: item.sort !== null ? item.sort : 0,
+      prefix: item.prefix !== null ? item.prefix : "",
+    }));
   }
 
-  return response.data
-}
-
-export const useFarm = () => {
   const { data, error } = useSWR('farm', fetchFarm)
 
   return {

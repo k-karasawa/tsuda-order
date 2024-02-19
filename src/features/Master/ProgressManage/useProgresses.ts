@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 
 export const useProgresses = () => {
   const [progresses, setProgresses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const supabase = useSupabaseClient();
 
   useEffect(() => {
     fetchProgresses();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchProgresses = async () => {

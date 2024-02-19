@@ -1,22 +1,22 @@
-// components/AddOrder.tsx
 import React, { useState } from 'react';
-import { supabase } from '../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 
 const AddOrder: React.FC = () => {
   const [orderCode, setOrderCode] = useState('');
   const [progress, setProgress] = useState(0);
   const [customer, setCustomer] = useState(0);
+  const supabase = useSupabaseClient();
 
   const handleAddOrder = async () => {
     try {
       const newOrder = {
         order_code: orderCode,
         progress: progress,
-        customer: customer,
+        customer_id: customer,
       };
       const { data, error } = await supabase
-        .from('order_list')
-        .insert([newOrder]);
+        .from('orders')
+        .insert(newOrder);
       if (error) {
         throw error;
       }

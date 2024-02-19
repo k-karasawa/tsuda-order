@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { supabase } from '../../../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import { mutate } from 'swr';
 import { ExistingData } from '../types/types';
 
 export const useDeleteReturn = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const supabase = useSupabaseClient();
 
   const deleteReturn = async (id: number) => {
     setIsLoading(true);

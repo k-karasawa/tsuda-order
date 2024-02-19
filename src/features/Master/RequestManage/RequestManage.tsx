@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { Button, Table, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { supabase } from '../../../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import { useRequests } from './useRequests';
 import { RequestModal } from './RequestModal';
 import { RequestColumns } from './RequestColumns';
 
 export const RequestManage: React.FC = () => {
   const { requests, loading, fetchRequests } = useRequests();
-  const [visible, setVisible] = useState(false);
   const [currentRequest, setCurrentRequest] = useState<any>(null);
-
-  const [name, setName] = useState<string>('');
   const [sort, setSort] = useState<number | null>(null);
+  const [name, setName] = useState<string>('');
+  const [visible, setVisible] = useState(false);
+  const supabase = useSupabaseClient();
 
   const handleAddOrEditRequest = async () => {
     if (name && sort !== null) {

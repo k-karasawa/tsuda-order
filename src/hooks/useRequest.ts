@@ -1,9 +1,10 @@
 import useSWR from 'swr';
-import { supabase } from '../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import type { RequestType } from '@/types/types';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-const fetchRequest = async (): Promise<RequestType[]> => {
-  const response = await supabase.from('request').select('id, name, sort');
+const fetchRequest = async (supabaseClient: SupabaseClient): Promise<RequestType[]> => {
+  const response = await supabaseClient.from('request').select('id, name, sort');
 
   if (response.error) {
     throw response.error;
@@ -13,12 +14,13 @@ const fetchRequest = async (): Promise<RequestType[]> => {
 };
 
 export const useRequest = () => {
-  const { data, error } = useSWR('request', fetchRequest);
+  const supabase = useSupabaseClient();
+  const { data, error } = useSWR('request', () => fetchRequest(supabase));
 
   return {
     data,
     loading: !error && !data,
     error,
-    refetchRequest: fetchRequest,
+    refetchRequest: () => fetchRequest(supabase),
   };
 };
