@@ -15,24 +15,24 @@ export const useAuthListen = ({ supabaseClient }: UseAuthListen) => {
       data: { subscription },
     } = supabaseClient.auth.onAuthStateChange((event, session) => {
       if (event === "INITIAL_SESSION") {
-        // handle initial session
+        // 初期セッションの処理
       } else if (event === "SIGNED_IN") {
+        // サインインイベントの処理
         if (router.pathname.includes("/auth")) {
           router.push("/");
         }
-        // handle sign in event
       } else if (event === "SIGNED_OUT") {
-        // handle sign out event
+        // サインアウトイベントの処理
+        router.push('/auth'); // ログインページにリダイレクト
       } else if (event === "PASSWORD_RECOVERY") {
-        // handle password recovery event
+        // パスワード回復イベントの処理
       } else if (event === "TOKEN_REFRESHED") {
-        // handle token refreshed event
+        // トークン更新イベントの処理
       } else if (event === "USER_UPDATED") {
-        // handle user updated event
+        // ユーザー更新イベントの処理
       }
     });
 
     return () => subscription.unsubscribe();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [supabaseClient]);
+  }, [supabaseClient, router]); // router を依存配列に追加
 };
