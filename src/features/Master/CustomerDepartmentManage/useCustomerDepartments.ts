@@ -1,16 +1,13 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../../../../utils/supabase';
+import { useState, useEffect, useCallback } from 'react';
+import { useSupabaseClient } from '@/hooks';
 import { message } from 'antd';
 
 export const useCustomerDepartments = (customerID?: number) => {
   const [loading, setLoading] = useState(true);
   const [departments, setDepartments] = useState<any[]>([]);
+  const supabase = useSupabaseClient();
 
-  useEffect(() => {
-    if (customerID) fetchDepartments(customerID);
-  }, [customerID]);
-
-  const fetchDepartments = async (customerID: number) => {
+  const fetchDepartments = useCallback(async (customerID: number) => {
     setLoading(true);
     const { data, error } = await supabase
       .from('customer_department')
@@ -24,7 +21,11 @@ export const useCustomerDepartments = (customerID?: number) => {
       setDepartments(data || []);
     }
     setLoading(false);
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    if (customerID) fetchDepartments(customerID);
+  }, [customerID, fetchDepartments]);
 
   return { departments, loading, fetchDepartments };
 };

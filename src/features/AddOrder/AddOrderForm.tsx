@@ -3,7 +3,7 @@ import { Form, Row, Col, Divider, FloatButton, message, Modal, Button } from 'an
 import { FileAddOutlined } from '@ant-design/icons'
 import styles from './styles/RegistrationForm.module.css'
 import { SelectDataCreate } from '../../components/SelectDataCreate/SelectDataCreate'
-import { supabase } from '@/../utils/supabase'
+import { useSupabaseClient } from '@/hooks';
 import dayjs from 'dayjs'
 import { useRouter } from "next/router"
 import { GenerateOrderNumber } from './GenerateOrderNumber'
@@ -24,6 +24,7 @@ export const AddOrderForm: React.FC = () => {
   const formRef = useRef<any>(null);
   const router = useRouter();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const supabase = useSupabaseClient();
 
   const handleValuesChange = (changedValues: any, allValues: any) => {
     const updatedValues = {...allValues};
@@ -64,17 +65,21 @@ export const AddOrderForm: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const sanitizedData = Object.fromEntries(
-      Object.entries(formData).map(([key, value]) => {
-        if (key.includes('date') && dayjs.isDayjs(value)) {
-          return [key, formatDate(value as dayjs.Dayjs)];
-        }
-        return [key, value === undefined ? null : value];
-      })
-    );
+    const entries = Object.entries(formData).map(([key, value]) => {
+      if (dayjs.isDayjs(value)) {
+        return [key, value.format('YYYY-MM-DD')];
+      }
+      return [key, value];
+    });
 
-    sanitizedData.order_code = orderCode;
-    sanitizedData.prefix = orderPrefix;
+    const sanitizedData = {
+      ...Object.fromEntries(entries),
+      customer: parseInt(formData.customer as string),
+      order_code: orderCode,
+      prefix: orderPrefix,
+      progress: parseInt(formData.progress as string),
+      request: parseInt(formData.request as string),
+    };
 
     const { data, error } = await supabase
       .from('order_list')

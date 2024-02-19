@@ -1,18 +1,23 @@
 import useSWR, { mutate } from 'swr';
-import { supabase }  from '../../../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import { ExistingData } from '../types/types';
 
 export const useUpdateExistingData = () => {
+  const supabase = useSupabaseClient();
 
-  const fetcher = async (url: string) => {
+  const fetcher = async (url: string): Promise<ExistingData[]> => {
     const { data, error } = await supabase
-    .from('item_return')
-    .select('*');
+      .from('item_return')
+      .select('*');
     if (error) {
       console.error("Fetcher error:", error);
       throw error;
     }
-    return data;
+    return data.map(item => ({
+      ...item,
+      reshipment_date: item.reshipment_date || "",
+      remark: item.remark || "",
+    }));
   };
 
   const { data, error } = useSWR<ExistingData[]>('/api/existingData', fetcher, { refreshWhenHidden: true, refreshInterval: 0 });

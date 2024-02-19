@@ -1,39 +1,32 @@
 import '@/styles/globals.css';
+import { useState } from 'react';
 import { ReactElement } from 'react';
 import { MainMenu } from '@/components/menus/MainMenu';
-import { AppProps } from "next/app";
-import { supabase } from "../../utils/supabase";
-import { useEffect } from "react";
-import { useRouter } from "next/router";
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { type AppProps } from "next/app";
 import { RecoilRoot } from 'recoil';
 import { ConfigProvider } from 'antd';
 import jaJP from 'antd/lib/locale/ja_JP';
+import { useAuthListen } from '@/hooks/useAuthListen';
+import { createPagesBrowserClient } from "@supabase/auth-helpers-nextjs";
+import { SessionContextProvider, Session } from "@supabase/auth-helpers-react";
+import type { Database } from "@/types/database.types";
 
-function MyApp({ Component, pageProps }: AppProps) {
-  const router = useRouter();
+function MyApp({
+  Component,
+  pageProps,
+}: AppProps & {
+  pageProps: {
+    initialSession: Session;
+  };
+}) {
+  const [supabaseClient] = useState(() => createPagesBrowserClient<Database>());
   const getLayout = Component.getLayout ?? ((page: ReactElement) => <MainMenu pagetitle={Component.pagetitle}>{page}</MainMenu>);
-
-  useEffect(() => {
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === "SIGNED_OUT") {
-          router.push("/auth");
-        } else if (event === "SIGNED_IN" && router.pathname === "/auth") {
-          router.push("/");
-        }
-      }
-    );
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [router]);
-
+  useAuthListen({ supabaseClient });
   return (
     <RecoilRoot>
       <ConfigProvider locale={jaJP}>
         <SessionContextProvider
-          supabaseClient={supabase}
+          supabaseClient={supabaseClient}
           initialSession={pageProps.initialSession}
         >
           {getLayout(<Component {...pageProps} />)}

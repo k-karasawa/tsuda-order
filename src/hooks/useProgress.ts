@@ -1,9 +1,10 @@
 import useSWR from 'swr';
-import { supabase } from '../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import type { ProgressType } from '../types/types';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-const fetchProgress = async (): Promise<ProgressType[]> => {
-  const response = await supabase.from('progress').select('id, progress, color, sort').order('sort', { ascending: true });
+const fetchProgress = async (supabaseClient: SupabaseClient): Promise<ProgressType[]> => {
+  const response = await supabaseClient.from('progress').select('id, progress, color, sort').order('sort', { ascending: true });
 
   if (response.error) {
     throw response.error;
@@ -13,12 +14,13 @@ const fetchProgress = async (): Promise<ProgressType[]> => {
 };
 
 export const useProgress = () => {
-  const { data, error } = useSWR('progress', fetchProgress);
+  const supabase = useSupabaseClient();
+  const { data, error } = useSWR('progress', () => fetchProgress(supabase));
 
   return {
     data,
     loading: !error && !data,
     error,
-    refetchProgress: fetchProgress,
+    refetchProgress: () => fetchProgress(supabase),
   };
 };

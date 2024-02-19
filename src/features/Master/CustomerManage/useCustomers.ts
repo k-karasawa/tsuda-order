@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import { supabase } from '../../../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 
 export const useCustomers = () => {
   const [customers, setCustomers] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const supabase = useSupabaseClient();
 
   const fetchCustomers = async () => {
     setLoading(true);
@@ -16,6 +17,7 @@ export const useCustomers = () => {
 
   useEffect(() => {
     fetchCustomers();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return {

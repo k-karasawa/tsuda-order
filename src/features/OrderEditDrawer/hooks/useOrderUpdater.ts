@@ -4,6 +4,7 @@ import { updateOrder } from '../orderService';
 import { OrderListDataType } from '@/types/types';
 import { DatesType } from '../types/types';
 import dayjs from 'dayjs';
+import { useSupabaseClient } from "@/hooks";
 
 const PROGRESS_DESIRED_DELIVERY = 3;
 const PROGRESS_ESTIMATE = 4;
@@ -66,6 +67,9 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
   const [isAttention, setIsAttention] = useState(false);
   const [initialProgress, setInitialProgress] = useState<number | null>(null);
 
+  // ここで useSupabaseClient を呼び出す
+  const supabaseClient = useSupabaseClient();
+
   useEffect(() => {
     if (selectedOrder) {
       setInitialProgress(selectedOrder.progress);
@@ -73,6 +77,7 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
   }, [selectedOrder]);
 
   const handleUpdate = async () => {
+    // トップレベルで取得した supabaseClient を使用
     const values = form.getFieldsValue();
     if (!validateProgress(values.progress, values, dates, form)) {
       return;
@@ -88,7 +93,7 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
     };
 
     if (selectedOrder && selectedOrder.id) {
-      const { data, error } = await updateOrder(mergedData, selectedOrder.id);
+      const { data, error } = await updateOrder(supabaseClient, mergedData, selectedOrder.id);
       if (error) {
         message.error('注文の更新に失敗しました。');
       } else {

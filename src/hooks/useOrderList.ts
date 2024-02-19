@@ -1,37 +1,41 @@
 import useSWR, { mutate } from 'swr';
-import { supabase } from '../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import type { OrderListDataType } from '@/types/types';
+import { SupabaseClient } from '@supabase/supabase-js';
 
-//supabaseの制約で1000件以上のデータは取得できないので、再帰的に取得するようにした
-const fetchAllOrders = async (from = 0): Promise<OrderListDataType[]> => {
-  const response = await supabase
-    .from('order_list_extended')
-    .select('*')
-    .range(from, from + 999);
+// supabaseの制約で1000件以上のデータは取得できないので、再帰的に取得するようにした
+// fetchAllOrders関数をコンポーネントまたはカスタムフックの外で定義しない
+const fetchOrders = async (supabaseClient: SupabaseClient): Promise<OrderListDataType[]> => {
+  const fetchAllOrders = async (from = 0, allData: OrderListDataType[] = []): Promise<OrderListDataType[]> => {
+    const response = await supabaseClient
+      .from('order_list_extended')
+      .select('*')
+      .range(from, from + 999);
 
-  if (response.error) {
-    console.error('Error fetching orders:', response.error);
-    throw response.error;
-  }
+    if (response.error) {
+      console.error('Error fetching orders:', response.error);
+      throw response.error;
+    }
 
-  if (response.data.length === 1000) {
-    return response.data.concat(await fetchAllOrders(from + 1000));
-  } else {
-    return response.data;
-  }
-};
+    const newData = allData.concat(response.data);
 
-const fetchOrders = async (): Promise<OrderListDataType[]> => {
-  const allData = await fetchAllOrders();
+    if (response.data.length === 1000) {
+      return fetchAllOrders(from + 1000, newData);
+    } else {
+      return newData;
+    }
+  };
+
+  const allData = await fetchAllOrders(0, []);
   return allData.map(item => ({
     ...item,
     fullOrderCode: item.prefix + item.order_code,
   }));
 };
 
-
 export const useOrderList = () => {
-  const { data, error } = useSWR('orders', fetchOrders);
+  const supabase = useSupabaseClient();
+  const { data, error } = useSWR('orders', () => fetchOrders(supabase));
   const revalidate = () => {
     mutate('orders');
   };
@@ -40,22 +44,22 @@ export const useOrderList = () => {
     data,
     loading: !error && !data,
     error,
-    refetchOrderList: fetchOrders,
+    refetchOrderList: () => fetchOrders(supabase),
     revalidate
   };
 };
 
-const fetchItemReturns = async (): Promise<any[]> => {
-  const response = await supabase.from('item_return').select('return_orderlist_id');
+const fetchItemReturns = async (supabaseClient: SupabaseClient): Promise<any[]> => {
+  const response = await supabaseClient.from('item_return').select('return_orderlist_id');
   if (response.error) {
     throw response.error;
   }
   return response.data;
-
 };
 
 export const useItemReturns = () => {
-  const { data, error } = useSWR('itemReturns', fetchItemReturns);
+  const supabase = useSupabaseClient();
+  const { data, error } = useSWR('itemReturns', () => fetchItemReturns(supabase));
   return {
     itemReturns: data,
     loading: !error && !data,

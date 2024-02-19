@@ -1,9 +1,9 @@
 import useSWR from 'swr';
-import { supabase } from '../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import type { CustomerType } from '../types/types';
 
-const fetchCustomer = async (): Promise<CustomerType[]> => {
-  const response = await supabase.from('customer').select('id, name, sort').order('sort', { ascending: true });
+const fetchCustomer = async (supabaseClient: any): Promise<CustomerType[]> => {
+  const response = await supabaseClient.from('customer').select('id, name, sort').order('sort', { ascending: true });
 
   if (response.error) {
     throw response.error;
@@ -13,12 +13,13 @@ const fetchCustomer = async (): Promise<CustomerType[]> => {
 };
 
 export const useCustomer = () => {
-  const { data, error } = useSWR('customer', fetchCustomer);
+  const supabase = useSupabaseClient();
+  const { data, error } = useSWR('customer', () => fetchCustomer(supabase));
 
   return {
     data,
     loading: !error && !data,
     error,
-    refetchCustomer: fetchCustomer,
+    refetchCustomer: () => fetchCustomer(supabase),
   };
 };

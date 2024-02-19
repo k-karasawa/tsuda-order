@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Table, message, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { supabase } from '../../../../utils/supabase';
+import { useSupabaseClient } from '@/hooks';
 import { useCustomerDepartments } from './useCustomerDepartments';
 import { useCustomersInfo } from './useCustomersInfo';
 import { CustomerDepartmentModal } from './CustomerDepartmentModal';
@@ -11,11 +11,11 @@ export const CustomerDepartmentManage: React.FC = () => {
   const { departments, loading, fetchDepartments } = useCustomerDepartments();
   const { customers } = useCustomersInfo();
   const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
-
   const [visible, setVisible] = useState(false);
   const [currentDepartment, setCurrentDepartment] = useState<any>(null);
   const [department, setDepartment] = useState<string>('');
   const [sort, setSort] = useState<number | null>(null);
+  const supabase = useSupabaseClient();
 
   const handleAddOrEditDepartment = async () => {
     if (department) {
