@@ -27,16 +27,12 @@ export function getItem(
   };
 }
 
-// カスタムフックとして定義
 export const useFilteredItems = () => {
   const session = useSessionInfo();
   const [filteredItems, setFilteredItems] = useState<MenuItem[]>([]);
 
   useEffect(() => {
     if (!session) {
-      setFilteredItems([
-        getItem('サインイン', '/signin', <LoginOutlined />),
-      ]);
     } else {
       setFilteredItems(items);
     }

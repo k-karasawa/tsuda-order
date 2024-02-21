@@ -44,7 +44,7 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
         }
       }
     }
-    return "Unknown Page";
+    return key === "/auth" ? "サインイン画面" : "Unknown Page";
   };
 
   const pageTitle = getPageTitle(router.pathname, filteredItems);
