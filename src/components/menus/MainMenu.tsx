@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import { items } from './MenuItems';
+import { useFilteredItems } from './MenuItems';
 import { useRouter } from 'next/router';
 import { useSupabaseClient } from '@/hooks';
 const { Header, Content, Sider } = Layout;
@@ -8,6 +8,7 @@ const { Header, Content, Sider } = Layout;
 export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({children, pagetitle}) => {
   const router = useRouter();
   const supabase = useSupabaseClient();
+  const filteredItems = useFilteredItems();
 
   const {
     token: { colorBgContainer },
@@ -30,14 +31,14 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
     }
   };
 
-  const getPageTitle = (key: string): string => {
+  const getPageTitle = (key: string, items: any[]): string => {
     const menuItem = items.find(item => item.key === key);
     if (menuItem) {
       return menuItem.label as string;
     }
     for (let mainItem of items) {
       if (mainItem.children) {
-        const subMenuItem = mainItem.children.find(item => item.key === key);
+        const subMenuItem = mainItem.children.find((item: { key: string; }) => item.key === key);
         if (subMenuItem) {
           return subMenuItem.label as string;
         }
@@ -45,6 +46,8 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
     }
     return "Unknown Page";
   };
+
+  const pageTitle = getPageTitle(router.pathname, filteredItems);
 
   return (
     <>
@@ -58,14 +61,14 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
             defaultSelectedKeys={['/']}
             selectedKeys={[router.pathname]}
             mode="inline"
-            items={items}
+            items={filteredItems}
             onClick={handleMenuClick}
           />
         </Sider>
 
         <Layout>
           <Header style={{ background: colorBgContainer, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {pagetitle ? pagetitle : getPageTitle(router.pathname)}
+            {pagetitle ? pagetitle : pageTitle}
           </Header>
           <Content style={{ marginTop: '1.2rem' }}>
             <Breadcrumb>

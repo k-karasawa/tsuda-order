@@ -6,7 +6,10 @@ import {
   SettingOutlined,
   BarChartOutlined,
   LogoutOutlined,
+  LoginOutlined,
 } from '@ant-design/icons';
+import { useSessionInfo } from '@/hooks/useSessionInfo';
+import { useEffect, useState } from 'react';
 
 export function getItem(
   label: React.ReactNode,
@@ -23,6 +26,24 @@ export function getItem(
     action,
   };
 }
+
+// カスタムフックとして定義
+export const useFilteredItems = () => {
+  const session = useSessionInfo();
+  const [filteredItems, setFilteredItems] = useState<MenuItem[]>([]);
+
+  useEffect(() => {
+    if (!session) {
+      setFilteredItems([
+        getItem('サインイン', '/signin', <LoginOutlined />),
+      ]);
+    } else {
+      setFilteredItems(items);
+    }
+  }, [session]);
+
+  return filteredItems;
+};
 
 export const items: MenuItem[] = [
   getItem('ダッシュボード', '/', <BarChartOutlined />),
