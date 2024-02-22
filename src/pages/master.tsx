@@ -1,4 +1,3 @@
-import React from "react";
 import { MasterList } from "@/features/Master/MasterList";
 
 const MasterPage = () => {
