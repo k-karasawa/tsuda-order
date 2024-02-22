@@ -1,8 +1,9 @@
-import { ReactNode } from 'react';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
-import { useFilteredItems } from './MenuItems';
-import { useRouter } from 'next/router';
-import { useSupabaseClient } from '@/hooks';
+import { ReactNode } from "react";
+import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { useFilteredItems } from "./MenuItems";
+import { useRouter } from "next/router";
+import { useSupabaseClient } from "@/hooks";
+
 const { Header, Content, Sider } = Layout;
 
 export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({children, pagetitle}) => {

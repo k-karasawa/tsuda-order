@@ -1,4 +1,4 @@
-import { MenuItem } from './types';
+import { MenuItem } from "./types";
 import {
   FileTextOutlined,
   SnippetsOutlined,
@@ -6,10 +6,9 @@ import {
   SettingOutlined,
   BarChartOutlined,
   LogoutOutlined,
-  LoginOutlined,
-} from '@ant-design/icons';
-import { useSessionInfo } from '@/hooks/useSessionInfo';
-import { useEffect, useState } from 'react';
+} from "@ant-design/icons";
+import { useSessionInfo } from "@/hooks/useSessionInfo";
+import { useEffect, useState } from "react";
 
 export function getItem(
   label: React.ReactNode,

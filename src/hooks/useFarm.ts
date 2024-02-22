@@ -1,6 +1,6 @@
-import useSWR from 'swr'
-import { useSupabaseClient } from '@/hooks'
-import type { FarmType } from '../types/types'
+import useSWR from 'swr';
+import { useSupabaseClient } from '@/hooks';
+import type { FarmType } from '../types/types';
 
 export const useFarm = () => {
   const supabase = useSupabaseClient();
@@ -12,7 +12,6 @@ export const useFarm = () => {
       throw response.error
     }
 
-    // prefix が null の場合、空文字列 "" を設定
     return response.data.map(item => ({
       ...item,
       sort: item.sort !== null ? item.sort : 0,
@@ -28,4 +27,4 @@ export const useFarm = () => {
     error,
     refetchFarm: fetchFarm,
   }
-}
+};

@@ -1,5 +1,5 @@
-import { Button, Input } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Button, Input } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
 
 export const filterIcon = (filtered: boolean) => (
   <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
