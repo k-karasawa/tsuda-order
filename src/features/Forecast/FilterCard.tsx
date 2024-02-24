@@ -8,9 +8,9 @@ import { useFarm } from "@/hooks/useFarm";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useOrderList } from "@/hooks/useOrderList";
 import { CSVDownloader } from "@/features/CSVExport/CSVExport";
-import { filterOrdersByDate, filterOrdersByAcceptDate } from "./utils/filterOrders";
 import "dayjs/locale/ja";
 import { useFilteredData } from "@/contexts/FilterdDataContext";
+import { generateGraphXAxisData } from "./utils/dateUtils";
 
 dayjs.extend(isBetween);
 const { RangePicker } = DatePicker;
@@ -21,6 +21,7 @@ interface FilterCardProps {
   setChartOrderData: React.Dispatch<React.SetStateAction<any[]>>;
   selectedDateRange: [dayjs.Dayjs, dayjs.Dayjs];
   setSelectedDateRange: React.Dispatch<React.SetStateAction<[dayjs.Dayjs, dayjs.Dayjs]>>;
+  graphXAxisData: string[];
 }
 
 export const FilterCard: React.FC<FilterCardProps> = ({
@@ -28,18 +29,22 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   setAcceptOrderData,
   setChartOrderData,
 }) => {
-  const { setFilteredData } = useFilteredData();
+  const { setFilteredData, setGraphXAxisData } = useFilteredData();
   const [selectedRequest, setSelectedRequest] = useState<string>('none');
-  const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
-  const [selectedProgress, setSelectedProgress] = useState<string>('none');
   const [selectedFarm, setSelectedFarm] = useState<string>('none');
   const [selectedCustomer, setSelectedCustomer] = useState<string>('none');
-  const [acceptFiltered, setAcceptFiltered] = useState<any[]>([]);
   const { data: allOrderData, error: orderListError } = useOrderList();
   const [selectedDateRange, setSelectedDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>([
     dayjs().startOf('month'),
     dayjs().add(1, 'year').endOf('month'),
   ]);
+  const handleDateRangeChange = (dates: [dayjs.Dayjs, dayjs.Dayjs]) => {
+    if (dates[0] && dates[1]) {
+      const [start, end] = dates;
+      const newGraphXAxisData = generateGraphXAxisData(start, end);
+      setGraphXAxisData(newGraphXAxisData); // コンテキストの更新
+    }
+  };
 
   const filterOrders = (orders: any[], selectedRequest: string, selectedFarm: string, selectedCustomer: string) => {
     let filtered = orders;
@@ -67,16 +72,12 @@ export const FilterCard: React.FC<FilterCardProps> = ({
 
       // desired_delivery_dateに基づいてフィルタリング
       let orderFiltered = allOrderData.filter(order => {
-        const deliveryDate = dayjs(order.desired_delivery_date);
-        return deliveryDate.isAfter(startOfRange) && deliveryDate.isBefore(endOfRange);
+        const DesiredDeliveryDate = dayjs(order.desired_delivery_date);
+        return DesiredDeliveryDate.isAfter(startOfRange) && DesiredDeliveryDate.isBefore(endOfRange);
       });
-
-      // accept_dateに基づいてフィルタリング（必要に応じて）
-      let acceptFiltered = filterOrdersByAcceptDate(allOrderData, startOfRange, endOfRange);
 
       // 選択されたリクエスト、農場、顧客に基づいてさらにフィルタリング
       orderFiltered = filterOrders(orderFiltered, selectedRequest, selectedFarm, selectedCustomer);
-      acceptFiltered = filterOrders(acceptFiltered, selectedRequest, selectedFarm, selectedCustomer);
 
       // コンテキストにフィルタリングされたデータを設定
       setFilteredData(orderFiltered);
@@ -84,8 +85,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
       // 既存のデータ設定ロジックを保持（もし必要なら）
       setOrderData(orderFiltered);
       setChartOrderData(orderFiltered);
-      setAcceptOrderData(acceptFiltered);
-      setAcceptFiltered(acceptFiltered);
     }
   }, [
     allOrderData,
@@ -143,6 +142,7 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                     const startDate = dates[0].startOf('month');
                     const endDate = dates[1].endOf('month');
                     setSelectedDateRange([startDate, endDate]);
+                    handleDateRangeChange([startDate, endDate]);
                   }
                 }}
               />
@@ -174,13 +174,13 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                 onChange={(value) => setSelectedCustomer(value)}
               />
             </div>
-            <div className={styles.filterItem} style={{ display: 'flex', alignItems: 'center', height: '100%', gap: 8 }}>
+            {/* <div className={styles.filterItem} style={{ display: 'flex', alignItems: 'center', height: '100%', gap: 8 }}>
               <CSVDownloader
-                data={acceptFiltered}
+                data={}
                 filename={`${dayjs().format('YYYYMMDD')}-検収日_集計.csv`}
                 buttonLabel="検収予測データ"
               />
-            </div>
+            </div> */}
           </Space>
         </Card>
       </div>

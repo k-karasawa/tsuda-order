@@ -4,6 +4,8 @@ import { OrderListDataType } from '@/types/types';
 interface FilteredDataContextType {
   filteredData: OrderListDataType[];
   setFilteredData: React.Dispatch<React.SetStateAction<OrderListDataType[]>>;
+  graphXAxisData: string[]; // 追加
+  setGraphXAxisData: React.Dispatch<React.SetStateAction<string[]>>; // 追加
 }
 
 const FilteredDataContext = createContext<FilteredDataContextType | null>(null);
@@ -14,9 +16,10 @@ interface FilteredDataProviderProps {
 
 export const FilteredDataProvider: React.FC<FilteredDataProviderProps> = ({ children }) => {
   const [filteredData, setFilteredData] = useState<OrderListDataType[]>([]);
+  const [graphXAxisData, setGraphXAxisData] = useState<string[]>([]); // 追加
 
   return (
-    <FilteredDataContext.Provider value={{ filteredData, setFilteredData }}>
+    <FilteredDataContext.Provider value={{ filteredData, setFilteredData, graphXAxisData, setGraphXAxisData }}>
       {children}
     </FilteredDataContext.Provider>
   );

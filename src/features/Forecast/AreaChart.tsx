@@ -8,9 +8,12 @@ interface AreaChartPageProps {
   selectedDateRange: [dayjs.Dayjs, dayjs.Dayjs];
 }
 
-export const AreaChartPage: React.FC<AreaChartPageProps> = ({ selectedDateRange }) => {
-  const { filteredData } = useFilteredData();
-  const chartData = useChartData(filteredData);
+export const AreaChartPage: React.FC<AreaChartPageProps> = () => {
+  const { filteredData, graphXAxisData } = useFilteredData();
+  const chartData = useChartData(filteredData, graphXAxisData);
+
+  console.log(filteredData); // デバッグログ
+  console.log(`X軸データ`,graphXAxisData); // デバッグログ
 
   return (
     <ResponsiveContainer width="100%" height={380}>
