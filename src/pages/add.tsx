@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useSupabaseClient } from '@/hooks';
+import React, { useState } from "react";
+import { useSupabaseClient } from "@/hooks";
 
 const AddOrder: React.FC = () => {
   const [orderCode, setOrderCode] = useState('');

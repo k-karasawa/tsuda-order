@@ -1,4 +1,4 @@
-import { MenuItem } from './types';
+import { MenuItem } from "./types";
 import {
   FileTextOutlined,
   SnippetsOutlined,
@@ -6,7 +6,9 @@ import {
   SettingOutlined,
   BarChartOutlined,
   LogoutOutlined,
-} from '@ant-design/icons';
+} from "@ant-design/icons";
+import { useSessionInfo } from "@/hooks/useSessionInfo";
+import { useEffect, useState } from "react";
 
 export function getItem(
   label: React.ReactNode,
@@ -23,6 +25,20 @@ export function getItem(
     action,
   };
 }
+
+export const useFilteredItems = () => {
+  const session = useSessionInfo();
+  const [filteredItems, setFilteredItems] = useState<MenuItem[]>([]);
+
+  useEffect(() => {
+    if (!session) {
+    } else {
+      setFilteredItems(items);
+    }
+  }, [session]);
+
+  return filteredItems;
+};
 
 export const items: MenuItem[] = [
   getItem('ダッシュボード', '/', <BarChartOutlined />),
@@ -48,5 +64,6 @@ export const items: MenuItem[] = [
   getItem('設定管理', '3', <SettingOutlined />, [
     getItem('マスター管理', '/master'),
   ]),
+  getItem('検収予測', '/forecast', <FileTextOutlined />),
   getItem('サインアウト', 'SIGN_OUT', <LogoutOutlined />),
 ];

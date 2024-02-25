@@ -1,5 +1,5 @@
-import React from 'react';
-import { OrderAssorting } from '@/features/OrderAssorting/OrderAssorting';
+import React from "react";
+import { OrderAssorting } from "@/features/OrderAssorting/OrderAssorting";
 
 const OrderDevelopmentPage = () => {
   return (
