@@ -7,10 +7,9 @@ import { useRequest } from "@/hooks/useRequest";
 import { useFarm } from "@/hooks/useFarm";
 import { useCustomer } from "@/hooks/useCustomer";
 import { useOrderList } from "@/hooks/useOrderList";
-import { CSVDownloader } from "@/features/CSVExport/CSVExport";
-import "dayjs/locale/ja";
 import { useFilteredData } from "@/contexts/FilterdDataContext";
 import { generateGraphXAxisData } from "./utils/dateUtils";
+import "dayjs/locale/ja";
 
 dayjs.extend(isBetween);
 const { RangePicker } = DatePicker;
@@ -34,15 +33,17 @@ export const FilterCard: React.FC<FilterCardProps> = ({
   const [selectedFarm, setSelectedFarm] = useState<string>('none');
   const [selectedCustomer, setSelectedCustomer] = useState<string>('none');
   const { data: allOrderData, error: orderListError } = useOrderList();
+
   const [selectedDateRange, setSelectedDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>([
     dayjs().startOf('month'),
-    dayjs().add(1, 'year').endOf('month'),
+    dayjs().startOf('month').add(1, 'year').subtract(1, 'day'),
   ]);
+
   const handleDateRangeChange = (dates: [dayjs.Dayjs, dayjs.Dayjs]) => {
     if (dates[0] && dates[1]) {
       const [start, end] = dates;
       const newGraphXAxisData = generateGraphXAxisData(start, end);
-      setGraphXAxisData(newGraphXAxisData); // コンテキストの更新
+      setGraphXAxisData(newGraphXAxisData);
     }
   };
 
@@ -59,6 +60,14 @@ export const FilterCard: React.FC<FilterCardProps> = ({
     }
     return filtered;
   };
+
+  useEffect(() => {
+    const start = dayjs().startOf('month');
+    const end = dayjs().startOf('month').add(1, 'year').subtract(1, 'day');
+    const initialGraphXAxisData = generateGraphXAxisData(start, end);
+    setGraphXAxisData(initialGraphXAxisData);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (orderListError) {
@@ -174,13 +183,6 @@ export const FilterCard: React.FC<FilterCardProps> = ({
                 onChange={(value) => setSelectedCustomer(value)}
               />
             </div>
-            {/* <div className={styles.filterItem} style={{ display: 'flex', alignItems: 'center', height: '100%', gap: 8 }}>
-              <CSVDownloader
-                data={}
-                filename={`${dayjs().format('YYYYMMDD')}-検収日_集計.csv`}
-                buttonLabel="検収予測データ"
-              />
-            </div> */}
           </Space>
         </Card>
       </div>
