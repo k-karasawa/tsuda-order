@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { StateCard } from './StateCard';
 import { FilterCard } from './FilterCard';
 import { ChartCard } from './ChartCard';
-import { AcceptCard } from './AcceptCard';
 import dayjs from 'dayjs';
 import styles from './styles/Dashboard.module.css';
 import { FilteredDataProvider } from "@/contexts/FilterdDataContext";
@@ -18,6 +16,8 @@ export const ReceiptsForecast: React.FC = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>(
     getStartEndOfMonth(dayjs())
   );
+  // graphXAxisDataの状態を追加
+  const [graphXAxisData, setGraphXAxisData] = useState<string[]>([]);
 
   return (
     <FilteredDataProvider>
@@ -28,6 +28,8 @@ export const ReceiptsForecast: React.FC = () => {
           setChartOrderData={setChartOrderData}
           selectedDateRange={selectedDateRange}
           setSelectedDateRange={setSelectedDateRange}
+          graphXAxisData={graphXAxisData}
+          setGraphXAxisData={setGraphXAxisData}
         />
         <ChartCard orderData={chartOrderData} selectedDateRange={selectedDateRange} />
       </div>

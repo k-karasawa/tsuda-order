@@ -21,6 +21,7 @@ interface FilterCardProps {
   selectedDateRange: [dayjs.Dayjs, dayjs.Dayjs];
   setSelectedDateRange: React.Dispatch<React.SetStateAction<[dayjs.Dayjs, dayjs.Dayjs]>>;
   graphXAxisData: string[];
+  setGraphXAxisData: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const FilterCard: React.FC<FilterCardProps> = ({
