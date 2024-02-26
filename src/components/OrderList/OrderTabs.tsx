@@ -1,11 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Tabs, Table, Spin, Button } from 'antd';
+import { Tabs, Table, Spin } from 'antd';
 import type { OrderListDataType } from '../../types/types';
 import { useProgress } from '../../hooks/useProgress';
 import { useRecoilValue, useRecoilState } from 'recoil';
 import { XScrollState } from '../../recoil/atoms';
 import { selectedOrderAtom } from '../../recoil/selectedOrderAtom';
-const { TabPane } = Tabs;
 
 interface OrderTabsProps {
   data: OrderListDataType[];
@@ -46,125 +45,35 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
       default:
         return data;
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTab, data, PROGRESS_COMPLETED_ID, PROGRESS_INRECEIVED_ID, PROGRESS_LOST_ID]);
+  }, [progressLoading, data, activeTab, PROGRESS_LOST_ID, PROGRESS_COMPLETED_ID, PROGRESS_INRECEIVED_ID]);
 
   if (progressLoading || !data) {
     return <Spin size="large" />;
   }
+  const tabItems = [
+    {
+      label: '進行中',
+      key: 'inProgress',
+      children: <Table size="small" columns={columns} dataSource={filteredData.filter(order => order.progress !== PROGRESS_LOST_ID && order.progress !== PROGRESS_COMPLETED_ID)} rowKey="id" pagination={{ position: ['bottomLeft'], pageSize: 50, total: filteredData.length, showSizeChanger: false, }} scroll={{ x: scrollX, y: 520 }} sticky={{ offsetScroll: 0, offsetHeader: 0 }} onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })} />,
+    },
+    {
+      label: '受付',
+      key: 'inReceived',
+      children: <Table size="small" columns={columns} dataSource={filteredData.filter(order => order.progress === PROGRESS_INRECEIVED_ID)} rowKey="id" pagination={{ position: ['bottomLeft'], pageSize: 50, total: filteredData.length, showSizeChanger: false, }} scroll={{ x: scrollX, y: 520 }} sticky={{ offsetScroll: 0, offsetHeader: 0 }} onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })} />,
+    },
+    {
+      label: '完了',
+      key: 'completed',
+      children: <Table size="small" columns={columns} dataSource={filteredData.filter(order => order.progress === PROGRESS_COMPLETED_ID)} rowKey="id" pagination={{ position: ['bottomLeft'], pageSize: 50, total: filteredData.length, showSizeChanger: false, }} scroll={{ x: scrollX, y: 520 }} sticky={{ offsetScroll: 0, offsetHeader: 0 }} onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })} />,
+    },
+    {
+      label: '失注',
+      key: 'lost',
+      children: <Table size="small" columns={columns} dataSource={filteredData.filter(order => order.progress === PROGRESS_LOST_ID)} rowKey="id" pagination={{ position: ['bottomLeft'], pageSize: 50, total: filteredData.length, showSizeChanger: false, }} scroll={{ x: scrollX, y: 520 }} sticky={{ offsetScroll: 0, offsetHeader: 0 }} onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })} />,
+    }
+  ];
 
   return (
-    <Tabs defaultActiveKey="inProgress" onChange={setActiveTab}>
-      <TabPane tab="進行中" key="inProgress">
-        <Table
-          size="small"
-          columns={columns}
-          dataSource={filteredData}
-          rowKey="id"
-          pagination={{
-            position: ['bottomLeft'],
-            pageSize: 50,
-            total: filteredData.length,
-            showSizeChanger: false,
-          }}
-          scroll={{ x: scrollX, y: 520 }}
-          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
-          onRow={(record) => ({
-            onClick: () => {
-              setSelectedOrder(record);
-              onRowClick(record);
-            },
-          })}
-        />
-      </TabPane>
-      <TabPane tab="受付" key="inReceived">
-        <Table
-          size="small"
-          columns={columns}
-          dataSource={filteredData}
-          rowKey="id"
-          pagination={{
-            position: ['bottomLeft'],
-            pageSize: 50,
-            total: filteredData.length,
-            showSizeChanger: false,
-          }}
-          scroll={{ x: scrollX, y: 680 }}
-          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
-          onRow={(record) => ({
-            onClick: () => {
-              setSelectedOrder(record);
-              onRowClick(record);
-            },
-          })}
-        />
-      </TabPane>
-      <TabPane tab="完了" key="completed">
-        <Table
-          size="small"
-          columns={columns}
-          dataSource={filteredData}
-          rowKey="id"
-          pagination={{
-            position: ['bottomLeft'],
-            pageSize: 50,
-            total: filteredData.length,
-            showSizeChanger: false,
-          }}
-          scroll={{ x: scrollX, y: 680 }}
-          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
-          onRow={(record) => ({
-            onClick: () => {
-              setSelectedOrder(record);
-              onRowClick(record);
-            },
-          })}
-        />
-      </TabPane>
-      <TabPane tab="失注" key="lost">
-        <Table
-          size="small"
-          columns={columns}
-          dataSource={filteredData}
-          rowKey="id"
-          pagination={{
-            position: ['bottomLeft'],
-            pageSize: 50,
-            total: filteredData.length,
-            showSizeChanger: false,
-          }}
-          scroll={{ x: scrollX, y: 680 }}
-          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
-          onRow={(record) => ({
-            onClick: () => {
-              setSelectedOrder(record);
-              onRowClick(record);
-            },
-          })}
-        />
-      </TabPane>
-      <TabPane tab="全案件" key="all">
-        <Table
-          size="small"
-          columns={columns}
-          dataSource={filteredData}
-          rowKey="id"
-          pagination={{
-            position: ['bottomLeft'],
-            pageSize: 50,
-            total: filteredData.length,
-            showSizeChanger: false,
-          }}
-          scroll={{ x: scrollX, y: 680 }}
-          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
-          onRow={(record) => ({
-            onClick: () => {
-              setSelectedOrder(record);
-              onRowClick(record);
-            },
-          })}
-        />
-      </TabPane>
-    </Tabs>
+    <Tabs defaultActiveKey="inProgress" onChange={setActiveTab} items={tabItems} />
   );
 };

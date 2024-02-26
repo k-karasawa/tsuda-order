@@ -1,4 +1,3 @@
-// src/features/Master/CustomerDepartmentManage/CustomerDepartmentColumns.tsx
 import React from 'react';
 import { Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
