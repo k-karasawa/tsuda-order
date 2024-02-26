@@ -66,8 +66,6 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
   });
   const [isAttention, setIsAttention] = useState(false);
   const [initialProgress, setInitialProgress] = useState<number | null>(null);
-
-  // ここで useSupabaseClient を呼び出す
   const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
@@ -76,8 +74,15 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
     }
   }, [selectedOrder]);
 
+  useEffect(() => {
+    if (selectedOrder) {
+      form.setFieldsValue(selectedOrder);
+      form.setFieldsValue(dates);
+      form.setFieldsValue({ attention: isAttention });
+    }
+  }, [selectedOrder, dates, isAttention, form]);
+
   const handleUpdate = async () => {
-    // トップレベルで取得した supabaseClient を使用
     const values = form.getFieldsValue();
     if (!validateProgress(values.progress, values, dates, form)) {
       return;
@@ -105,13 +110,6 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
       message.error('注文が選択されていないか、IDが不足しています。');
     }
   };
-
-  // Set initial form values
-  if (selectedOrder) {
-    form.setFieldsValue(selectedOrder);
-    form.setFieldsValue(dates);
-    form.setFieldsValue({ attention: isAttention });
-  }
 
   return {
     form,

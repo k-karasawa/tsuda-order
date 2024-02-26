@@ -18,6 +18,7 @@ export const columns: ColumnsType<OrderListDataType> = [
   {
     title: 'ID',
     dataIndex: 'id',
+    fixed: 'left',
   },
   {
     title: '受注番号',

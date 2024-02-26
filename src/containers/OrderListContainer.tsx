@@ -16,7 +16,11 @@ type OrderListContainerProps = {
 export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter, customColumns, sortOrder = 'default', showDownloadButton, filterCondition }) => {
   const { data, loading, error, refetchOrderList } = useOrderList();
 
-  if (loading) return <Spin size="large" tip="Loading..." />;
+  if (loading) return (
+    <Spin size="large" tip="Loading...">
+      <div></div>
+    </Spin>
+  );
   if (error) return <p>Error: {error.message}</p>;
 
   if (!data) return null;

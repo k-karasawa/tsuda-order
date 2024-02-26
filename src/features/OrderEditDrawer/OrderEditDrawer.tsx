@@ -10,7 +10,6 @@
   import dayjs from 'dayjs';
   import { useRecoilValue } from 'recoil';
   import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
-  import { CustomInputNumber } from '@/components/CustomeInputNumber/CustomeInputNumber';
   import { InputNumber } from '@/components/InputNumber';
 
   dayjs.extend(customParseFormat);
