@@ -16,7 +16,6 @@ export const ReceiptsForecast: React.FC = () => {
   const [selectedDateRange, setSelectedDateRange] = useState<[dayjs.Dayjs, dayjs.Dayjs]>(
     getStartEndOfMonth(dayjs())
   );
-  // graphXAxisDataの状態を追加
   const [graphXAxisData, setGraphXAxisData] = useState<string[]>([]);
 
   return (

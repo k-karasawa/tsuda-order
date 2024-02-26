@@ -4,7 +4,7 @@ import { ExistingDataListProps, ExistingData } from './types/types';
 import { PlusOutlined, EditOutlined, CheckOutlined, CloseOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useUpdateExistingData } from './hooks/useExistingDataUpdate';
 import { useDeleteReturn } from './hooks/useDeleteReturn';
-import useSWR, { mutate } from 'swr';
+import { mutate } from 'swr';
 import dayjs from 'dayjs';
 
 export const ExistingDataList: React.FC<ExistingDataListProps> = ({ data, onAddNew, onClose }) => {
@@ -46,10 +46,6 @@ export const ExistingDataList: React.FC<ExistingDataListProps> = ({ data, onAddN
   const cancelEditing = () => {
     setEditingIndex(null);
     setTempData({});
-  };
-
-  const confirmDelete = async (returnId: string, index: number) => {
-    handleDelete(returnId, index);
   };
 
   const handleDelete = async (returnId: string, index: number) => {
