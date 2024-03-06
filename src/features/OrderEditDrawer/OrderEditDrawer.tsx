@@ -1,9 +1,7 @@
   import React, { useState, useEffect } from 'react';
-  import { Drawer, Form, Input, Row, Col, Divider, FloatButton, Switch } from 'antd';
+  import { Drawer, Form, Input, Row, Col, Divider, FloatButton, Switch, DatePicker } from 'antd';
   import { CheckOutlined, RollbackOutlined } from '@ant-design/icons';
   import { useOrderUpdater } from './hooks/useOrderUpdater';
-  import { CustomDatePicker } from './CustomDatePicker';
-  import { useOrderEffect } from './hooks/useOrderEffect';
   import { SelectDataCreate } from '../../components/SelectDataCreate/SelectDataCreate';
   import { SecondaryDrawer } from './SecondaryDrawer';
   import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -11,6 +9,7 @@
   import { useRecoilValue } from 'recoil';
   import { selectedOrderAtom } from '@/recoil/selectedOrderAtom';
   import { InputNumber } from '@/components/InputNumber';
+  import { formatOrderDates } from './utils/DayjsUtils';
 
   dayjs.extend(customParseFormat);
   const { TextArea } = Input;
@@ -48,19 +47,21 @@
       setVisible(false);
     };
 
-    const { form, dates, setDates, handleUpdate, isAttention, setIsAttention } = useOrderUpdater(onClose, onUpdated, selectedOrder);
+    const { form, handleUpdate, isAttention, setIsAttention } = useOrderUpdater(onClose, onUpdated, selectedOrder);
 
     const handleAttention = () => {
       setIsAttention((prevState: boolean) => !prevState);
     };
 
-    useOrderEffect(selectedOrder, setIsAttention, setDates);
-
+    //dayjsフォーマット
     useEffect(() => {
       if (selectedOrder) {
-        form.setFieldsValue(selectedOrder);
+        const initialvalues = formatOrderDates(selectedOrder);
+        form.setFieldsValue(initialvalues);
       }
     }, [form, selectedOrder]);
+    //dayjsフォーマット
+    const initialvalues = formatOrderDates(selectedOrder);
 
     const handleInvalidNumber = (value: string) => {
     };
@@ -103,7 +104,7 @@
           <Form
             layout="vertical"
             form={form}
-            initialValues={selectedOrder}
+            initialValues={initialvalues}
             onValuesChange={form.getFieldValue('onValuesChange')}
           >
             <Row gutter={16}>
@@ -216,63 +217,48 @@
 
             <Row gutter={16}>
               <Col span={6}>
-                <CustomDatePicker
-                  label="見積日"
-                  value={dates.estimate_date}
-                  onChange={(value) => setDates(prev => ({ ...prev, estimate_date: value }))}
-                />
+                <Form.Item label="見積日" name="estimate_date">
+                  <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
+              </Col>
+
+              <Col span={6}>
+                <Form.Item label="受注日" name="order_date">
+                  <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
               </Col>
               <Col span={6}>
-                <CustomDatePicker
-                  label="受注日"
-                  value={dates.order_date}
-                  onChange={(value) => setDates(prev => ({ ...prev, order_date: value }))}
-                />
+                <Form.Item label="希望納期" name="desired_delivery_date">
+                  <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
               </Col>
               <Col span={6}>
-                <CustomDatePicker
-                  label="希望納期"
-                  value={dates.desired_delivery_date}
-                  onChange={(value) => setDates(prev => ({ ...prev, desired_delivery_date: value }))}
-                />
-              </Col>
-              <Col span={6}>
-                <CustomDatePicker
-                  label="出荷日"
-                  value={dates.shipment_date}
-                  onChange={(value) => setDates(prev => ({ ...prev, shipment_date: value }))}
-                />
+                <Form.Item label="出荷日" name="shipment_date">
+                  <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
               </Col>
             </Row>
 
             <Row gutter={16}>
               <Col span={6}>
-                <CustomDatePicker
-                  label="現品受領日"
-                  value={dates.item_receive_date}
-                  onChange={(value) => setDates(prev => ({ ...prev, item_receive_date: value }))}
-                />
+                <Form.Item label="現品受領日" name="item_receive_date">
+                  <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
               </Col>
               <Col span={6}>
-                <CustomDatePicker
-                  label="現品返却日"
-                  value={dates.item_return_date}
-                  onChange={(value) => setDates(prev => ({ ...prev, item_return_date: value }))}
-                />
+                <Form.Item label="現品返却日" name="item_return_date">
+                  <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
               </Col>
               <Col span={6}>
-                <CustomDatePicker
-                  label="資料送付日"
-                  value={dates.send_document_date}
-                  onChange={(value) => setDates(prev => ({ ...prev, send_document_date: value }))}
-                />
+                <Form.Item label="資料送付日" name="send_document_date">
+                  <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
               </Col>
               <Col span={6}>
-                <CustomDatePicker
-                  label="資料受領日"
-                  value={dates.receive_document_date}
-                  onChange={(value) => setDates(prev => ({ ...prev, receive_document_date: value }))}
-                />
+                <Form.Item label="資料受領日" name="receive_document_date">
+                  <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
               </Col>
             </Row>
             <Divider />
@@ -297,11 +283,9 @@
 
             <Row gutter={16}>
               <Col span={12}>
-                <CustomDatePicker
-                  label="検収日"
-                  value={dates.accept_date}
-                  onChange={(value) => setDates(prev => ({ ...prev, accept_date: value }))}
-                />
+                <Form.Item label="検収日" name="accept_date">
+                  <DatePicker style={{ width: '100%' }} />
+                </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item
