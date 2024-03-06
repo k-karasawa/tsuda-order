@@ -24,5 +24,9 @@ export const selectedColumns = [
   'item_return_date', // 現品返却日
   'comment', // 備考
   'customer_management_code', // 注文番号
-  'accept_date' // 検収日
+  'accept_date', // 検収日
+  'estimate_code', //見積No
+  'order_form_code', //受注書No
+  'amount', //金額
+  'remark', //営業用備考
 ];
