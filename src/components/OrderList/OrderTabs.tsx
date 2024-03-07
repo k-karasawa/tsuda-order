@@ -34,6 +34,8 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
     }
 
     switch (activeTab) {
+      case 'all':
+        return data;
       case 'inProgress':
         return data.filter(order => order.progress !== PROGRESS_LOST_ID && order.progress !== PROGRESS_COMPLETED_ID);
       case 'inReceived':
@@ -50,6 +52,7 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
   if (progressLoading || !data) {
     return <Spin size="large" />;
   }
+
   const tabItems = [
     {
       label: '進行中',
@@ -70,7 +73,12 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
       label: '失注',
       key: 'lost',
       children: <Table size="small" columns={columns} dataSource={filteredData.filter(order => order.progress === PROGRESS_LOST_ID)} rowKey="id" pagination={{ position: ['bottomLeft'], pageSize: 50, total: filteredData.length, showSizeChanger: false, }} scroll={{ x: scrollX, y: 520 }} sticky={{ offsetScroll: 0, offsetHeader: 0 }} onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })} />,
-    }
+    },
+    {
+      label: '全体',
+      key: 'all',
+      children: <Table size="small" columns={columns} dataSource={data} rowKey="id" pagination={{ position: ['bottomLeft'], pageSize: 50, total: data.length, showSizeChanger: false, }} scroll={{ x: scrollX, y: 520 }} sticky={{ offsetScroll: 0, offsetHeader: 0 }} onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })} />,
+    },
   ];
 
   return (

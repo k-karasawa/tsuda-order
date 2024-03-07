@@ -26,7 +26,9 @@ export const generateColumns = (
         ...baseCol,
         render: (text: string, record: OrderListDataType, index: number) => renderTooltip(record.fullOrderCode, record, index, col),
         onFilter: (value: string | number | boolean, record: OrderListDataType) => {
-          return record.fullOrderCode.includes(value.toString());
+          const itemValue = record[col.dataIndex as keyof OrderListDataType];
+          const valueString = value ? value.toString() : '';
+          return (itemValue ? itemValue.toString() : '').includes(valueString);
         },
       };
     }
@@ -37,7 +39,8 @@ export const generateColumns = (
         filters: dynamicFilters[col.dataIndex as keyof OrderListDataType],
         onFilter: (value: string | number | boolean, record: OrderListDataType) => {
           const itemValue = record[col.dataIndex as keyof OrderListDataType];
-          return (itemValue ? itemValue.toString() : '').includes(value.toString());
+          const valueString = value ? value.toString() : '';
+          return (itemValue ? itemValue.toString() : '').includes(valueString);
         },
       };
     }

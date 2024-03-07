@@ -62,7 +62,7 @@ export const columns: ColumnsType<OrderListDataType> = [
   {
     title: '拠点',
     dataIndex: 'customer_location',
-    width: 100
+    width: 100,
   },
   {
     title: '部署',

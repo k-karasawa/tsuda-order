@@ -1,3 +1,4 @@
+//このコードでフィルタリング機能をつけるカラムを指定する
 export const filterableColumns = [
   'order_code',
   'priority_level',
@@ -12,5 +13,6 @@ export const filterableColumns = [
   'estimate_code',
   'order_form_code',
   'comment',
-  'farm_name'
+  'farm_name',
+  'customer_location'
 ];

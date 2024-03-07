@@ -4,7 +4,12 @@ import { updateOrder } from '../orderService';
 import { OrderListDataType } from '@/types/types';
 import { DatesType } from '../types/types';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { useSupabaseClient } from "@/hooks";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const PROGRESS_DESIRED_DELIVERY = 3;
 const PROGRESS_ESTIMATE = 4;
@@ -88,17 +93,20 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
       return;
     }
 
-    const statusUpdatedDate = values.progress !== initialProgress ? dayjs().format('YYYY-MM-DD') : selectedOrder?.status_updated_at;
-
-    const mergedData = {
-      ...values,
-      ...dates,
-      attention: isAttention,
-      status_updated_at: statusUpdatedDate,
-    };
+    // 日付データをJSTに変換し、フォーマットする
+    const formatDate = (date: string | null) => date ? dayjs.utc(date).tz('Asia/Tokyo').format('YYYY-MM-DD') : null;
+    values.estimate_date = formatDate(values.estimate_date);
+    values.order_date = formatDate(values.order_date);
+    values.desired_delivery_date = formatDate(values.desired_delivery_date);
+    values.shipment_date = formatDate(values.shipment_date);
+    values.item_receive_date = formatDate(values.item_receive_date);
+    values.item_return_date = formatDate(values.item_return_date);
+    values.send_document_date = formatDate(values.send_document_date);
+    values.receive_document_date = formatDate(values.receive_document_date);
+    values.accept_date = formatDate(values.accept_date);
 
     if (selectedOrder && selectedOrder.id) {
-      const { data, error } = await updateOrder(supabaseClient, mergedData, selectedOrder.id);
+      const { data, error } = await updateOrder(supabaseClient, values, selectedOrder.id);
       if (error) {
         message.error('注文の更新に失敗しました。');
       } else {
