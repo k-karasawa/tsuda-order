@@ -73,6 +73,7 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
   const [initialProgress, setInitialProgress] = useState<number | null>(null);
   const supabaseClient = useSupabaseClient();
 
+
   useEffect(() => {
     if (selectedOrder) {
       setInitialProgress(selectedOrder.progress);
@@ -104,6 +105,10 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
     values.send_document_date = formatDate(values.send_document_date);
     values.receive_document_date = formatDate(values.receive_document_date);
     values.accept_date = formatDate(values.accept_date);
+
+    if (initialProgress !== values.progress) {
+      values.status_updated_at = dayjs().tz('Asia/Tokyo').format('YYYY-MM-DD');
+    }
 
     if (selectedOrder && selectedOrder.id) {
       const { data, error } = await updateOrder(supabaseClient, values, selectedOrder.id);

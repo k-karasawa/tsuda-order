@@ -79,6 +79,7 @@ export const AddOrderForm: React.FC = () => {
       prefix: orderPrefix,
       progress: parseInt(formData.progress as string),
       request: parseInt(formData.request as string),
+      status_updated_at: dayjs().format('YYYY-MM-DD'),
     };
 
     const { data, error } = await supabase

@@ -23,12 +23,22 @@
     const [visible, setVisible] = useState(false);
     const [secondaryDrawerVisible, setSecondaryDrawerVisible] = useState(false);
     const selectedOrder = useRecoilValue(selectedOrderAtom);
+    const [initialProgress, setInitialProgress] = useState<number | null>(null);
 
     const validateNumberInput = (value: string) => {
       const numberPattern = /^[0-9]+$/;
       return numberPattern.test(value) ?
              { validateStatus: 'success', errorMsg: null } :
              { validateStatus: 'error', errorMsg: '半角数値のみを入力してください' };
+    };
+
+    const onFormValuesChange = (changedValues: any, allValues: any) => {
+      if ('progress' in changedValues) {
+        // progress が変更された場合、かつ初期値と異なる場合にのみ status_updated_at を更新
+        if (initialProgress !== allValues.progress) {
+          form.setFieldsValue({ status_updated_at: dayjs().format('YYYY-MM-DD') });
+        }
+      }
     };
 
     const openSecondaryDrawer = () => {
@@ -65,6 +75,12 @@
 
     const handleInvalidNumber = (value: string) => {
     };
+
+    useEffect(() => {
+      if (selectedOrder) {
+        setInitialProgress(selectedOrder.progress);
+      }
+    }, [selectedOrder]);
 
     return (
       <>
@@ -105,7 +121,7 @@
             layout="vertical"
             form={form}
             initialValues={initialvalues}
-            onValuesChange={form.getFieldValue('onValuesChange')}
+            onValuesChange={onFormValuesChange}
           >
             <Row gutter={16}>
               <Col span={8}>
