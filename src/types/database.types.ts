@@ -351,6 +351,27 @@ export type Database = {
         }
         Relationships: []
       }
+      rls_test: {
+        Row: {
+          created_at: string
+          farm: number | null
+          id: number
+          name: string | null
+        }
+        Insert: {
+          created_at?: string
+          farm?: number | null
+          id?: number
+          name?: string | null
+        }
+        Update: {
+          created_at?: string
+          farm?: number | null
+          id?: number
+          name?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       order_list_extended: {
