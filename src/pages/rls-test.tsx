@@ -2,13 +2,38 @@ import React, { useEffect, useState } from "react";
 import { useSupabaseClient } from "@/hooks";
 import { Table, Button, Input } from "antd";
 
+type DataType = {
+  created_at: string;
+  farm: number | null;
+  id: number;
+  name: string | null;
+  user_id: string | null;
+};
+
 const RlsTest = () => {
   const supabase = useSupabaseClient();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<DataType[]>([]); // ここで型を指定
   const [loading, setLoading] = useState(true);
   const [newItem, setNewItem] = useState("");
   const [editItem, setEditItem] = useState({ id: null, name: "" }); // 編集用の状態
   const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error('Error fetching user:', error);
+        return;
+      }
+      if (user && user.email) {
+        setUserEmail(user.email);
+      } else {
+        setUserEmail("");
+      }
+    };
+
+    fetchUser();
+  }, [supabase]);
 
   // データの読み込み
   const fetchData = async () => {
@@ -23,19 +48,32 @@ const RlsTest = () => {
 
   useEffect(() => {
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // データの追加
-  const addItem = async () => {
+// データの追加
+const addItem = async () => {
+  const { data: { user }, error } = await supabase.auth.getUser(); // 現在のユーザー情報を取得
+
+  if (error) {
+    console.error('Error fetching user:', error);
+    return;
+  }
+
+  if (user) {
     const { data, error } = await supabase
       .from('rls_test')
-      .insert([{ name: newItem }]);
+      .insert([{ name: newItem, user_id: user.id }]); // user_id を指定してデータを挿入
+
     if (error) console.error(error);
     else {
       fetchData(); // データを再読み込み
       setNewItem(""); // 入力フィールドをクリア
     }
-  };
+  } else {
+    console.error('User not logged in');
+  }
+};
 
   // データの更新
   const updateItem = async () => {
@@ -109,7 +147,7 @@ const RlsTest = () => {
           <Table dataSource={data} columns={columns} rowKey="id" />
         </div>
       )}
-      <p>ログインユーザーのメールアドレス: {userEmail}</p>
+      <p>取得email: {userEmail}</p>
     </div>
   );
 };
