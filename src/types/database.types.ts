@@ -351,6 +351,38 @@ export type Database = {
         }
         Relationships: []
       }
+      rls_test: {
+        Row: {
+          created_at: string
+          farm: number | null
+          id: number
+          name: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          farm?: number | null
+          id?: number
+          name?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          farm?: number | null
+          id?: number
+          name?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rls_test_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       order_list_extended: {
