@@ -128,6 +128,41 @@ export type Database = {
           }
         ]
       }
+      notice: {
+        Row: {
+          created_at: string
+          function: boolean
+          id: number
+          message: string | null
+          type: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          function?: boolean
+          id?: number
+          message?: string | null
+          type: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          function?: boolean
+          id?: number
+          message?: string | null
+          type?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_notice_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       order_list: {
         Row: {
           accept_date: string | null
@@ -357,31 +392,20 @@ export type Database = {
           farm: number | null
           id: number
           name: string | null
-          user_id: string | null
         }
         Insert: {
           created_at?: string
           farm?: number | null
           id?: number
           name?: string | null
-          user_id?: string | null
         }
         Update: {
           created_at?: string
           farm?: number | null
           id?: number
           name?: string | null
-          user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "rls_test_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+        Relationships: []
       }
     }
     Views: {

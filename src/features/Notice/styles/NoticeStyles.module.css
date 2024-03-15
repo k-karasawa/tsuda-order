@@ -1,0 +1,29 @@
+.noticeContainer {
+  padding: 40px;
+}
+
+.noticeTitle {
+  margin-left: 40px;
+}
+
+.formItemHorizontal {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+
+.formItemHorizontal .ant-form-item {
+  margin-right: 24px;
+}
+
+.formItemHorizontal .ant-form-item:last-child {
+  margin-right: 0;
+}
+
+.typeSelectMargin {
+  margin-right: 120px;
+}
+
+.updateButton {
+  margin-top: 24px;
+}
