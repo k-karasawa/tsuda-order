@@ -42,22 +42,20 @@ export const Notification = () => {
     fetchNotices();
   }, [supabase]);
 
+  //更新処理のレスポンスが正しく評価できない
   const handleSubmit = async (values: any) => {
     const { id, message: noticeMessage, type, function: functionValue } = values;
-    const { error } = await supabase
+    const { error, count } = await supabase
       .from('notice')
       .update({ message: noticeMessage, type, function: functionValue })
       .match({ id });
 
     if (error) {
-      message.error('通知の更新に失敗しました。');
+      message.error('更新に失敗しました。');
+    } else if (count === 0) {
+      message.error('更新対象が見つからないか、更新権限がありません。');
     } else {
       message.success('通知設定が更新されました。');
-      // 更新後の通知リストを再取得
-      const { data, error } = await supabase.from('notice').select('*');
-      if (!error) {
-        setNotices(data);
-      }
     }
   };
 
