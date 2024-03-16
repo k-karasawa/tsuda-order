@@ -41,6 +41,14 @@ export const GlobalAlert: React.FC = () => {
     };
 
     fetchNotices();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, _session) => {
+      fetchNotices();
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, [supabase]);
 
   return (
