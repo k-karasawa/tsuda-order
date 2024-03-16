@@ -49,14 +49,6 @@ export const Notification = () => {
       .from('notice')
       .update({ message: noticeMessage, type, function: functionValue })
       .match({ id });
-
-    if (error) {
-      message.error('更新に失敗しました。');
-    } else if (count === 0) {
-      message.error('更新対象が見つからないか、更新権限がありません。');
-    } else {
-      message.success('通知設定が更新されました。');
-    }
   };
 
   return (

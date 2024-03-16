@@ -1,19 +1,11 @@
-import React, { useEffect, useState } from "react";
 import { ReactNode } from "react";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { useFilteredItems } from "./MenuItems";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@/hooks";
 import { GlobalAlert } from "@/features/Notice/GlobalAlert";
-
-type Notice = {
-  created_at: string;
-  function: boolean;
-  id: number;
-  message: string | null;
-  type: number;
-  user_id: string | null;
-};
+import { useSessionInfo } from "@/hooks/useSessionInfo";
+import { UserOutlined } from '@ant-design/icons';
 
 const { Header, Content, Sider } = Layout;
 
@@ -21,7 +13,8 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
   const router = useRouter();
   const supabase = useSupabaseClient();
   const filteredItems = useFilteredItems();
-  const [notices, setNotices] = useState<Notice[]>([]);
+  const session = useSessionInfo();
+  const userEmail = session?.user?.email;
 
   const {
     token: { colorBgContainer },
@@ -65,21 +58,27 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
-
-        <Sider collapsible>
-          <div className="app-title" style={{ marginBottom: 20, padding: '10px', textAlign: 'center', color: '#cccccc' }}>
-            <p>津田製作所</p>案件管理アプリ
+        <Sider collapsible style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div>
+            <div className="app-title" style={{ marginBottom: 20, padding: '10px', textAlign: 'center', color: '#cccccc' }}>
+              <p>津田製作所</p>案件管理アプリ
+            </div>
+            <Menu
+              theme="dark"
+              defaultSelectedKeys={['/']}
+              selectedKeys={[router.pathname]}
+              mode="inline"
+              items={filteredItems}
+              onClick={handleMenuClick}
+            />
           </div>
-          <Menu
-            theme="dark"
-            defaultSelectedKeys={['/']}
-            selectedKeys={[router.pathname]}
-            mode="inline"
-            items={filteredItems}
-            onClick={handleMenuClick}
-          />
+          <div style={{ marginTop: '160px', padding: '20px', textAlign: 'left', color: '#a9a9a9', borderTop: '1px solid #ffffff20' }}>
+            <div style={{ marginBottom: '5px', display: 'flex', alignItems: 'center' }}>
+              <UserOutlined style={{ marginRight: 8 }} />ログインID
+            </div>
+            {userEmail}
+          </div>
         </Sider>
-
         <Layout>
           <GlobalAlert />
           <Header style={{ background: colorBgContainer, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
