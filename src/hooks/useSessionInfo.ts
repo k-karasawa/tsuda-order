@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSupabaseClient } from "@/hooks/useSupabaseClient/useSupabaseClient";
+import { useSupabaseClient } from "@/hooks";
 import { Session } from '@supabase/supabase-js';
 
 export const useSessionInfo = () => {

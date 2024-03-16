@@ -63,6 +63,7 @@ export const items: MenuItem[] = [
   ]),
   getItem('設定管理', '3', <SettingOutlined />, [
     getItem('マスター管理', '/master'),
+    getItem('アナウンス設定', '/notice'),
   ]),
   getItem('検収予測', '/forecast', <FileTextOutlined />),
   getItem('サインアウト', 'SIGN_OUT', <LogoutOutlined />),
