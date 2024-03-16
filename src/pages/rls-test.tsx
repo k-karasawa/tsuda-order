@@ -7,15 +7,15 @@ type DataType = {
   farm: number | null;
   id: number;
   name: string | null;
-  user_id: string | null;
+  user_id?: string;
 };
 
 const RlsTest = () => {
   const supabase = useSupabaseClient();
-  const [data, setData] = useState<DataType[]>([]); // ここで型を指定
+  const [data, setData] = useState<DataType[]>([]);
   const [loading, setLoading] = useState(true);
   const [newItem, setNewItem] = useState("");
-  const [editItem, setEditItem] = useState({ id: null, name: "" }); // 編集用の状態
+  const [editItem, setEditItem] = useState({ id: null, name: "" });
   const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
@@ -51,9 +51,8 @@ const RlsTest = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-// データの追加
 const addItem = async () => {
-  const { data: { user }, error } = await supabase.auth.getUser(); // 現在のユーザー情報を取得
+  const { data: { user }, error } = await supabase.auth.getUser();
 
   if (error) {
     console.error('Error fetching user:', error);
@@ -63,12 +62,12 @@ const addItem = async () => {
   if (user) {
     const { data, error } = await supabase
       .from('rls_test')
-      .insert([{ name: newItem, user_id: user.id }]); // user_id を指定してデータを挿入
+      .insert([{ name: newItem, user_id: user.id }]);
 
     if (error) console.error(error);
     else {
-      fetchData(); // データを再読み込み
-      setNewItem(""); // 入力フィールドをクリア
+      fetchData();
+      setNewItem("");
     }
   } else {
     console.error('User not logged in');
@@ -83,22 +82,20 @@ const addItem = async () => {
       .match({ id: editItem.id });
     if (error) console.error(error);
     else {
-      fetchData(); // データを再読み込み
-      setEditItem({ id: null, name: "" }); // 編集状態をクリア
+      fetchData();
+      setEditItem({ id: null, name: "" });
     }
   };
 
-  // データの削除
   const deleteItem = async (id: any) => {
     const { data, error } = await supabase
       .from('rls_test')
       .delete()
       .match({ id });
     if (error) console.error(error);
-    else fetchData(); // データを再読み込み
+    else fetchData();
   };
 
-  // Tableの列定義（更新と削除の操作を含む）
   const columns = [
     {
       title: 'ID',
