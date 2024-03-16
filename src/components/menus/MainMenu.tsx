@@ -1,8 +1,19 @@
+import React, { useEffect, useState } from "react";
 import { ReactNode } from "react";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { useFilteredItems } from "./MenuItems";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@/hooks";
+import { GlobalAlert } from "@/features/Notice/GlobalAlert";
+
+type Notice = {
+  created_at: string;
+  function: boolean;
+  id: number;
+  message: string | null;
+  type: number;
+  user_id: string | null;
+};
 
 const { Header, Content, Sider } = Layout;
 
@@ -10,6 +21,7 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
   const router = useRouter();
   const supabase = useSupabaseClient();
   const filteredItems = useFilteredItems();
+  const [notices, setNotices] = useState<Notice[]>([]);
 
   const {
     token: { colorBgContainer },
@@ -53,6 +65,7 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
   return (
     <>
       <Layout style={{ minHeight: '100vh' }}>
+
         <Sider collapsible>
           <div className="app-title" style={{ marginBottom: 20, padding: '10px', textAlign: 'center', color: '#cccccc' }}>
             <p>津田製作所</p>案件管理アプリ
@@ -68,6 +81,7 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
         </Sider>
 
         <Layout>
+          <GlobalAlert />
           <Header style={{ background: colorBgContainer, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {pagetitle ? pagetitle : pageTitle}
           </Header>
