@@ -29,56 +29,76 @@ export const RepairAchievements = () => {
   const [data, setData] = useState<Array<{ key: string; item_code: string; total_count: number; children: Array<{ key: string; item_code: string; count: number }> }>>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      let { data: orderList, error } = await supabase
+    const fetchAllOrders = async (from = 0, allData: OrderListData[] = []): Promise<OrderListData[]> => {
+      const response = await supabase
         .from('order_list')
         .select('item_code, request')
-        .order('item_code', { ascending: true }) as { data: OrderListData[] | null, error: any };
+        .range(from, from + 999);
 
-      if (error || !orderList) {
+      if (response.error) {
+        console.error('Error fetching orders:', response.error);
+        throw response.error;
+      }
+
+      // item_codeがnullでないデータのみをフィルタリング
+      const filteredData = response.data.filter(d => d.item_code !== null);
+
+      // TypeScriptにfilteredDataがOrderListData[]型であることを明示
+      const newData: OrderListData[] = allData.concat(filteredData as OrderListData[]);
+
+      if (response.data.length === 1000) {
+        return fetchAllOrders(from + 1000, newData);
+      } else {
+        return newData;
+      }
+    };
+
+    const fetchData = async () => {
+      try {
+        let orderList = await fetchAllOrders();
+
+        if (!requestData) {
+          console.error('requestデータの取得に失敗しました');
+          return;
+        }
+
+        const requestIdToNameMap = requestData.reduce((acc: { [key: number]: string }, { id, name }: RequestData) => {
+          acc[id] = name;
+          return acc;
+        }, {});
+
+        const groupedData: GroupedData = orderList.reduce((acc: GroupedData, { item_code, request }: OrderListData) => {
+          const requestName = request ? requestIdToNameMap[request] : '未指定';
+          if (!acc[item_code]) {
+            acc[item_code] = { item_code, total_count: 0, children: [] };
+          }
+          acc[item_code].total_count += 1;
+          const existingRequest = acc[item_code].children.find(r => r.name === requestName);
+          if (existingRequest) {
+            existingRequest.count += 1;
+          } else {
+            acc[item_code].children.push({ name: requestName, count: 1, key: `${item_code}-${requestName}` });
+          }
+          return acc;
+        }, {});
+
+        const sortedGroupedData = Object.values(groupedData).sort((a, b) => b.total_count - a.total_count);
+
+        const tableData = sortedGroupedData.map(item => ({
+          key: item.item_code,
+          item_code: item.item_code,
+          total_count: item.total_count,
+          children: item.children.map(child => ({
+            key: child.key,
+            item_code: child.name,
+            count: child.count,
+          })),
+        }));
+
+        setData(tableData);
+      } catch (error) {
         console.error('データの取得に失敗しました', error);
-        return;
       }
-
-      if (!requestData) {
-        console.error('requestデータの取得に失敗しました');
-        return;
-      }
-
-      const requestIdToNameMap = requestData.reduce((acc: { [key: number]: string }, { id, name }: RequestData) => {
-        acc[id] = name;
-        return acc;
-      }, {});
-
-      const groupedData: GroupedData = orderList.reduce((acc: GroupedData, { item_code, request }: OrderListData) => {
-        const requestName = request ? requestIdToNameMap[request] : '未指定';
-        if (!acc[item_code]) {
-          acc[item_code] = { item_code, total_count: 0, children: [] };
-        }
-        acc[item_code].total_count += 1;
-        const existingRequest = acc[item_code].children.find(r => r.name === requestName);
-        if (existingRequest) {
-          existingRequest.count += 1;
-        } else {
-          acc[item_code].children.push({ name: requestName, count: 1, key: `${item_code}-${requestName}` });
-        }
-        return acc;
-      }, {});
-
-      const sortedGroupedData = Object.values(groupedData).sort((a, b) => b.total_count - a.total_count);
-
-      const tableData = sortedGroupedData.map(item => ({
-        key: item.item_code,
-        item_code: item.item_code,
-        total_count: item.total_count,
-        children: item.children.map(child => ({
-          key: child.key,
-          item_code: child.name,
-          count: child.count,
-        })),
-      }));
-
-      setData(tableData);
     };
 
     if (requestData) {
@@ -92,7 +112,7 @@ export const RepairAchievements = () => {
         style={{ width: '50%' }}
         dataSource={data}
         columns={columns}
-        defaultExpandAllRows={true}
+        size="middle"
       />
     </div>
   );
