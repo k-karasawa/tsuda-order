@@ -1,3 +1,20 @@
 .repairAchievementsContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
   padding: 40px;
+}
+
+.tableContainer {
+  flex: 1;
+  margin-right: 1.6rem;
+
+}
+
+.chartContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  background-color: #fff;
 }

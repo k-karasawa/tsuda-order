@@ -3,6 +3,7 @@ import { useSupabaseClient } from '@/hooks';
 import { useRequest } from '@/hooks/useRequest';
 import { Table } from 'antd';
 import { columns } from './columns_repairachievements';
+import { RepairAchievementsChart } from './RepairAchievementsChart';
 import styles from './styles/RepairAchievementsStyles.module.css';
 
 interface RequestData {
@@ -26,6 +27,7 @@ interface GroupedData {
 export const RepairAchievements = () => {
   const supabase = useSupabaseClient();
   const { data: requestData } = useRequest();
+  const [selectedRowData, setSelectedRowData] = useState<{ name: string; count: number }[]>([]);
   const [data, setData] = useState<Array<{ key: string; item_code: string; total_count: number; children: Array<{ key: string; item_code: string; count: number }> }>>([]);
 
   useEffect(() => {
@@ -62,12 +64,15 @@ export const RepairAchievements = () => {
           return;
         }
 
+        // requestIdToNameMapの作成
         const requestIdToNameMap = requestData.reduce((acc: { [key: number]: string }, { id, name }: RequestData) => {
           acc[id] = name;
           return acc;
         }, {});
 
+        // orderListを処理してgroupedDataを作成
         const groupedData: GroupedData = orderList.reduce((acc: GroupedData, { item_code, request }: OrderListData) => {
+          // ここでrequestIdToNameMapからrequest名を取得
           const requestName = request ? requestIdToNameMap[request] : '未指定';
           if (!acc[item_code]) {
             acc[item_code] = { item_code, total_count: 0, children: [] };
@@ -108,12 +113,24 @@ export const RepairAchievements = () => {
 
   return (
     <div className={styles.repairAchievementsContainer}>
-      <Table
-        style={{ width: '50%' }}
-        dataSource={data}
-        columns={columns}
-        size="middle"
-      />
+      <div className={styles.tableContainer}>
+        <Table
+          dataSource={data}
+          columns={columns}
+          size="middle"
+          onRow={(record) => ({
+            onClick: () => {
+              // record.children が { key: string; item_code: string; count: number; }[] 型であることを確認
+              // name の代わりに item_code を使用
+              const selectedData = record.children.map(({ item_code, count }) => ({ name: item_code, count }));
+              setSelectedRowData(selectedData);
+            },
+          })}
+        />
+      </div>
+      <div className={styles.chartContainer}>
+        <RepairAchievementsChart data={selectedRowData} />
+      </div>
     </div>
   );
 };
