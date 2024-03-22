@@ -13,9 +13,11 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
   const router = useRouter();
   const supabase = useSupabaseClient();
   const allItems = useFilteredItems();
-  const userName = useLoginUser();
+  const userInfo = useLoginUser();
 
-  const filteredItems = userName ? allItems : [];
+  const isLoggedIn = userInfo.name !== '';
+
+  const filteredItems = isLoggedIn ? allItems : [];
 
   const {
     token: { colorBgContainer },
@@ -77,7 +79,7 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
             <div style={{ marginBottom: '5px', display: 'flex', alignItems: 'center' }}>
               <UserOutlined style={{ marginRight: 8 }} />ログインユーザー
             </div>
-            {userName}
+            {userInfo.name}
           </div>
         </Sider>
         <Layout>
