@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSupabaseClient } from '@/hooks';
 import { useRequest } from '@/hooks/useRequest';
-import { Table } from 'antd';
+import { Table, Select } from 'antd';
 import { columns } from './columns_repairachievements';
 import { RepairAchievementsChart } from './RepairAchievementsChart';
 import styles from './styles/RepairAchievementsStyles.module.css';
@@ -24,11 +24,14 @@ interface GroupedData {
   };
 }
 
+const { Option } = Select;
+
 export const RepairAchievements = () => {
   const supabase = useSupabaseClient();
   const { data: requestData } = useRequest();
   const [selectedRowData, setSelectedRowData] = useState<{ name: string; count: number }[]>([]);
   const [data, setData] = useState<Array<{ key: string; item_code: string; total_count: number; children: Array<{ key: string; item_code: string; count: number }> }>>([]);
+  const [filter, setFilter] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const fetchAllOrders = async (from = 0, allData: OrderListData[] = []): Promise<OrderListData[]> => {
@@ -42,10 +45,8 @@ export const RepairAchievements = () => {
         throw response.error;
       }
 
-      // item_codeがnullでないデータのみをフィルタリング
       const filteredData = response.data.filter(d => d.item_code !== null);
 
-      // TypeScriptにfilteredDataがOrderListData[]型であることを明示
       const newData: OrderListData[] = allData.concat(filteredData as OrderListData[]);
 
       if (response.data.length === 1000) {
@@ -111,17 +112,37 @@ export const RepairAchievements = () => {
     }
   }, [requestData, supabase]);
 
+  const getFilteredData = () => {
+    if (!filter) {
+      return data;
+    }
+    return data.filter(item => item.item_code.includes(filter));
+  };
+
   return (
     <div className={styles.repairAchievementsContainer}>
       <div className={styles.tableContainer}>
+        <Select
+          showSearch
+          style={{ width: 200, marginBottom: 16 }}
+          placeholder="アイテムコードで検索"
+          optionFilterProp="children"
+          onChange={value => setFilter(value)}
+          filterOption={(input, option) =>
+            option?.children ? option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0 : false
+          }
+          allowClear
+        >
+          {data.map(item => (
+            <Option key={item.key} value={item.item_code}>{item.item_code}</Option>
+          ))}
+        </Select>
         <Table
-          dataSource={data}
+          dataSource={getFilteredData()}
           columns={columns}
           size="middle"
           onRow={(record) => ({
             onClick: () => {
-              // record.children が { key: string; item_code: string; count: number; }[] 型であることを確認
-              // name の代わりに item_code を使用
               const selectedData = record.children.map(({ item_code, count }) => ({ name: item_code, count }));
               setSelectedRowData(selectedData);
             },

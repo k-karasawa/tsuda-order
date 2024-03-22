@@ -1,6 +1,6 @@
 export const columns = [
   {
-    title: '品番 - リクエスト',
+    title: '品番 - 対応内容',
     dataIndex: 'item_code',
     key: 'item_code',
   },
