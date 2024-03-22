@@ -128,6 +128,44 @@ export type Database = {
           },
         ]
       }
+      login_users: {
+        Row: {
+          created_at: string
+          email: string
+          id: number
+          name: string | null
+          organization: string | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: number
+          name?: string | null
+          organization?: string | null
+          role: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: number
+          name?: string | null
+          organization?: string | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_users_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notice: {
         Row: {
           created_at: string
@@ -406,44 +444,6 @@ export type Database = {
           name?: string | null
         }
         Relationships: []
-      }
-      users: {
-        Row: {
-          created_at: string
-          email: string
-          id: number
-          name: string | null
-          organization: string | null
-          role: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: number
-          name?: string | null
-          organization?: string | null
-          role: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: number
-          name?: string | null
-          organization?: string | null
-          role?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "public_users_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
       }
     }
     Views: {
