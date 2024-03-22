@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Input, Row, Col } from 'antd';
+import { Form, Input, Row, Col, DatePicker } from 'antd';
 import { InputNumber } from '@/components/InputNumber';
 
 const { TextArea } = Input;
@@ -44,6 +44,18 @@ export const OrderInput: React.FC<OrderInfoProps> = ({ formRef }) => {
           </Form.Item>
         </Col>
       </Row>
+
+      <Col span={6}>
+          <Form.Item label="検収日" name="accept_date">
+            <DatePicker
+              format={{
+                format: 'YYYY-MM-DD',
+                type: 'mask',
+              }}
+              style={{ width: '100%' }}
+            />
+          </Form.Item>
+        </Col>
 
       <Row gutter={24}>
         <Col span={12}>

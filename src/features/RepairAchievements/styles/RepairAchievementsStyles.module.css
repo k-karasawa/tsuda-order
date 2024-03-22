@@ -1,0 +1,33 @@
+.repairAchievementsContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 0 40px;
+}
+
+.leftContainer, .rightContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.tableContainer {
+  margin-right: 1.6rem;
+}
+
+.chartContainer {
+  flex: 1;
+  background-color: #fff;
+  margin: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 48px;
+}
+
+.similarCaseContainer {
+  flex: 1;
+  margin: 8px;
+  justify-content: center;
+  align-items: center;
+}

@@ -6,6 +6,9 @@ import {
   SettingOutlined,
   BarChartOutlined,
   LogoutOutlined,
+  FileAddOutlined,
+  DashboardOutlined,
+  FileProtectOutlined,
 } from "@ant-design/icons";
 import { useSessionInfo } from "@/hooks/useSessionInfo";
 import { useEffect, useState } from "react";
@@ -41,8 +44,8 @@ export const useFilteredItems = () => {
 };
 
 export const items: MenuItem[] = [
-  getItem('ダッシュボード', '/', <BarChartOutlined />),
-  getItem('案件登録', '/add-order', <FileTextOutlined />),
+  getItem('ダッシュボード', '/', <DashboardOutlined />),
+  getItem('案件登録', '/add-order', <FileAddOutlined />),
   getItem('案件一覧', '/order-list', <FileTextOutlined />),
   getItem('部門別一覧', '1', <FolderOpenOutlined />, [
     getItem('修理', '/order-repair', <SnippetsOutlined />),
@@ -65,6 +68,7 @@ export const items: MenuItem[] = [
     getItem('マスター管理', '/master'),
     getItem('アナウンス設定', '/notice'),
   ]),
-  getItem('検収予測', '/forecast', <FileTextOutlined />),
+  getItem('過去実績', '/repair-achievements', <FileProtectOutlined />),
+  getItem('検収予測', '/forecast', <BarChartOutlined />),
   getItem('サインアウト', 'SIGN_OUT', <LogoutOutlined />),
 ];
