@@ -4,6 +4,7 @@ import { useRequest } from '@/hooks/useRequest';
 import { Table, Select } from 'antd';
 import { columns } from './columns_repairachievements';
 import { RepairAchievementsChart } from './RepairAchievementsChart';
+import { SimilarCase } from './SimilarCase';
 import styles from './styles/RepairAchievementsStyles.module.css';
 
 interface RequestData {
@@ -11,7 +12,7 @@ interface RequestData {
   name: string;
 }
 
-interface OrderListData {
+export interface OrderListData {
   item_code: string;
   request: number | null;
 }
@@ -32,6 +33,7 @@ export const RepairAchievements = () => {
   const [selectedRowData, setSelectedRowData] = useState<{ name: string; count: number }[]>([]);
   const [data, setData] = useState<Array<{ key: string; item_code: string; total_count: number; children: Array<{ key: string; item_code: string; count: number }> }>>([]);
   const [filter, setFilter] = useState<string | undefined>(undefined);
+  const [selectedItemCode, setSelectedItemCode] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const fetchAllOrders = async (from = 0, allData: OrderListData[] = []): Promise<OrderListData[]> => {
@@ -121,36 +123,46 @@ export const RepairAchievements = () => {
 
   return (
     <div className={styles.repairAchievementsContainer}>
-      <div className={styles.tableContainer}>
-        <Select
-          showSearch
-          style={{ width: 200, marginBottom: 16 }}
-          placeholder="アイテムコードで検索"
-          optionFilterProp="children"
-          onChange={value => setFilter(value)}
-          filterOption={(input, option) =>
-            option?.children ? option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0 : false
-          }
-          allowClear
-        >
-          {data.map(item => (
-            <Option key={item.key} value={item.item_code}>{item.item_code}</Option>
-          ))}
-        </Select>
-        <Table
-          dataSource={getFilteredData()}
-          columns={columns}
-          size="middle"
-          onRow={(record) => ({
-            onClick: () => {
-              const selectedData = record.children.map(({ item_code, count }) => ({ name: item_code, count }));
-              setSelectedRowData(selectedData);
-            },
-          })}
-        />
+      <div className={styles.leftContainer}>
+        <div className={styles.tableContainer}>
+          <Select
+            showSearch
+            style={{ width: 200, marginBottom: 16 }}
+            placeholder="アイテムコードで検索"
+            optionFilterProp="children"
+            onChange={value => setFilter(value)}
+            filterOption={(input, option) =>
+              option?.children ? option.children.toString().toLowerCase().indexOf(input.toLowerCase()) >= 0 : false
+            }
+            allowClear
+          >
+            {data.map(item => (
+              <Option key={item.key} value={item.item_code}>{item.item_code}</Option>
+            ))}
+          </Select>
+          <Table
+            dataSource={getFilteredData()}
+            columns={columns}
+            size="middle"
+            onRow={(record) => ({
+              onClick: () => {
+                if (record.children) {
+                  const selectedData = record.children.map(({ item_code, count }) => ({ name: item_code, count }));
+                  setSelectedRowData(selectedData);
+                  setSelectedItemCode(record.item_code);
+                }
+              },
+            })}
+          />
+        </div>
       </div>
-      <div className={styles.chartContainer}>
-        <RepairAchievementsChart data={selectedRowData} />
+      <div className={styles.rightContainer}>
+        <div className={styles.chartContainer}>
+          <RepairAchievementsChart data={selectedRowData} />
+        </div>
+        <div className={styles.similarCaseContainer}>
+          <SimilarCase selectedItemCode={selectedItemCode} allData={data} />
+        </div>
       </div>
     </div>
   );

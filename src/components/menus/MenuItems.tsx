@@ -68,7 +68,7 @@ export const items: MenuItem[] = [
     getItem('マスター管理', '/master'),
     getItem('アナウンス設定', '/notice'),
   ]),
-  getItem('修理実績', '/repair-achievements', <FileProtectOutlined />),
+  getItem('過去実績', '/repair-achievements', <FileProtectOutlined />),
   getItem('検収予測', '/forecast', <BarChartOutlined />),
   getItem('サインアウト', 'SIGN_OUT', <LogoutOutlined />),
 ];
