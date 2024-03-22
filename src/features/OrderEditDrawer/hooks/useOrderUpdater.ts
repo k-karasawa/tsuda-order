@@ -70,7 +70,26 @@ export const useOrderUpdater = (onClose: () => void, refetchOrderList: () => voi
       return;
     }
 
-    // 日付データをJSTに変換し、フォーマットする処理は、必要に応じてここに追加
+    // 日付フィールドのリスト
+    const dateFields = [
+      'estimate_date',
+      'order_date',
+      'desired_delivery_date',
+      'shipment_date',
+      'item_receive_date',
+      'item_return_date',
+      'send_document_date',
+      'receive_document_date',
+      'accept_date',
+    ];
+
+    // 日付データをJSTに変換し、フォーマットする
+    dateFields.forEach(field => {
+      if (values[field]) {
+        values[field] = dayjs(values[field]).tz('Asia/Tokyo').format('YYYY-MM-DD');
+      }
+    });
+
     if (initialProgress !== values.progress) {
       values.status_updated_at = dayjs().tz('Asia/Tokyo').format('YYYY-MM-DD');
     }
