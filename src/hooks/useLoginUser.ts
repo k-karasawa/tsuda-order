@@ -22,10 +22,22 @@ export const useLoginUser = () => {
         } else {
           setUserName(data.name ?? '');
         }
+      } else {
+        setUserName('');
       }
     };
 
     fetchUserName();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        setUserName('');
+      }
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+    };
   }, [userEmail, supabase]);
 
   return userName;
