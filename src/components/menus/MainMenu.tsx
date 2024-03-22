@@ -12,8 +12,10 @@ const { Header, Content, Sider } = Layout;
 export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({children, pagetitle}) => {
   const router = useRouter();
   const supabase = useSupabaseClient();
-  const filteredItems = useFilteredItems();
+  const allItems = useFilteredItems();
   const userName = useLoginUser();
+
+  const filteredItems = userName ? allItems : [];
 
   const {
     token: { colorBgContainer },
