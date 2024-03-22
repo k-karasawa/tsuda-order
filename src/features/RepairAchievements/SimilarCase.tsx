@@ -1,6 +1,5 @@
 import React from 'react';
 import { Table } from 'antd';
-import { OrderListData } from './RepairAchievements';
 
 interface SimilarCaseProps {
   selectedItemCode: string | undefined;
