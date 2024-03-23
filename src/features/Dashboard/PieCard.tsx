@@ -26,7 +26,7 @@ export const PieCard: React.FC<{ orderData: any[] }> = ({ orderData }) => {
             data={SalesData}
             cx="50%"
             cy="50%"
-            outerRadius="90%"
+            outerRadius="70%"
             fill="#8884d8"
             labelLine={false}
             label={renderCustomizedLabel}
