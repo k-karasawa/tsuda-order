@@ -12,8 +12,8 @@ const { Header, Content, Sider } = Layout;
 export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({children, pagetitle}) => {
   const router = useRouter();
   const supabase = useSupabaseClient();
-  const allItems = useFilteredItems();
   const userInfo = useLoginUser();
+  const allItems = useFilteredItems(userInfo.role);
 
   const isLoggedIn = userInfo.name !== '';
 

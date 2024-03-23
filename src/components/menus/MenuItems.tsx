@@ -10,7 +10,6 @@ import {
   DashboardOutlined,
   FileProtectOutlined,
 } from "@ant-design/icons";
-import { useSessionInfo } from "@/hooks/useSessionInfo";
 import { useEffect, useState } from "react";
 
 export function getItem(
@@ -23,25 +22,11 @@ export function getItem(
   return {
     key: key.toString(),
     icon,
-    children,
+    children: children || undefined,
     label,
     action,
   };
 }
-
-export const useFilteredItems = () => {
-  const session = useSessionInfo();
-  const [filteredItems, setFilteredItems] = useState<MenuItem[]>([]);
-
-  useEffect(() => {
-    if (!session) {
-    } else {
-      setFilteredItems(items);
-    }
-  }, [session]);
-
-  return filteredItems;
-};
 
 export const items: MenuItem[] = [
   getItem('ダッシュボード', '/', <DashboardOutlined />),
@@ -72,3 +57,23 @@ export const items: MenuItem[] = [
   getItem('検収予測', '/forecast', <BarChartOutlined />),
   getItem('サインアウト', 'SIGN_OUT', <LogoutOutlined />),
 ];
+
+export const useFilteredItems = (role: string | null) => {
+  const [filteredItems, setFilteredItems] = useState<MenuItem[]>([]);
+
+  useEffect(() => {
+    let itemsToShow: MenuItem[] = [];
+    if (role === 'guest') {
+      itemsToShow = [
+        getItem('ダッシュボード', '/dashboard-guest', <DashboardOutlined />),
+        getItem('案件一覧', '/order-list', <FileTextOutlined />),
+        getItem('サインアウト', 'SIGN_OUT', <LogoutOutlined />),
+      ];
+    } else if (['admin', 'user', 'manager'].includes(role || '')) {
+      itemsToShow = items;
+    }
+    setFilteredItems(itemsToShow);
+  }, [role]);
+
+  return filteredItems;
+};
