@@ -12,11 +12,9 @@ const { Header, Content, Sider } = Layout;
 export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({children, pagetitle}) => {
   const router = useRouter();
   const supabase = useSupabaseClient();
-  const userInfo = useLoginUser();
-  const allItems = useFilteredItems(userInfo.role);
-
-  const isLoggedIn = userInfo.name !== '';
-
+  const { name: userName, role, organization } = useLoginUser();
+  const allItems = useFilteredItems(role);
+  const isLoggedIn = userName !== '';
   const filteredItems = isLoggedIn ? allItems : [];
 
   const {
@@ -77,9 +75,10 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
           </div>
           <div style={{ marginTop: '160px', padding: '20px', textAlign: 'left', color: '#a9a9a9', borderTop: '1px solid #ffffff20' }}>
             <div style={{ marginBottom: '5px', display: 'flex', alignItems: 'center' }}>
-              <UserOutlined style={{ marginRight: 8 }} />ログインユーザー
+              <UserOutlined style={{ marginRight: 8 }} />
+              <span style={{ fontSize: '13px' }}>{isLoggedIn ? organization : "ログインしてください"}</span>
             </div>
-            {userInfo.name}
+            {userName}
           </div>
         </Sider>
         <Layout>

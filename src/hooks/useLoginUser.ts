@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useSupabaseClient } from '@/hooks';
 import { useSessionInfo } from '@/hooks/useSessionInfo';
+import { jwtDecode } from 'jwt-decode';
 
 export const useLoginUser = () => {
-  const [userInfo, setUserInfo] = useState<{ name: string; role: string }>({ name: '', role: '' });
+  const [userInfo, setUserInfo] = useState<{ name: string; role: string | null; organization: string | null }>({ name: '', role: null, organization: null });
   const supabase = useSupabaseClient();
   const session = useSessionInfo();
   const userEmail = session?.user?.email;
@@ -13,32 +14,24 @@ export const useLoginUser = () => {
       if (userEmail) {
         const { data, error } = await supabase
           .from('login_users')
-          .select('name, role')
+          .select('name, organization')
           .eq('email', userEmail)
           .single();
 
         if (error) {
           console.error('ユーザー情報の取得に失敗しました', error);
         } else {
-          setUserInfo({ name: data.name ?? '', role: data.role ?? '' });
+          // JWTからroleを取得し、organizationもセットする
+          const jwt = jwtDecode<{ user_role: string | null }>(session.access_token);
+          setUserInfo({ name: data.name ?? '', role: jwt.user_role, organization: data.organization ?? null });
         }
       } else {
-        setUserInfo({ name: '', role: '' });
+        setUserInfo({ name: '', role: null, organization: null });
       }
     };
 
     fetchUserInfo();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session) {
-        setUserInfo({ name: '', role: '' });
-      }
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, [userEmail, supabase]);
+  }, [userEmail, supabase, session]);
 
   return userInfo;
 };

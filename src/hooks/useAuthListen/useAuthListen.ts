@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/types/database.types";
+import { jwtDecode } from 'jwt-decode'
 
 type UseAuthListen = {
   supabaseClient: SupabaseClient<Database>;
@@ -17,6 +18,15 @@ export const useAuthListen = ({ supabaseClient }: UseAuthListen) => {
       if (event === "INITIAL_SESSION") {
         // 初期セッションの処理
       } else if (event === "SIGNED_IN") {
+        if (session) {
+          const jwt = jwtDecode<{user_role: string | null}>(session.access_token)
+          console.log(jwt)
+          if (jwt.user_role === 'guest') {
+            router.push('/dashboard-guest')
+          } else {
+            router.push('/')
+          }
+        }
         // サインインイベントの処理
         if (router.pathname.includes("/auth")) {
           router.push("/");

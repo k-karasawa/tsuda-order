@@ -100,7 +100,7 @@
           width={800}
           onClose={onClose}
           open={visible}
-          bodyStyle={{ paddingBottom: 40 }}
+          styles={{ body: {paddingBottom: 40} }}
           destroyOnClose
         >
           <FloatButton.Group shape="circle" style={{ right: 24 }}>
