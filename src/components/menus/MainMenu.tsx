@@ -4,17 +4,20 @@ import { useFilteredItems } from "./MenuItems";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@/hooks";
 import { GlobalAlert } from "@/features/Notice/GlobalAlert";
-import { useSessionInfo } from "@/hooks/useSessionInfo";
 import { UserOutlined } from '@ant-design/icons';
+import { useLoginUser } from "@/hooks/useLoginUser";
 
 const { Header, Content, Sider } = Layout;
 
 export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({children, pagetitle}) => {
   const router = useRouter();
   const supabase = useSupabaseClient();
-  const filteredItems = useFilteredItems();
-  const session = useSessionInfo();
-  const userEmail = session?.user?.email;
+  const userInfo = useLoginUser();
+  const allItems = useFilteredItems(userInfo.role);
+
+  const isLoggedIn = userInfo.name !== '';
+
+  const filteredItems = isLoggedIn ? allItems : [];
 
   const {
     token: { colorBgContainer },
@@ -74,9 +77,9 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
           </div>
           <div style={{ marginTop: '160px', padding: '20px', textAlign: 'left', color: '#a9a9a9', borderTop: '1px solid #ffffff20' }}>
             <div style={{ marginBottom: '5px', display: 'flex', alignItems: 'center' }}>
-              <UserOutlined style={{ marginRight: 8 }} />ログインID
+              <UserOutlined style={{ marginRight: 8 }} />ログインユーザー
             </div>
-            {userEmail}
+            {userInfo.name}
           </div>
         </Sider>
         <Layout>
