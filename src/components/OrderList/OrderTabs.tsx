@@ -12,10 +12,31 @@ interface OrderTabsProps {
   onRowClick: (record: OrderListDataType) => void;
 }
 
+interface OrderTableProps {
+  columns: any;
+  dataSource: OrderListDataType[];
+  scrollX: number | string;
+  onRowClick: (record: OrderListDataType) => void;
+  setSelectedOrder: (order: OrderListDataType) => void;
+}
+
+const OrderTable: React.FC<OrderTableProps> = ({ columns, dataSource, scrollX, onRowClick, setSelectedOrder }) => (
+  <Table
+    size="small"
+    columns={columns}
+    dataSource={dataSource}
+    rowKey="id"
+    pagination={{ position: ['bottomLeft'], pageSize: 50, total: dataSource.length, showSizeChanger: false }}
+    scroll={{ x: scrollX, y: 520 }}
+    sticky={{ offsetScroll: 0, offsetHeader: 0 }}
+    onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })}
+  />
+);
+
 export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick }) => {
   const scrollX = useRecoilValue(XScrollState);
   const [, setSelectedOrder] = useRecoilState(selectedOrderAtom);
-  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string | null>('inProgress');
   const { data: progressData, loading: progressLoading } = useProgress();
 
   useEffect(() => {
@@ -24,111 +45,63 @@ export const OrderTabs: React.FC<OrderTabsProps> = ({ data, columns, onRowClick 
     }
   }, [progressData]);
 
-  const PROGRESS_COMPLETED_ID = progressData?.find(p => p.progress === '完了')?.id;
-  const PROGRESS_LOST_ID = progressData?.find(p => p.progress === '失注')?.id;
-  const PROGRESS_INRECEIVED_ID = progressData?.find(p => p.progress === '受付')?.id;
+  const progressIds = useMemo(() => ({
+    completedId: progressData?.find(p => p.progress === '完了')?.id,
+    lostId: progressData?.find(p => p.progress === '失注')?.id,
+    inReceivedId: progressData?.find(p => p.progress === '受付')?.id,
+  }), [progressData]);
 
   const filteredData = useMemo(() => {
-    if (progressLoading || !data || !activeTab) {
+    if (!activeTab) {
       return [];
     }
-
     switch (activeTab) {
       case 'all':
         return data;
       case 'inProgress':
-        return data.filter(order => order.progress !== PROGRESS_LOST_ID && order.progress !== PROGRESS_COMPLETED_ID);
+        return data.filter(order => order.progress !== progressIds.lostId && order.progress !== progressIds.completedId);
       case 'inReceived':
-        return data.filter(order => order.progress === PROGRESS_INRECEIVED_ID);
+        return data.filter(order => order.progress === progressIds.inReceivedId);
       case 'completed':
-        return data.filter(order => order.progress === PROGRESS_COMPLETED_ID);
+        return data.filter(order => order.progress === progressIds.completedId);
       case 'lost':
-        return data.filter(order => order.progress === PROGRESS_LOST_ID);
+        return data.filter(order => order.progress === progressIds.lostId);
       default:
         return data;
     }
-  }, [progressLoading, data, activeTab, PROGRESS_LOST_ID, PROGRESS_COMPLETED_ID, PROGRESS_INRECEIVED_ID]);
+  }, [data, activeTab, progressIds]);
 
-  if (progressLoading || !data) {
-    return <Spin size="large" />;
-  }
-
-  const tabItems = [
+  const tabItems = useMemo(() => [
     {
       label: '進行中',
       key: 'inProgress',
-      children:
-        <Table
-          size="small"
-          columns={columns}
-          dataSource={filteredData.filter(order => order.progress !== PROGRESS_LOST_ID && order.progress !== PROGRESS_COMPLETED_ID)}
-          rowKey="id"
-          pagination={{ position: ['bottomLeft'], pageSize: 50, total: filteredData.length, showSizeChanger: false, }}
-          scroll={{ x: scrollX, y: 520 }}
-          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
-          onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })}
-        />,
+      children: <OrderTable columns={columns} dataSource={filteredData} scrollX={scrollX} onRowClick={onRowClick} setSelectedOrder={setSelectedOrder} />,
     },
     {
       label: '受付',
       key: 'inReceived',
-      children:
-        <Table
-          size="small"
-          columns={columns}
-          dataSource={filteredData.filter(order => order.progress === PROGRESS_INRECEIVED_ID)}
-          rowKey="id"
-          pagination={{ position: ['bottomLeft'], pageSize: 50, total: filteredData.length, showSizeChanger: false, }}
-          scroll={{ x: scrollX, y: 520 }}
-          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
-          onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })}
-        />,
+      children: <OrderTable columns={columns} dataSource={filteredData} scrollX={scrollX} onRowClick={onRowClick} setSelectedOrder={setSelectedOrder} />,
     },
     {
       label: '完了',
       key: 'completed',
-      children:
-        <Table size="small"
-          columns={columns}
-          dataSource={filteredData.filter(order => order.progress === PROGRESS_COMPLETED_ID)}
-          rowKey="id"
-          pagination={{ position: ['bottomLeft'], pageSize: 50, total: filteredData.length, showSizeChanger: false, }}
-          scroll={{ x: scrollX, y: 520 }}
-          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
-          onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })}
-        />,
+      children: <OrderTable columns={columns} dataSource={filteredData} scrollX={scrollX} onRowClick={onRowClick} setSelectedOrder={setSelectedOrder} />,
     },
     {
       label: '失注',
       key: 'lost',
-      children:
-        <Table
-          size="small"
-          columns={columns}
-          dataSource={filteredData.filter(order => order.progress === PROGRESS_LOST_ID)}
-          rowKey="id"
-          pagination={{ position: ['bottomLeft'], pageSize: 50, total: filteredData.length, showSizeChanger: false, }}
-          scroll={{ x: scrollX, y: 520 }}
-          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
-          onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })}
-        />,
+      children: <OrderTable columns={columns} dataSource={filteredData} scrollX={scrollX} onRowClick={onRowClick} setSelectedOrder={setSelectedOrder} />,
     },
     {
       label: '全体',
       key: 'all',
-      children:
-        <Table
-          size="small"
-          columns={columns}
-          dataSource={data}
-          rowKey="id"
-          pagination={{ position: ['bottomLeft'], pageSize: 50, total: data.length, showSizeChanger: false, }}
-          scroll={{ x: scrollX, y: 520 }}
-          sticky={{ offsetScroll: 0, offsetHeader: 0 }}
-          onRow={(record) => ({ onClick: () => { setSelectedOrder(record); onRowClick(record); }, })}
-        />,
+      children: <OrderTable columns={columns} dataSource={data} scrollX={scrollX} onRowClick={onRowClick} setSelectedOrder={setSelectedOrder} />,
     },
-  ];
+  ], [columns, filteredData, scrollX, onRowClick, setSelectedOrder, data]);
+
+  if (progressLoading || !data) {
+    return <Spin size="large" />;
+  }
 
   return (
     <Tabs

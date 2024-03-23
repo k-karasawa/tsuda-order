@@ -36,12 +36,6 @@ export const columns: ColumnsType<OrderListDataType> = [
     },
   },
   {
-    title: '優先度22222',
-    dataIndex: 'priority_level',
-    width: 120,
-    sorter: (a, b) => (a.estimate_date || '').localeCompare(b.estimate_date || ''),
-  },
-  {
     title: '進捗',
     dataIndex: 'progress_name',
     width: 100,
@@ -81,11 +75,6 @@ export const columns: ColumnsType<OrderListDataType> = [
     filterDropdown: CustomFilterDropdown,
     filterIcon: filterIcon,
     render: (text: string) => `${text}様`
-  },
-  {
-    title: '商社',
-    dataIndex: 'farm_name',
-    width: 100
   },
   {
     title: '品番',
