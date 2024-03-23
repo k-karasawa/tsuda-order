@@ -8,7 +8,7 @@ export const columns: ColumnsType<OrderListDataType> = [
   {
     dataIndex: 'attention',
     fixed: 'left',
-    width: 45,
+    width: 20,
     render: (text: boolean) => (
       <div style={{ textAlign: 'center' }}>
         {text ? <FlagOutlined style={{ color: 'red', fontSize: '16px' }} /> : null}
@@ -36,13 +36,7 @@ export const columns: ColumnsType<OrderListDataType> = [
     },
   },
   {
-    title: '優先度',
-    dataIndex: 'priority_level',
-    width: 120,
-    sorter: (a, b) => (a.estimate_date || '').localeCompare(b.estimate_date || ''),
-  },
-  {
-    title: '進捗',
+    title: '進捗1',
     dataIndex: 'progress_name',
     width: 100,
     render: (text: string) => <ColorfulTag text={text} />,
