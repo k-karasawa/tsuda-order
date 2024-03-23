@@ -16,7 +16,7 @@ import { exportToCsv } from "@/features/CSVExport/exportToCsv";
 import { selectedColumns } from "@/features/CSVExport/selectedColumns";
 import dayjs from "dayjs";
 
-export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data, columns, showDownloadButton, filterCondition }) => {
+export const OrderListPresentation: React.FC<OrderListPresentationProps> = ({ data, columns, filterCondition }) => {
   const { revalidate } = useOrderList();
   const [selectedOrder, setSelectedOrder] = useRecoilState(selectedOrderAtom);
   const dynamicFilters = createDynamicFilters(data, filterableColumns);

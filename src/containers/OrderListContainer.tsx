@@ -9,11 +9,10 @@ type OrderListContainerProps = {
   filter?: (order: OrderListDataType) => boolean;
   customColumns?: ColumnsType<OrderListDataType>;
   sortOrder?: 'default' | 'assorting';
-  showDownloadButton?: boolean;
   filterCondition?: string;
 }
 
-export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter, customColumns, sortOrder = 'default', showDownloadButton, filterCondition }) => {
+export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter, customColumns, sortOrder = 'default', filterCondition }) => {
   const { data, loading, error, refetchOrderList } = useOrderList();
 
   if (loading) return (
@@ -49,7 +48,6 @@ export const OrderListContainer: React.FC<OrderListContainerProps> = ({ filter, 
     data={sortedData}
     refetchOrderList={refetchOrderList}
     columns={customColumns}
-    showDownloadButton={showDownloadButton}
     filterCondition={filterCondition}
   />;
 };
