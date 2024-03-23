@@ -36,7 +36,7 @@ export const columns: ColumnsType<OrderListDataType> = [
     },
   },
   {
-    title: '進捗1',
+    title: '進捗',
     dataIndex: 'progress_name',
     width: 100,
     render: (text: string) => <ColorfulTag text={text} />,
@@ -75,11 +75,6 @@ export const columns: ColumnsType<OrderListDataType> = [
     filterDropdown: CustomFilterDropdown,
     filterIcon: filterIcon,
     render: (text: string) => `${text}様`
-  },
-  {
-    title: '商社',
-    dataIndex: 'farm_name',
-    width: 100
   },
   {
     title: '品番',
