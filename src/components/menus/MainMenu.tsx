@@ -14,9 +14,7 @@ export const MainMenu: React.FC<{children: ReactNode, pagetitle?: string}> = ({c
   const supabase = useSupabaseClient();
   const { name: userName, role, organization } = useLoginUser();
   const allItems = useFilteredItems(role);
-
   const isLoggedIn = userName !== '';
-
   const filteredItems = isLoggedIn ? allItems : [];
 
   const {
