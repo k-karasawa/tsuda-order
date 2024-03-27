@@ -15,25 +15,19 @@ export const useAuthListen = ({ supabaseClient }: UseAuthListen) => {
     const {
       data: { subscription },
     } = supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (event === "INITIAL_SESSION") {
-        // 初期セッションの処理
-      } else if (event === "SIGNED_IN") {
-        if (session) {
-          const jwt = jwtDecode<{user_role: string | null}>(session.access_token)
-          console.log(jwt)
-          if (jwt.user_role === 'guest') {
-            router.push('/dashboard-guest')
-          } else {
-            router.push('/')
-          }
-        }
+      if (event === "SIGNED_IN" && session) {
         // サインインイベントの処理
         if (router.pathname.includes("/auth")) {
-          router.push("/");
+          const jwt = jwtDecode<{user_role: string | null}>(session.access_token);
+          if (jwt.user_role === 'guest') {
+            router.push('/dashboard-guest');
+          } else {
+            router.push('/');
+          }
         }
       } else if (event === "SIGNED_OUT") {
         // サインアウトイベントの処理
-        router.push('/auth'); // ログインページにリダイレクト
+        router.push('/auth');
       } else if (event === "PASSWORD_RECOVERY") {
         // パスワード回復イベントの処理
       } else if (event === "TOKEN_REFRESHED") {
@@ -44,5 +38,5 @@ export const useAuthListen = ({ supabaseClient }: UseAuthListen) => {
     });
 
     return () => subscription.unsubscribe();
-  }, [supabaseClient, router]); // router を依存配列に追加
+  }, [supabaseClient, router]);
 };
